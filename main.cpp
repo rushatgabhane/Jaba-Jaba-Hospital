@@ -202,9 +202,9 @@ void errormsg(char* error="null")
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
-char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
-char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
+char Departments[][50] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
+char Mainmenu[][50] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char roomMenu[][50] ={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
 //*******************
 //Function prototypes
 //*******************
@@ -251,7 +251,7 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	char description[][50];	//Stores description about the treatment
+	char description[][100];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -292,6 +292,8 @@ public:
 		int opt;
 		cin>>opt;
 		strcpy(description[0],roomMenu[opt-1]);
+		cout<<description[0]<<endl;
+		getch();
 		amount[0]=5*opt;
 	}
 	void display()	//Displays patient details
@@ -303,9 +305,11 @@ public:
 		cout<<cprno;
 		align("Room No: ",30,14);
 		cout<<roomNo;
-		align("Date of Admission: ",30,16);
+		align("Room Type: ",30,16);
+		puts(description[0]);
+		align("Date of Admission: ",30,18);
 		dispDate();
-		center("Press any key to continue",18);
+		center("Press any key to continue",20);
 		getch();
 		main_menu();
 	}
@@ -319,7 +323,28 @@ public:
 	  int	x=(strcmpi(name,pname)==0?1:0);
 	  return x;
 	}
-	void bill()
+
+	void addTreatment()
+	{
+		int j=0;
+		createMenu("ADD TREATMENT");
+		center("Enter number of items to be added: ");
+		cin>>j;
+		j+=i;
+		for(;i<j;i++)
+		{
+			createMenu("ADD TREATMENT");
+			center("Enter description: ",10);
+			gets(description[i]);
+			center("Enter Amount: BD ");
+			cin>>amount[i];
+			center("Enter quantity: ",14);
+			cin>>qty[i];
+		}
+	}
+	void bill();
+};
+void patient::bill()
 	{
 		createMenu("PATIENT BILL");
 		clrscr();
@@ -340,41 +365,21 @@ public:
 		vr(80,'|');
 		hr(3,'*');
 		hr(1,'*');
-		for(int i=0;i<10;i++)
+		for(int j=0;j<i;j++)
 		{
-			gotoxy(3,5+2*i);
-			cout<<(i+1);
-			gotoxy(10,5+2*i);
-			cout<<description[i];
-			gotoxy(57,5+2*i);
-			cout<<qty[i];
-			gotoxy(64,5+2*i);
-			cout<<amount[i];
+			gotoxy(3,5+2*j);
+			cout<<(j+1);
+			gotoxy(10,5+2*j);
+			cout<<description[j];
+			gotoxy(57,5+2*j);
+			cout<<qty[j];
+			gotoxy(64,5+2*j);
+			cout<<amount[j];
 		}
 		align("Press any key to continue....",50,27);
 		getch();
 		main_menu();
 	}
-	void addTreatment()
-	{
-		int j=0;
-		createMenu("ADD TREATMENT");
-		center("Enter number of items to be added: ");
-		cin>>j;
-		j+=i;
-		for(;i<j;i++)
-		{
-			createMenu("ADD TREATMENT");
-			center("Enter description: ",10);
-			gets(description[i]);
-			center("Enter Amount: BD ");
-			cin>>amount[i];
-			center("Enter quantity: ",14);
-			cin>>qty[i];
-		}
-	}
-};
-
 //*************************
 //Function to add users
 //*************************
@@ -475,17 +480,18 @@ void addPatient()
 	center("NEW ADMISSION",2);
 	hr(4,'*');
 	P.input();
+	P.display();
 	ofstream file;
 	file.open("patients.dat",ios::app|ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
-	P.display();
+
 }
 //Search Patient Function
 void searchPatient()
 {
 	first_screen:
-	char* pSearchMenu[]={"Search by Name","Search by CPR"};
+	char pSearchMenu[][50]={"Search by Name\0","Search by CPR\0"};
 	createMenu("Patient Search",pSearchMenu,ArraySize(pSearchMenu),4);
 	center("Enter your option: ",15);
 	char name[20];
@@ -545,9 +551,9 @@ void searchPatient()
 void facilities()
 {
 first_screen:
-  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
-  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
-  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
+  char facilityMenu[][50]={"Departments","Lab","Rooms","Main Menu"};
+  char labMenu[][50]={"X-Ray","ECG","Ultrasound","MRI"};
+  char roomMenu[][50]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
   createMenu("FACILITIES",facilityMenu,ArraySize(facilityMenu));
   center("Enter Your Option:",17);
@@ -606,7 +612,7 @@ void billing()
 		main_menu();
 	  }
 	}
-	char* opts[]={"Add Treatments","View Bill"};
+	char opts[][50]={"Add Treatments","View Bill"};
 	createMenu("BILLING",opts,ArraySize(opts));
 	center("Enter your option: ",18);
 	char ch = getch();
@@ -642,9 +648,8 @@ void removePatient()
 	int cpr;
 	cin>>cpr;
 	patient P1,P2;
-	while(!file.eof())
+	while(file.read((char*)&P1,sizeof(P2)))
 	{
-		file.read((char*)&P1,sizeof(P2));
 		if(P1.check(cpr))
 		{
 			int point = file.tellg();
