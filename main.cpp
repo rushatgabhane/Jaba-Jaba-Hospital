@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 #define ArraySize(array)	sizeof(array)/sizeof(array[0])
+void main_menu();			//To output the main menu
 //*********************************************************************************************
 //Special Functions
 //*********************************************************************************************
@@ -73,10 +74,16 @@ void banner()
 	ifstream file;
 	char str[500];
 	file.open("banner.txt");
+	while(!file)
+	{
+		cout<<"\nFile Not There";
+		getch();
+		main_menu();
+	}
 	while(!file.eof())
 	{
 		file.getline(str,450,'\n');
-		cout<<str<<'\n';
+		cout<<str<<endl;
 	}
 	getch();
 }
@@ -224,7 +231,6 @@ char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room",
 void getdoctor();			//To assign a doctor to a patient
 void addPatient();			//To add a patient
 void removePatient();		//To archive patient records
-void main_menu();			//To output the main menu
 void login();				//To login
 void billing();				//Billing Function
 void addUser();				//Function to add users
@@ -357,16 +363,16 @@ public:
 		vr(80,'|');
 		hr(3,'*');
 		hr(1,'*');
-		for(int i=0;i<10;i++)
+		for(int j=0;j<i;j++)
 		{
-			gotoxy(3,5+2*i);
-			cout<<(i+1);
-			gotoxy(10,5+2*i);
-			cout<<description[i];
-			gotoxy(57,5+2*i);
-			cout<<qty[i];
-			gotoxy(64,5+2*i);
-			cout<<amount[i];
+			gotoxy(3,5+2*j);
+			cout<<(j+1);
+			gotoxy(10,5+2*j);
+			cout<<description[j];
+			gotoxy(57,5+2*j);
+			cout<<qty[j];
+			gotoxy(64,5+2*j);
+			cout<<amount[j];
 		}
 		align("Press any key to continue....",50,27);
 		getch();
@@ -653,7 +659,7 @@ void billing()
 int nop; //No. Of Patients On File
 void ShowReport()
 {
-	nop=0;
+	::nop=0;
 	createMenu("REPORTS");
 	ifstream file;
 	file.open("patients.dat",ios::in|ios::binary);
