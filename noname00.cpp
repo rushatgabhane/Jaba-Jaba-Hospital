@@ -1,6 +1,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <conio.h>
+<<<<<<< HEAD
 //Function prototypes
 void getdoctor();       //To assign a doctor to a patient
 void addPatient();      //To add a patient
@@ -9,13 +10,11 @@ void menu();            //To output the main menu
 void encrypt();         //To encrypt passwords
 void login(); 			//To login
 void billing();			//Billing Function
-void borders(int)		//To select different types of borders in a single function
+void borders2(int)		//To select different types of borders in a single function
 
-void login() //Our first function
-{
-	int i = 0;
-	char pass[200],uname[200];
-	//Borders
+void borders()
+ {
+  	//Borders
 	for(int j=0;j<81;j++)
 	{
 	 gotoxy(j,0);
@@ -36,7 +35,14 @@ void login() //Our first function
 	 gotoxy(81,n);
 	 cout<<'*';
 	}
-   //Border End
+	//Border End
+ }
+ void login() //Our first function
+ {
+ 	borders();
+	int i = 0;
+	char pass[200],uname[200];
+
 	gotoxy(30,10);
 	cout<<"Enter username: ";
 	gets(uname);
@@ -57,9 +63,10 @@ void login() //Our first function
    //Remove Output
 	cout<<"\nThe Username:"<<uname;
    cout<<"\nThe Password:"<<pass;
-}
+ }
  void main()
-{
- login();
- getche();
-}
+ {
+  borders();
+  login();
+  getche();
+ }
