@@ -1,6 +1,16 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <conio.h>
+//Function prototypes
+void getdoctor();       //To assign a doctor to a patient
+void addPatient();      //To add a patient
+void removePatient();   //To archive patient records
+void menu();            //To output the main menu
+void encrypt();         //To encrypt passwords
+void login(); 			//To login
+void billing();			//Billing Function
+void borders(int)		//To select different types of borders in a single function
+
 void login() //Our first function
 {
 	int i = 0;
