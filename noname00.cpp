@@ -20,10 +20,11 @@ void login() //Our first function
 		i++;
 	}
 	pass[i]='\0';
-	cout<<'\n'<<pass;
-	cout<<'\n'<<uname;
+	cout<<"\nThe Username:"<<uname;
+   cout<<"\nThe Password:"<<pass;
 }
  void main()
 {
  login();
+ getche();
 }
