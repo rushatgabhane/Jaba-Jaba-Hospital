@@ -1,3 +1,4 @@
+//Simple border function
 void simple(char ch)
 {
   for(int j=0;j<81;j++)
