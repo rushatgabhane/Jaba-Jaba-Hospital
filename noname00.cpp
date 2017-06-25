@@ -3,7 +3,10 @@
 #include <conio.h>
 #include <string.h>
 #include "borders.h"
+#include "sfun.h"
+//*******************
 //Function prototypes
+//*******************
 void getdoctor();       //To assign a doctor to a patient
 void addPatient();      //To add a patient
 void removePatient();   //To archive patient records
@@ -13,15 +16,48 @@ void login(); 			//To login
 void billing();			//Billing Function
 void borders(int);		//To select different types of borders in a single function
 void addUser();			//Function to add users
+//***********
+//User Class
+//***********
+class user
+{
+  char uname[200];
+  char pass[200];
+public:
+  void input()
+  {
+	gotoxy(30,10);
+	cout<<"Enter username: ";
+	gets(uname);
+	gotoxy(30,12);
+	cout<<"Enter password: ";
+	strcpy(pass,getpass());
+	strcpy(pass,encrypt(pass));
+  }
+  void output()
+  {
+	gotoxy(30,10);
+	cout<<"username: "<<uname;
+	gotoxy(30,12);
+	cout<<"password: "<<pass;
+  }
+};
+
+//**********************
 //Function to add users
+//**********************
 void addUser()
 {
-	char user[200],pass[200]
-	borders(1);
-	gotoxy(30,10);
-	cout<<"Username: "
-	gets()
+	user U;
+	U.input();
+	ofstream file;
+	file.open("users.dat",ios::app|ios::binary);
+	file.write((char*)&U,sizeof(U));
+	file.close();
 }
+//********************
+//Border selector
+//********************
 void borders(int i)
 {
 	switch(i)
@@ -32,8 +68,11 @@ void borders(int i)
 				  break;
 	}
 }	  //Border End
- void login() //Our first function
- {
+//****************
+//Login Screen
+//****************
+void login()
+{
 	borders(1);
 	char pass[200],uname[200];
 	gotoxy(30,10);
@@ -41,15 +80,24 @@ void borders(int i)
 	gets(uname);
 	gotoxy(30,12);
 	cout<<"Enter password: ";
-	pass = getpass();				
+	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));		//Encrypts password
 	ifstream file;
-	file.open("uses.dat",ios::in|ios::bin);
-	while(!
+	file.open("uses.dat",ios::in|ios::binary);
+	user U;
+	int i=0;
+	while(i<1)
+	{
+		file.read((char*)&U,sizeof(U));
+		clrscr();
+		simple('@');
+		U.output();
+		i++;
+	}
  }
- void main()
- {
+void main()
+{
   borders(1);
   login();
   getche();
- }
+}
