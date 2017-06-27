@@ -23,8 +23,18 @@
 		pass[i]='\0';
 		break;
 	  }
-	  cout<<'*';
-	  i++;
+	  else if(i>=1 && pass[i]==8)  //Checks for backspace
+	  {
+			i--;
+			gotoxy(46+i,12);
+			cout<<" ";
+			gotoxy(46+i,12);
+	  }
+	  else
+	  {
+		cout<<'*';
+		i++;
+	  }
 	}
 	pass[i]='\0';
   }
@@ -51,6 +61,11 @@
 	 cout<<'*';
 	}
   }
+  void output()
+  {
+	cout<<uname<<endl;
+	cout<<pass;
+  }
 };
  void main()
 {
@@ -61,4 +76,5 @@
   H.login();
  fout.write((char*)&(H),sizeof(H));
  fout.close();
+ H.output();
 }
