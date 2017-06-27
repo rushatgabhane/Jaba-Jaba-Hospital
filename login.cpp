@@ -1,7 +1,7 @@
-#include<iostream.h>
-#include<conio.h>
-#include<stdio.h>
-#include<fstream.h>
+#include <iostream.h>
+#include <conio.h>
+#include <stdio.h>
+#include <fstream.h>
   class Hospital
   {
 	int idno;
