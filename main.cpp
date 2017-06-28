@@ -33,12 +33,17 @@ public:
 	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));
   }
+  int access(char ename[],char epass[])
+  {
+  	if(strcmp(epass,pass)==0 && strcmp(ename,uname))
+  		return 1;
+  	else
+  		return 0;
+  }
   void output()
   {
-	gotoxy(30,10);
-	cout<<"username: "<<uname;
-	gotoxy(30,12);
-	cout<<"password: "<<pass;
+	cout<<endl<<uname;
+	cout<<endl<<pass;
   }
 };
 
@@ -72,28 +77,31 @@ void borders(int i)
 //****************
 void login()
 {
-	borders(1);
-	char pass[200],uname[200];
+	char uname[200],pass[200];
+	borders(2);
 	gotoxy(30,10);
 	cout<<"Enter username: ";
 	gets(uname);
 	gotoxy(30,12);
 	cout<<"Enter password: ";
 	strcpy(pass,getpass());
-	strcpy(pass,encrypt(pass));		//Encrypts password
-	ifstream file;
-	file.open("uses.dat",ios::in|ios::binary);
+	strcpy(pass,encrypt(pass));
+	fstream file;
+	file.open("users.dat",ios::in|ios::binary);
 	user U;
-	int i=0;
-	while(i<1)
+	while(!file.eof())
 	{
 		file.read((char*)&U,sizeof(U));
-		clrscr();
-		simple('@');
-		U.output();
-		i++;
+		if(U.access(uname,pass))
+			cout<<"access granted";
+		else
+			cout<<"access denied";
+		cout<<endl<<uname;
+		cout<<endl<<pass;
+      	U.output();
 	}
- }
+}
+
 void main()
 {
   borders(1);
