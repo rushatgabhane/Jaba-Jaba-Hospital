@@ -35,15 +35,10 @@ public:
   }
   int access(char ename[],char epass[])
   {
-  	if(strcmp(epass,pass)==0 && strcmp(ename,uname))
+  	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
   		return 1;
   	else
   		return 0;
-  }
-  void output()
-  {
-	cout<<endl<<uname;
-	cout<<endl<<pass;
   }
 };
 
@@ -93,12 +88,12 @@ void login()
 	{
 		file.read((char*)&U,sizeof(U));
 		if(U.access(uname,pass))
+		{
 			cout<<"access granted";
+			break;
+		}
 		else
-			cout<<"access denied";
-		cout<<endl<<uname;
-		cout<<endl<<pass;
-      	U.output();
+			continue;
 	}
 }
 
