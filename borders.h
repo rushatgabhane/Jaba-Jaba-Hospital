@@ -1,24 +1,36 @@
-//Simple border function
-void simple(char ch)
+void hr(int i,char ch)
 {
   for(int j=0;j<81;j++)
   {
-	gotoxy(j,0);
-	cout<<ch;
+    gotoxy(j,i);
+    cout<<ch;
   }
-  for(int k=1;k<24;k++)
+}
+void vr(int i,char ch)
+{
+  for(int j=0;j<25;j++)
   {
-	gotoxy(0,k);
-	cout<<ch;
+    gotoxy(i,j);
+    cout<<ch;
   }
-  for(int m=0;m<81;m++)
-  {
-	gotoxy(m,24);
-	cout<<ch;
-  }
-  for(int n=1;n<24;n++)
-  {
-	gotoxy(81,n);
-	cout<<ch;
-  }
+}
+void borders()
+{
+  char ch = '*';
+  hr(0,ch);
+  hr(25,ch);
+  vr(0,ch);
+  vr(81,ch);
+}
+void center(char* word)
+{
+  int length = strlen(word);
+  gotoxy(40.5 - length/2,12.5);
+  cout<<word;
+}
+void center(char* word,int y)
+{
+  int length = strlen(word);
+  gotoxy(40.5 - length/2,y);
+  cout<<word;
 }

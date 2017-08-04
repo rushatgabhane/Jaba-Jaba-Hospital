@@ -10,10 +10,9 @@
 void getdoctor();       //To assign a doctor to a patient
 void addPatient();      //To add a patient
 void removePatient();   //To archive patient records
-void menu();            //To output the main menu
+void main_menu();       //To output the main menu
 void login(); 			//To login
 void billing();			//Billing Function
-void borders(int);		//To select different types of borders in a single function
 void addUser();			//Function to add users
 //***********
 //User Class
@@ -42,9 +41,9 @@ public:
   }
 };
 
-//**********************
+//*************************
 //Function to add users
-//**********************
+//*************************
 void addUser()
 {
 	user U;
@@ -54,52 +53,56 @@ void addUser()
 	file.write((char*)&U,sizeof(U));
 	file.close();
 }
-//********************
-//Border selector
-//********************
-void borders(int i)
-{
-	switch(i)
-	{
-	  case 1 : simple('*');
-				  break;
-	  case 2 : simple('#');
-				  break;
-	}
-}	  //Border End
 //****************
 //Login Screen
 //****************
 void login()
 {
 	char uname[200],pass[200];
-	borders(2);
-	gotoxy(30,10);
-	cout<<"Enter username: ";
-	gets(uname);
-	gotoxy(30,12);
-	cout<<"Enter password: ";
-	strcpy(pass,getpass());
-	strcpy(pass,encrypt(pass));
-	fstream file;
-	file.open("users.dat",ios::in|ios::binary);
-	user U;
-	while(!file.eof())
-	{
-		file.read((char*)&U,sizeof(U));
-		if(U.access(uname,pass))
+	login:
+		borders();
+		gotoxy(30,10);
+		cout<<"Enter username: ";
+		gets(uname);
+		gotoxy(30,12);
+		cout<<"Enter password: ";
+		strcpy(pass,getpass());
+		strcpy(pass,encrypt(pass));
+		fstream file;
+		file.open("users.dat",ios::in|ios::binary);
+		user U;
+		while(!file.eof())
 		{
-			cout<<"access granted";
-			break;
+			file.read((char*)&U,sizeof(U));
+			if(U.access(uname,pass))
+			{
+				main_menu();
+			}
+			else
+				continue;
 		}
-		else
-			continue;
-	}
+	clrscr();
+	borders();
+	gotoxy(30,11);
+	cout<<"Username & Password combination does not match";
+	getche();
+	clrscr();
+	goto login;
 }
-
+//***********
+//Main Menu
+//***********
+void main_menu()
+{
+	clrscr();
+	borders();
+	hr(5,'*');
+	center("Main Menu",3);
+	getche();
+}
 void main()
 {
-  borders(1);
+  borders();
   login();
   getche();
 }
