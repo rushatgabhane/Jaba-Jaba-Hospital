@@ -2,8 +2,11 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
+#include <process.h>
+#include <stdlib.h>
 #include "borders.h"
 #include "sfun.h"
+
 //*******************
 //Function prototypes
 //*******************
@@ -11,9 +14,12 @@ void getdoctor();       //To assign a doctor to a patient
 void addPatient();      //To add a patient
 void removePatient();   //To archive patient records
 void main_menu();       //To output the main menu
-void login(); 			//To login
+void login(); 		    	//To login
 void billing();			//Billing Function
 void addUser();			//Function to add users
+void facilities();      //Function To Display Facilities Offered
+void ShowReport();        //Function To Display Patient Report;
+
 //***********
 //User Class
 //***********
@@ -34,10 +40,10 @@ public:
   }
   int access(char ename[],char epass[])
   {
-  	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
-  		return 1;
-  	else
-  		return 0;
+	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
+		return 1;
+	else
+		return 0;
   }
 };
 
@@ -79,15 +85,15 @@ void login()
 				main_menu();
 			}
 			else
-				continue;
+			{
+				clrscr();
+				borders();
+				center("Username & Password combination does not match",13);
+				getche();
+				clrscr();
+				goto login;
+			}
 		}
-	clrscr();
-	borders();
-	gotoxy(30,11);
-	cout<<"Username & Password combination does not match";
-	getche();
-	clrscr();
-	goto login;
 }
 //***********
 //Main Menu
@@ -97,9 +103,120 @@ void main_menu()
 	clrscr();
 	borders();
 	hr(5,'*');
-	center("Main Menu",3);
-	getche();
+	menu:
+	 center("Main Menu",3);
+	 int option;
+	 center("1.New Admission",7);
+	 center("2.Search",9);
+	 center("3.Facilities",11);
+	 center("4.Billing",13);
+	 center("5.Reports",15);
+	 center("6.Patient Checkout",17);
+	 center("7.Exit",19);
+	 center("Enter Your Option:",21);
+	 cin>>option;
+	 switch(option)
+	 {
+	  case 1:addPatient();
+			  break;
+	  case 2:
+
+	  case 3:facilities();
+				break;
+	  case 4:billing();
+				break;
+	  case 5:ShowReport();
+				break;
+	  case 6:removePatient();
+				break;
+	  default:center("Invalid Option",22);
+				 break;
+
+	}
 }
+//***********
+//Main Menu Functions
+//***********
+
+ void facilities()
+ {
+  clrscr();
+  borders();
+  center("FACILITIES",2);
+  hr(4,'*');
+  center("1.Departments",7);
+  center("2.Lab",10);
+  center("3.Rooms",13);
+  center("Enter Your Option:",17);
+  int fac;
+  cin>>fac;
+  switch(fac)
+  {
+	case 1:clrscr();
+			 borders();
+			 center("DEPARTMENTS",2);
+			 hr(4,'*');
+			 center("General Medicine",6);
+			 center("ENT",18);
+			 center("Pediatrics",8);
+			 center("Neurology",10);
+			 center("Gynacology",12);
+			 center("Opthamology",14);
+			 center("Dental",16);
+			 getche();
+			 break;
+	case 2:clrscr();
+			 borders();
+			 center("LAB",2);
+			 hr(4,'*');
+			 center("X-Ray",6);
+			 center("ECG",8);
+			 center("Ultrasound",10);
+			 center("MRI",12);
+			 getche();
+			 break;
+	case 3:clrscr();
+			 borders();
+			 center("ROOMS",2);
+			 hr(4,'*');
+			 center("Single AC Room",6);
+			 center("Single Non-AC Room",8);
+			 center("Double AC Room",10);
+			 center("Double Non-AC Room",12);
+			 center("Family Suite",14);
+			 getche();
+			 break;
+	default:center("Invalid Option",18);
+  }
+}
+ void addPatient()
+ {
+  clrscr();
+  borders();
+  center("2",11);
+ }
+ void removePatient()
+ {
+  clrscr();
+  borders();
+  center("3",11);
+ }
+ void ShowReport()
+ {
+  clrscr();
+  borders();
+  center("3",11);
+ }
+ void billing()
+ {
+  clrscr();
+  borders();
+  center("4",11);
+ }
+
+ //***********
+//Main Function
+//***********
 void main()
 {
   borders();
