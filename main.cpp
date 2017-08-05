@@ -4,6 +4,7 @@
 #include <string.h>
 #include <process.h>
 #include <stdlib.h>
+#include <windows.h>
 #include "borders.h"
 #include "sfun.h"
 
@@ -100,37 +101,47 @@ void login()
 //***********
 void main_menu()
 {
+	menu:
 	clrscr();
 	borders();
 	hr(5,'*');
-	menu:
-	 center("Main Menu",3);
-	 int option;
-	 center("1.New Admission",7);
-	 center("2.Search",9);
-	 center("3.Facilities",11);
-	 center("4.Billing",13);
-	 center("5.Reports",15);
-	 center("6.Patient Checkout",17);
-	 center("7.Exit",19);
-	 center("Enter Your Option:",21);
-	 cin>>option;
-	 switch(option)
-	 {
-	  case 1:addPatient();
-			  break;
+	center("Main Menu",3);
+	int option;
+	center("1.New Admission",7);
+	center("2.Search",9);
+	center("3.Facilities",11);
+	center("4.Billing",13);
+	center("5.Reports",15);
+	center("6.Patient Checkout",17);
+	center("7.Exit",19);
+	center("Enter Your Option:",21);
+	cin>>option;
+	switch(option)
+	{
+		case 1:
+	  		addPatient();
+			break;
 	  case 2:
 
-	  case 3:facilities();
-				break;
-	  case 4:billing();
-				break;
-	  case 5:ShowReport();
-				break;
-	  case 6:removePatient();
-				break;
-	  default:center("Invalid Option",22);
-				 break;
+	  case 3:
+	  		facilities();
+			break;
+	  case 4:
+	  		billing();
+			break;
+	  case 5:
+		  	ShowReport();
+			break;
+	  case 6:
+	 	 	removePatient();
+			break;
+	  default:
+	 	 	clrscr();
+	 	 	borders();
+	 	 	center("Invalid Option");
+	 	 	center("Press any key to continue.....",17);
+	 	 	getche();
+			goto menu;
 
 	}
 }
