@@ -47,7 +47,22 @@ public:
 		return 0;
   }
 };
-
+///////////////////
+//Patient Class
+///////////////////
+class patient
+{
+	char pname[200];
+	long cprno;
+public:
+	void input()
+	{
+		center("Patient Name: ",15);
+		gets(pname);
+		center("CPR No: ",17);
+		cin>>cprno;
+	}
+};
 //*************************
 //Function to add users
 //*************************
@@ -89,7 +104,8 @@ void login()
 			{
 				clrscr();
 				borders();
-				center("Username & Password combination does not match",13);
+				center("Username & Password combination does not match");
+				center("Press any key to continue.....",17);
 				getche();
 				clrscr();
 				goto login;
@@ -118,7 +134,7 @@ void main_menu()
 	cin>>option;
 	switch(option)
 	{
-		case 1:
+	  case 1:
 	  		addPatient();
 			break;
 	  case 2:
@@ -135,6 +151,8 @@ void main_menu()
 	  case 6:
 	 	 	removePatient();
 			break;
+	  case 7:
+	  		exit();
 	  default:
 	 	 	clrscr();
 	 	 	borders();
@@ -145,12 +163,20 @@ void main_menu()
 
 	}
 }
-//***********
+//*******************
 //Main Menu Functions
-//***********
-
- void facilities()
- {
+//*******************
+void addPatient()
+{
+	clrscr();
+	borders();
+	center("NEW ADMISSION",2);
+	hr(4,'*');
+	patient P;
+	P.input();
+}
+void facilities()
+{
   clrscr();
   borders();
   center("FACILITIES",2);
@@ -200,31 +226,21 @@ void main_menu()
 	default:center("Invalid Option",18);
   }
 }
- void addPatient()
- {
-  clrscr();
-  borders();
-  center("2",11);
- }
- void removePatient()
- {
-  clrscr();
-  borders();
-  center("3",11);
- }
- void ShowReport()
- {
-  clrscr();
-  borders();
-  center("3",11);
- }
- void billing()
- {
-  clrscr();
-  borders();
-  center("4",11);
- }
-
+void billing()
+{
+	clrscr();
+	cout<<4;
+}
+void ShowReport()
+{
+	clrscr();
+	cout<<5;
+}
+void removePatient()
+{
+	clrscr();
+	cout<<6;
+}
  //***********
 //Main Function
 //***********
