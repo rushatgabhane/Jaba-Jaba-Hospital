@@ -53,7 +53,8 @@ public:
 class patient
 {
 	char pname[200];
-	long cprno;
+	long cprno,bill;
+	int fac[]
 public:
 	void input()
 	{
@@ -61,6 +62,11 @@ public:
 		gets(pname);
 		center("CPR No: ",17);
 		cin>>cprno;
+		clrscr();
+		borders();
+		center("NEW ADMISSION",2);
+		hr(4,'*');
+		facilities();
 	}
 };
 //*************************
@@ -90,7 +96,7 @@ void login()
 		cout<<"Enter password: ";
 		strcpy(pass,getpass());
 		strcpy(pass,encrypt(pass));
-		fstream file;
+		ifstream file;
 		file.open("users.dat",ios::in|ios::binary);
 		user U;
 		while(!file.eof())
@@ -174,11 +180,17 @@ void addPatient()
 	hr(4,'*');
 	patient P;
 	P.input();
+	ofstream file
+	file.open("patients.dat",ios::out||ios::binary);
+	file.write((char*)&P,sizeof(P));
+	file.close();
+
 }
 void facilities()
 {
   clrscr();
   borders();
+  first_screen:
   center("FACILITIES",2);
   hr(4,'*');
   center("1.Departments",7);
@@ -200,6 +212,7 @@ void facilities()
 			 center("Gynacology",12);
 			 center("Opthamology",14);
 			 center("Dental",16);
+			 center("Enter Your Option",17);
 			 getche();
 			 break;
 	case 2:clrscr();
