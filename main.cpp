@@ -54,21 +54,22 @@ class patient
 {
 	char pname[200];
 	long cprno,bill;
-	int fac[]
+	int fac[5];
 public:
-	void input()
-	{
-		center("Patient Name: ",15);
-		gets(pname);
-		center("CPR No: ",17);
-		cin>>cprno;
-		clrscr();
-		borders();
-		center("NEW ADMISSION",2);
-		hr(4,'*');
-		facilities();
-	}
+	void input();	
 };
+void patient :: input()
+{
+	center("Patient Name: ",15);
+	gets(pname);
+	center("CPR No: ",17);
+	cin>>cprno;
+	clrscr();
+	borders();
+	center("NEW ADMISSION",2);
+	hr(4,'*');
+	facilities(fac[]);
+}
 //*************************
 //Function to add users
 //*************************
@@ -158,7 +159,7 @@ void main_menu()
 	 	 	removePatient();
 			break;
 	  case 7:
-	  		exit();
+	  		exit(0);
 	  default:
 	 	 	clrscr();
 	 	 	borders();
@@ -180,13 +181,13 @@ void addPatient()
 	hr(4,'*');
 	patient P;
 	P.input();
-	ofstream file
+	ofstream file;
 	file.open("patients.dat",ios::out||ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
 
 }
-void facilities()
+void facilities(int &fac[])
 {
   clrscr();
   borders();
@@ -194,12 +195,13 @@ void facilities()
   center("FACILITIES",2);
   hr(4,'*');
   center("1.Departments",7);
-  center("2.Lab",10);
-  center("3.Rooms",13);
-  center("Enter Your Option:",17);
-  int fac;
-  cin>>fac;
-  switch(fac)
+  center("2.Lab",9);
+  center("3.Rooms",12);
+  center("4.Return",14);
+  center("Enter Your Option:",16);
+  int sec;
+  cin>>sec;
+  switch(sec)
   {
 	case 1:clrscr();
 			 borders();
@@ -213,8 +215,8 @@ void facilities()
 			 center("Opthamology",14);
 			 center("Dental",16);
 			 center("Enter Your Option",17);
-			 getche();
-			 break;
+			 cin>>fac[1];
+			 goto first_screen;
 	case 2:clrscr();
 			 borders();
 			 center("LAB",2);
@@ -223,8 +225,8 @@ void facilities()
 			 center("ECG",8);
 			 center("Ultrasound",10);
 			 center("MRI",12);
-			 getche();
-			 break;
+			 cin>>fac[2];
+			 goto first_screen;
 	case 3:clrscr();
 			 borders();
 			 center("ROOMS",2);
@@ -234,9 +236,11 @@ void facilities()
 			 center("Double AC Room",10);
 			 center("Double Non-AC Room",12);
 			 center("Family Suite",14);
-			 getche();
-			 break;
+			 cin>>fac[3];
+			 goto first_screen;
+	case 4: return;
 	default:center("Invalid Option",18);
+			goto first_screen;
   }
 }
 void billing()
