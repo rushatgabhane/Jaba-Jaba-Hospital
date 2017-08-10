@@ -18,7 +18,7 @@ void main_menu();       //To output the main menu
 void login(); 		    	//To login
 void billing();			//Billing Function
 void addUser();			//Function to add users
-void facilities();      //Function To Display Facilities Offered
+void facilities(int);      //Function To Display Facilities Offered
 void ShowReport();        //Function To Display Patient Report;
 
 //***********
@@ -68,7 +68,7 @@ void patient :: input()
 	borders();
 	center("NEW ADMISSION",2);
 	hr(4,'*');
-	facilities(fac[]);
+	facilities(fac);
 }
 //*************************
 //Function to add users
@@ -147,7 +147,6 @@ void main_menu()
 	  case 2:
 
 	  case 3:
-	  		facilities();
 			break;
 	  case 4:
 	  		billing();
@@ -187,7 +186,7 @@ void addPatient()
 	file.close();
 
 }
-void facilities(int &fac[])
+void facilities(int fac[])
 {
   clrscr();
   borders();
