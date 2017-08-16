@@ -54,7 +54,7 @@ class patient
 {
 	char pname[200];
 	long cprno,bill;
-	int fac[]
+	int fac[];
 public:
 	void input()
 	{
@@ -158,7 +158,7 @@ void main_menu()
 	 	 	removePatient();
 			break;
 	  case 7:
-	  		exit();
+	  		exit(0);
 	  default:
 	 	 	clrscr();
 	 	 	borders();
@@ -180,7 +180,7 @@ void addPatient()
 	hr(4,'*');
 	patient P;
 	P.input();
-	ofstream file
+	ofstream file;
 	file.open("patients.dat",ios::out||ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
