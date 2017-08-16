@@ -89,6 +89,8 @@ void login()
 	char uname[200],pass[200];
 	login:
 		borders();
+		gotoxy(36,7);
+		cout<<"LOGIN";
 		gotoxy(30,10);
 		cout<<"Enter username: ";
 		gets(uname);
@@ -128,7 +130,7 @@ void main_menu()
 	borders();
 	hr(5,'*');
 	center("Main Menu",3);
-	int option;
+	char option;
 	center("1.New Admission",7);
 	center("2.Search",9);
 	center("3.Facilities",11);
@@ -137,34 +139,34 @@ void main_menu()
 	center("6.Patient Checkout",17);
 	center("7.Exit",19);
 	center("Enter Your Option:",21);
-	cin>>option;
+	option=getche();
 	switch(option)
 	{
-	  case 1:
-	  		addPatient();
+	  case '1':
+			addPatient();
 			break;
-	  case 2:
+	  case '2':
 
-	  case 3:
-	  		facilities();
+	  case '3':
+			facilities();
 			break;
-	  case 4:
-	  		billing();
+	  case '4':
+			billing();
 			break;
-	  case 5:
-		  	ShowReport();
+	  case '5':
+			ShowReport();
 			break;
-	  case 6:
-	 	 	removePatient();
+	  case '6':
+			removePatient();
 			break;
-	  case 7:
-	  		exit(0);
+	  case '7':
+			exit(0);
 	  default:
-	 	 	clrscr();
-	 	 	borders();
-	 	 	center("Invalid Option");
-	 	 	center("Press any key to continue.....",17);
-	 	 	getche();
+			clrscr();
+			borders();
+			center("Invalid Option");
+			center("Press any key to continue.....",17);
+			getche();
 			goto menu;
 
 	}
@@ -197,11 +199,11 @@ void facilities()
   center("2.Lab",10);
   center("3.Rooms",13);
   center("Enter Your Option:",17);
-  int fac;
-  cin>>fac;
+  char fac;
+  fac=getche();
   switch(fac)
   {
-	case 1:clrscr();
+	case '1':clrscr();
 			 borders();
 			 center("DEPARTMENTS",2);
 			 hr(4,'*');
@@ -215,7 +217,7 @@ void facilities()
 			 center("Enter Your Option",17);
 			 getche();
 			 break;
-	case 2:clrscr();
+	case '2':clrscr();
 			 borders();
 			 center("LAB",2);
 			 hr(4,'*');
@@ -225,7 +227,7 @@ void facilities()
 			 center("MRI",12);
 			 getche();
 			 break;
-	case 3:clrscr();
+	case '3':clrscr();
 			 borders();
 			 center("ROOMS",2);
 			 hr(4,'*');
