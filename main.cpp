@@ -69,6 +69,13 @@ public:
 		hr(4,'*');
 		facilities();
 	}
+	int cprcheck(long cpe)
+	{
+		if(cpe==cprno)
+		 return 1;
+		else
+		 return 0;
+	}
 };
 //*************************
 //Function to add users
@@ -170,7 +177,6 @@ void main_menu()
 			center("Press any key to continue...",17);
 			getche();
 			goto menu;
-
 	}
 }
 //*******************
@@ -246,7 +252,35 @@ void facilities()
 void billing()
 {
 	clrscr();
-	cout<<4;
+	borders();
+	patient P;
+	long cpr;
+	gotoxy(22,7);
+	cout<<"Enter CPR number to view the Bill ";
+	cin>>cpr;
+	ifstream file;
+	file.open("users.dat",ios::in|ios::binary);
+	while(!file.eof())
+	{
+		  file.read((char*)&P,sizeof(P));
+		  if(P.cprcheck(cpr))
+		  {
+			 gotoxy(25,4);
+			 cout<<"it worked";
+		  }
+		  else
+		  {
+			 clrscr();
+			 borders();
+			 gotoxy(25,7);
+			 cout<<"The entered CPR no. doesn't exist";
+			 gotoxy(25,8);
+			 cout<<"Press any key to continue..";
+			 getche();
+			 main_menu();
+			 break;
+		  }
+	}
 }
 void ShowReport()
 {
@@ -261,13 +295,14 @@ void removePatient()
 void exitprogram()
 {
 	clrscr();
+	borders();
 	char op;
 	gotoxy(25,8);
 	cout<<"THANK YOU FOR USING THE PROGRAM";
 	gotoxy(25,10);
-	cout<<"Press 1 to EXIT the program";
+	cout<<"Press 1 to confirm EXIT";
 	gotoxy(25,11);
-	cout<<"Press 2 for a suprise..";
+	cout<<"Press 2 to play a game!";
 	gotoxy(25,13);
 	cout<<"Enter your choice: ";
 	op=getche();
@@ -301,19 +336,19 @@ void game()
 	int n=random(10);
 	strcpy(word,words[n]);
 	Unknown(word, unknown);
-	gotoxy(1,3);
+	gotoxy(1,2);
 	cout<<"Welcome to hangman";
-	gotoxy(1,4);
+	gotoxy(1,3);
 	cout<<"Guess the country name";
-	gotoxy(1,5);
+	gotoxy(1,4);
 	cout<<"You have 5 tries"<<endl;
-	gotoxy(1,6);
+	gotoxy(1,5);
 	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~";
 	while (WrongGuess <mt)
 	{
-		gotoxy(1,7);
+		gotoxy(1,6);
 		cout<<endl<<endl<<unknown;
-		gotoxy(1,8);
+		gotoxy(1,7);
 		cout<<"\n\nGuess a letter: ";
 		cin>>letter;
 		if (letterFill(letter, word, unknown)==0)
@@ -325,13 +360,13 @@ void game()
 		{
 			clrscr();
 		}
-		gotoxy(1,7);
+		gotoxy(1,4);
 		cout << "You have "<< (mt) - (WrongGuess)<<" guesses left"<<endl;
 		if (strcmp(word,unknown)==0)
 		{
-			gotoxy(2,8);
+			gotoxy(1,8);
 			cout<<word<<endl;
-			gotoxy(2,9);
+			gotoxy(1,9);
 			cout<<"You guessed it right!";
 			exit(0);
 			break;
@@ -339,10 +374,10 @@ void game()
 	 }
 	  if(WrongGuess == mt)
 	  {
-			gotoxy(2,10);
-			cout<<endl<<"you lose...you've been hanged." << endl;
-			gotoxy(2,11);
-			cout<< "The word was : "<<word<<endl;
+			gotoxy(1,7);
+			cout<<endl<<"You lose... you've been hanged." << endl;
+			gotoxy(1,9);
+			cout<<"The word was: "<<word<<endl;
 			exit(0);
 	 }
 	 getch();
@@ -368,7 +403,6 @@ void Unknown (char word[], char unknown[])
 	  unknown[i]='*';
 	  unknown[i]='\0';
 }
-
 //***********
 //Main Function
 //***********
