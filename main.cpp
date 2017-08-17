@@ -40,11 +40,9 @@ class user
 public:
   void input()
   {
-	gotoxy(30,10);
-	cout<<"Enter username: ";
+	align("Enter Username: ",30,10);
 	gets(uname);
-	gotoxy(30,12);
-	cout<<"Enter password: ";
+	align("Enter Password: ",30,12);
 	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));
   }
@@ -66,11 +64,11 @@ class patient
 public:
 	void input()
 	{
-		Lalign("Patient Name: ",10);
+		align("Patient Name: ",25,10);
 		gets(pname);
-		Lalign("CPR No: ",12);
+		align("CPR Number: ",25,12);
 		cin>>cprno;
-		Lalign("Room No.: ",14);
+		align("Room Number: ",25,14);
 		cin>>roomNo;
 		clrscr();
 		borders();
@@ -81,11 +79,11 @@ public:
 	void display()
 	{
 		createMenu("Patient Details");
-		Lalign("Name: ",5);
+		align("Name: ",30,5);
 		cout<<pname;
-		Lalign("CPR No.: ",7);
+		align("CPR Number: ",30,7);
 		cout<<cprno;
-		Lalign("Room No: ",9);
+		align("Room Number: ",30,9);
 		cout<<roomNo;
 	}
 	int check(long cpr)
@@ -168,13 +166,10 @@ void login()
  char uname[200],pass[200];
  login:
 	borders();
-	 gotoxy(36,7);
-	 cout<<"LOGIN";
-	 gotoxy(30,10);
-	 cout<<"Enter username: ";
+	 align("LOGIN",36,7);
+	 align("Enter Username: ",30,10);
 	 gets(uname);
-	 gotoxy(30,12);
-	 cout<<"Enter password: ";
+	 align("Enter Password: ",30,12);
 	 strcpy(pass,getpass());
 	 strcpy(pass,encrypt(pass));
 	 ifstream file;
@@ -257,7 +252,7 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms","4.Main Menu"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
