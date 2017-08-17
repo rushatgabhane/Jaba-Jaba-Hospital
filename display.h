@@ -47,12 +47,7 @@ void dispArray(char* array[],int arraySize,int step=3,int start=6)
 {
   for(int i=0; i<arraySize;i++)
   {
-    char word[50] = {i+49,'.'};
-    for(int j = 2; array[i][j-2]!='\0';j++)
-    {
-      word[j]=array[i][j-2];
-    }
-   center(word,start+(i*step));
+	 center(array[i],start+(i*step));
   }
 }
 
@@ -72,4 +67,10 @@ void errormsg(char* error)
   center(error);
   center("Press any key to continue...",17);
   getche();
+}
+//push the output in middle of screen, left alignment 
+void align(char* text,int y=7)
+{
+  gotoxy(35,y);
+  cout<<text;
 }
