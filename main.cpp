@@ -57,7 +57,7 @@ public:
 ///////////////////
 class patient
 {
-	char pname[200];
+	char pname[20];
 	long cprno,pBill;
 	int fac[];
 	int roomNo;
@@ -70,11 +70,6 @@ public:
 		cin>>cprno;
 		align("Room Number: ",25,14);
 		cin>>roomNo;
-		clrscr();
-		borders();
-		center("NEW ADMISSION",2);
-		hr(4,'*');
-		facilities(fac);
 	}
 	void display()
 	{
@@ -149,7 +144,7 @@ int searchPatient()
 	}
   patient P;
   ifstream file;
-  file.open("patients.dat",ios::in||ios::binary);
+  file.open("patients.dat",ios::in|ios::binary);
   while(!file.eof())
   {
 	 file.read((char*)&P,sizeof(P));
@@ -188,7 +183,7 @@ void login()
 {
  char uname[200],pass[200];
  login:
-	borders();
+	 borders();
 	 align("LOGIN",36,7);
 	 align("Enter Username: ",30,10);
 	 gets(uname);
@@ -210,7 +205,6 @@ void login()
 		errormsg("Incorrect username or password");
 		clrscr();
 		goto
-
 		login;
 	  }
 	 }
@@ -268,10 +262,9 @@ void addPatient()
 	patient P;
 	P.input();
 	ofstream file;
-	file.open("patients.dat",ios::app||ios::binary);
+	file.open("patients.dat",ios::app|ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
-
 }
 void facilities(int fac[])
 {
@@ -320,7 +313,7 @@ void billing()
 	align("Enter CPR number to view the Bill: ",17,12);
 	cin>>cpr;
 	ifstream file;
-	file.open("users.dat",ios::in|ios::binary);
+	file.open("patients.dat",ios::in|ios::binary);
 	while(!file.eof())
 	{
 		file.read((char*)&P,sizeof(P));
