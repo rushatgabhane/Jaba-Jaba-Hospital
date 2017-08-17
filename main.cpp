@@ -160,14 +160,14 @@ int searchPatient()
 	 file.read((char*)&P,sizeof(P));
 	 if(P.check(cpr) && choice==1)
 	 {
-	 	cout<<"check1";
+		cout<<"check1";
 		int point = file.tellg();
 		file.close();
 		return point;
 	 }
 	 else if (P.check(name) && choice==2)
 	 {
-	 	cout<<"check2";
+		cout<<"check2";
 		int point = file.tellg();
 		file.close();
 		return point;
@@ -405,20 +405,15 @@ void game()
 	int n=random(10);
 	strcpy(word,words[n]);
 	Unknown(word, unknown);
-	gotoxy(1,2);
-	cout<<"Welcome to hangman";
-	gotoxy(1,3);
-	cout<<"Guess the country name";
-	gotoxy(1,4);
-	cout<<"You have 5 tries"<<endl;
-	gotoxy(1,5);
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~";
+	align("Welcome to hangman",1,2);
+	align("Guess the country name",1,3);
+	align("You have 5 guesses left",1,4);
+	align("~~~~~~~~~~~~~~~~~~~~~~~~",1,5);
 	while (WrongGuess <mt)
 	{
 		gotoxy(1,6);
 		cout<<endl<<endl<<unknown;
-		gotoxy(1,7);
-		cout<<"\n\nGuess a letter: ";
+		align("\n\nGuess a letter: ",1,7);
 		cin>>letter;
 		if (letterFill(letter, word, unknown)==0)
 		{
@@ -435,8 +430,7 @@ void game()
 		{
 			gotoxy(1,8);
 			cout<<word<<endl;
-			gotoxy(1,9);
-			cout<<"You guessed it right!";
+			align("You guessed it right!",1,9);
 			exit(0);
 			break;
 		}
@@ -444,33 +438,36 @@ void game()
 	  if(WrongGuess == mt)
 	  {
 			gotoxy(1,7);
-			cout<<endl<<"You lose... you've been hanged." << endl;
-			gotoxy(1,9);
+			cout<<endl<<"You lose... you've been hanged."<<endl;
+			gotoxy(1,6);
 			cout<<"The word was: "<<word<<endl;
+			dixit(33,3);
+			dixit(47,3);
+			dixit(61,3);
 			exit(0);
-	 }
+	  }
 	 getch();
 	 }
 int letterFill (char guess, char secretword[], char guessword[])
 {
 	int matches=0;
 	for (int i = 0; secretword[i]!='\0'; i++)
+  {
+	 if (guess == guessword[i])
+		 return 0;
+	 if (guess == secretword[i])
 	{
-		if (guess == guessword[i])
-			return 0;
-			if (guess == secretword[i])
-		{
-			guessword[i] = guess;
-			matches++;
-		}
+	 guessword[i] = guess;
+	 matches++;
 	}
+  }
 	return matches;
 }
 void Unknown (char word[], char unknown[])
 {
 	for (int i = 0; i<strlen(word) ; i++)
-	  unknown[i]='*';
-	  unknown[i]='\0';
+	unknown[i]='*';
+	unknown[i]='\0';
 }
 //***********
 //Main Function

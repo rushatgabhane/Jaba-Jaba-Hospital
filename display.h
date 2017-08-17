@@ -89,3 +89,12 @@ void align(char* text,int x,int y)
   gotoxy(x,y);
   cout<<text;
 }
+void dixit(int x=10,int y=1)
+{
+        align("¯\\_('_')_/¯",x,y);
+        align("|",x+5,y+1);       
+        align("|",x+5,y+2);
+        align("|",x+5,y+3);
+        align("/ \\",x+4,y+4);
+        align("_/   \\_",x+2,y+5);  
+}
