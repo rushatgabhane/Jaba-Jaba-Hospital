@@ -58,7 +58,7 @@ public:
 class patient
 {
 	char pname[200];
-	long cprno,bill;
+	long cprno,pBill;
 	int fac[];
 	int roomNo;
 public:
@@ -79,22 +79,45 @@ public:
 	void display()
 	{
 		createMenu("Patient Details");
-		align("Name: ",30,5);
-		cout<<pname;
-		align("CPR Number: ",30,7);
-		cout<<cprno;
-		align("Room Number: ",30,9);
-		cout<<roomNo;
+		gotoxy(30,5);
+		cout<<"Patient Name: "<<pname;
+		gotoxy(30,7);
+		cout<<"CPR No: "<<cprno;
+		gotoxy(30,9);
+		cout<<"Room No: "<<roomNo;
 	}
 	int check(long cpr)
 	{
-	  int x=(cpr=cprno?1:0);
+	  int x=(cprno==cpr?1:0);
 	  return x;
 	}
 	int check(char* name)
 	{
-	  int	x=(strcmpi(name,pname)==0?1:0);
+	  int	x=(strcmpi(name,pname)==1?1:0);
 	  return x;
+	}
+	void bill()
+	{
+	  float x,y,z;   //for lab charge, pharmacy charge etc
+	  clrscr();
+	  randomize();
+	  x=1+random(15);
+	  y=1.5+random(5);
+	  z=1+random(7);
+	  pBill=x+y+z+5+10;
+
+	  createMenu("Billing Information ");
+	  align("Admission Fee    : 5 BD",29,8);
+	  gotoxy(29,10);
+	  cout<<"Laboratory charge: "<<x<<" BD";
+	  gotoxy(29,12);
+	  cout<<"Pharmacy         : "<<y<<" BD";
+	  gotoxy(29,14);
+	  cout<<"Physical Therapy : "<<z<<" BD";
+	  align("Accomodation     : 10 BD",29,16);
+	  align("_________________________",29,17);
+	  gotoxy(29,18);
+	  cout<<"Total Bill       : "<<pBill<<" BD";
 	}
 };
 //Search Patient Functions
@@ -186,7 +209,9 @@ void login()
 	  {
 		errormsg("Incorrect username or password");
 		clrscr();
-		goto login;
+		goto
+
+		login;
 	  }
 	 }
 }
@@ -291,8 +316,8 @@ void billing()
 	borders();
 	patient P;
 	long cpr;
-	gotoxy(22,7);
-	cout<<"Enter CPR number to view the Bill ";
+	borders();
+	align("Enter CPR number to view the Bill: ",17,12);
 	cin>>cpr;
 	ifstream file;
 	file.open("users.dat",ios::in|ios::binary);
@@ -301,15 +326,20 @@ void billing()
 		file.read((char*)&P,sizeof(P));
 		if(P.check(cpr))
 	  {
-		 gotoxy(25,4);
-		 cout<<"it worked";
+		  P.bill();
+		  align("Press any key to go to Main Menu..",25,24);
+		  getche();
+		  main_menu();
+		  break;
 	  }
 		else
 	  {
 		errormsg("The entered CPR no. doesn't exist");
 		main_menu();
+		break;
 	  }
 	}
+  file.close();
 }
 void ShowReport()
 {
