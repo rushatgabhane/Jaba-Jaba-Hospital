@@ -20,7 +20,8 @@ void billing();			//Billing Function
 void addUser();			//Function to add users
 void facilities();      //Function To Display Facilities Offered
 void ShowReport();      //Function To Display Patient Report
-void exitprogram();     //Function to exit or play a game
+void exitprogram();     //Function asking to exit or play a game
+void game();            //Function to Play a game
 //***********
 //User Class
 //***********
@@ -160,7 +161,8 @@ void main_menu()
 			removePatient();
 			break;
 	  case '7':
-		exitprogram();
+			exitprogram();
+			break;
 	default:
 			clrscr();
 			borders();
@@ -258,29 +260,116 @@ void removePatient()
 }
 void exitprogram()
 {
-		clrscr();
-			char op;
-			gotoxy(25,8);
-			cout<<"THANK YOU FOR USING THE PROGRAM";
-			gotoxy(25,10);
-			cout<<"Press 1 to EXIT the program";
-			gotoxy(25,11);
-			cout<<"Press 2 for a suprise..";
-			gotoxy(25,13);
-			cout<<"Enter your choice: ";
-			op=getche();
-			switch(op)
-			{
-			  case '1':
-			  exit(0);
-			  case '2':
-			  clrscr();
-			  cout<<"game";
-			}
-
+	clrscr();
+	char op;
+	gotoxy(25,8);
+	cout<<"THANK YOU FOR USING THE PROGRAM";
+	gotoxy(25,10);
+	cout<<"Press 1 to EXIT the program";
+	gotoxy(25,11);
+	cout<<"Press 2 for a suprise..";
+	gotoxy(25,13);
+	cout<<"Enter your choice: ";
+	op=getche();
+	switch(op)
+	{
+	  case '1':
+		  exit(0);
+	  case '2':
+		  clrscr();
+		  game();
+	}
 }
 
- //***********
+const int ml=80; //for game program
+const int mt=5;  //for game program
+const int mr=7;  //for game program
+
+int letterFill (char, char[], char[]);
+void Unknown (char[], char[]);
+
+void game()
+{
+	char letter,unknown[ml],word[ml];
+	int WrongGuess=0;
+	char words[][ml] =
+	{
+		"india","bahrain","sweden","australia","germany",
+		"russia","france","mexico","denmark","vietnam"
+	};
+	randomize();
+	int n=random(10);
+	strcpy(word,words[n]);
+	Unknown(word, unknown);
+	gotoxy(1,3);
+	cout<<"Welcome to hangman";
+	gotoxy(1,4);
+	cout<<"Guess the country name";
+	gotoxy(1,5);
+	cout<<"You have 5 tries"<<endl;
+	gotoxy(1,6);
+	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~";
+	while (WrongGuess <mt)
+	{
+		gotoxy(1,7);
+		cout<<endl<<endl<<unknown;
+		gotoxy(1,8);
+		cout<<"\n\nGuess a letter: ";
+		cin>>letter;
+		if (letterFill(letter, word, unknown)==0)
+		{
+			WrongGuess++;
+			clrscr();
+		}
+		else
+		{
+			clrscr();
+		}
+		gotoxy(1,7);
+		cout << "You have "<< (mt) - (WrongGuess)<<" guesses left"<<endl;
+		if (strcmp(word,unknown)==0)
+		{
+			gotoxy(2,8);
+			cout<<word<<endl;
+			gotoxy(2,9);
+			cout<<"You guessed it right!";
+			exit(0);
+			break;
+		}
+	 }
+	  if(WrongGuess == mt)
+	  {
+			gotoxy(2,10);
+			cout<<endl<<"you lose...you've been hanged." << endl;
+			gotoxy(2,11);
+			cout<< "The word was : "<<word<<endl;
+			exit(0);
+	 }
+	 getch();
+	 }
+int letterFill (char guess, char secretword[], char guessword[])
+{
+	int matches=0;
+	for (int i = 0; secretword[i]!='\0'; i++)
+	{
+		if (guess == guessword[i])
+			return 0;
+			if (guess == secretword[i])
+		{
+			guessword[i] = guess;
+			matches++;
+		}
+	}
+	return matches;
+}
+void Unknown (char word[], char unknown[])
+{
+	for (int i = 0; i<strlen(word) ; i++)
+	  unknown[i]='*';
+	  unknown[i]='\0';
+}
+
+//***********
 //Main Function
 //***********
 void main()
