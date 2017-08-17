@@ -11,7 +11,7 @@
 //Global Variables
 //*****************
 char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","6.Opthamology","Dental"};
-char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char* Mainmenu[] = {"1.New Admission","2.Search","3.Facilities","4.Billing","5.Reports","6.Patient Checkout","7.Exit"};
 //*******************
 //Function prototypes
 //*******************
@@ -26,8 +26,8 @@ void facilities(int fac[]);      //Function To Display Facilities Offered
 void ShowReport();      //Function To Display Patient Report
 void exitprogram();     //Function asking to exit or play a game
 void game();            //Function to Play a game
-void facilities(int);      //Function To Display Facilities Offered
-void ShowReport();        //Function To Display Patient Report
+void facilities(int);   //Function To Display Facilities Offered
+void ShowReport();      //Function To Display Patient Report
 int searchPatient();
 
 //***********
@@ -35,8 +35,8 @@ int searchPatient();
 //***********
 class user
 {
-  char uname[200];
-  char pass[200];
+	char uname[200];
+	char pass[200];
 public:
   void input()
   {
@@ -50,10 +50,8 @@ public:
   }
   int access(char ename[],char epass[])
   {
-	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
-		return 1;
-	else
-		return 0;
+	int x=((strcmp(epass,pass)==0 && strcmp(ename,uname)==0)?1:0);
+	return x;
   }
 };
 ///////////////////
@@ -85,17 +83,13 @@ public:
 	}*/
 	int check(long cpr)
 	{
-		if(cpr==cprno)
-		 return 1;
-		else
-		 return 0;
+	  int x=(cpr=cprno?1:0);
+	  return x;
 	}
 	int check(char* name)
 	{
-		if(strcmpi(name,pname)==0)
-			return 1;
-		else
-			return 0;
+	  int	x=(strcmpi(name,pname)==0?1:0);
+	  return x;
 	}
 };
 //Search Patient Functions
@@ -105,7 +99,7 @@ int searchPatient()
 
 	char* pSearchMenu[]={"Search by Name","Search by CPR"};
 	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
-	
+
 	center("Enter your option: ",15);
 	int choice;
 	cin>>choice;
@@ -131,17 +125,17 @@ int searchPatient()
   while(!file.eof())
   {
 	 file.read((char*)&P,sizeof(P));
-    if(P.check(cpr) && choice==1)
+	 if(P.check(cpr) && choice==1)
 	 {
 		int point = file.tellg();
 		file.close();
-      return point;
+		return point;
 	 }
-    else if (P.check(name) && choice==2)
+	 else if (P.check(name) && choice==2)
 	 {
 		int point = file.tellg();
 		file.close();
-    	return point;
+		return point;
 	 }
   }
   file.close();
@@ -164,35 +158,35 @@ void addUser()
 //****************
 void login()
 {
-	char uname[200],pass[200];
-	login:
-		borders();
-		gotoxy(36,7);
-		cout<<"LOGIN";
-		gotoxy(30,10);
-		cout<<"Enter username: ";
-		gets(uname);
-		gotoxy(30,12);
-		cout<<"Enter password: ";
-		strcpy(pass,getpass());
-		strcpy(pass,encrypt(pass));
-		ifstream file;
-		file.open("users.dat",ios::in|ios::binary);
-		user U;
-		while(!file.eof())
-		{
-			file.read((char*)&U,sizeof(U));
-			if(U.access(uname,pass))
-			{
-				main_menu();
-			}
-			else
-			{
-				errormsg("Incorrect username or password");
-				clrscr();
-				goto login;
-			}
-		}
+ char uname[200],pass[200];
+ login:
+	borders();
+	 gotoxy(36,7);
+	 cout<<"LOGIN";
+	 gotoxy(30,10);
+	 cout<<"Enter username: ";
+	 gets(uname);
+	 gotoxy(30,12);
+	 cout<<"Enter password: ";
+	 strcpy(pass,getpass());
+	 strcpy(pass,encrypt(pass));
+	 ifstream file;
+	 file.open("users.dat",ios::in|ios::binary);
+	 user U;
+	 while(!file.eof())
+	 {
+		file.read((char*)&U,sizeof(U));
+		if(U.access(uname,pass))
+	  {
+		main_menu();
+	  }
+		else
+	  {
+		errormsg("Incorrect username or password");
+		clrscr();
+		goto login;
+	  }
+	 }
 }
 //***********
 //Main Menu
@@ -216,7 +210,6 @@ void main_menu()
 			ifstream file;
 			file.open("patients.dat",ios::in||ios::binary);
 			*/
-
 	  case 3:
 			break;
 	  case 4:
@@ -257,7 +250,7 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
+  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms","4.Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
@@ -303,17 +296,17 @@ void billing()
 	file.open("users.dat",ios::in|ios::binary);
 	while(!file.eof())
 	{
-		  file.read((char*)&P,sizeof(P));
-		  if(P.check(cpr))
-		  {
-			 gotoxy(25,4);
-			 cout<<"it worked";
-		  }
-		  else
-		  {
-			 errormsg("The entered CPR no. doesn't exist");
-			 main_menu();
-		  }
+		file.read((char*)&P,sizeof(P));
+		if(P.check(cpr))
+	  {
+		 gotoxy(25,4);
+		 cout<<"it worked";
+	  }
+		else
+	  {
+		errormsg("The entered CPR no. doesn't exist");
+		main_menu();
+	  }
 	}
 }
 void ShowReport()
