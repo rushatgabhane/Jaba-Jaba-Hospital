@@ -133,7 +133,7 @@ int searchPatient()
 	 file.read((char*)&P,sizeof(P));
     if(P.check(cpr) && choice==1)
 	 {
-      int point = file.tellg();
+		int point = file.tellg();
 		file.close();
       return point;
 	 }
@@ -203,31 +203,32 @@ void main_menu()
 	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
 	center("Enter Your Option:",21);
 
-	char option=getche();
+	int option;
+	cin>>option;
 	switch(option)
 	{
-	  case '1':
+	  case 1:
 			addPatient();
 			break;
-	  case '2':
+	  case 2:
 			/*
-	  		int point = searchPatient();
+			int point = searchPatient();
 			ifstream file;
-	  		file.open("patients.dat",ios::in||ios::binary);
+			file.open("patients.dat",ios::in||ios::binary);
 			*/
 
-	  case '3':
+	  case 3:
 			break;
-	  case '4':
+	  case 4:
 			billing();
 			break;
-	  case '5':
+	  case 5:
 			ShowReport();
 			break;
-	  case '6':
+	  case 6:
 			removePatient();
 			break;
-	  case '7':
+	  case 7:
 			exitprogram();
 			break;
 	default:
@@ -256,7 +257,7 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms"};
+  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms","4.Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
@@ -282,7 +283,8 @@ first_screen:
 			 cin>>fac[3];
 			 goto first_screen;
 
-	  case 4: 	 return;
+	  case 4:    main_menu();
+			 break;
 
 	  default:	 errormsg("Invalid Option");
 			 goto first_screen;
@@ -328,7 +330,7 @@ void exitprogram()
 {
 	clrscr();
 	borders();
-	char op;
+	int op;
 	gotoxy(25,8);
 	cout<<"THANK YOU FOR USING THE PROGRAM";
 	gotoxy(25,10);
@@ -337,12 +339,12 @@ void exitprogram()
 	cout<<"Press 2 to play a game!";
 	gotoxy(25,13);
 	cout<<"Enter your choice: ";
-	op=getche();
+	cin>>op;
 	switch(op)
 	{
-	  case '1':
+	  case 1:
 		  exit(0);
-	  case '2':
+	  case 2:
 		  clrscr();
 		  game();
 	}
