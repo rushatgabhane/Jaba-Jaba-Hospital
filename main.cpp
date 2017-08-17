@@ -19,8 +19,8 @@ void login(); 		    	//To login
 void billing();			//Billing Function
 void addUser();			//Function to add users
 void facilities();      //Function To Display Facilities Offered
-void ShowReport();        //Function To Display Patient Report;
-
+void ShowReport();      //Function To Display Patient Report
+void exitprogram();     //Function to exit or play a game
 //***********
 //User Class
 //***********
@@ -112,8 +112,8 @@ void login()
 			{
 				clrscr();
 				borders();
-				center("Username & Password combination does not match");
-				center("Press any key to continue.....",17);
+				center("Incorrect username or password");
+				center("Press any key to continue...",17);
 				getche();
 				clrscr();
 				goto login;
@@ -160,12 +160,12 @@ void main_menu()
 			removePatient();
 			break;
 	  case '7':
-			exit(0);
-	  default:
+		exitprogram();
+	default:
 			clrscr();
 			borders();
 			center("Invalid Option");
-			center("Press any key to continue.....",17);
+			center("Press any key to continue...",17);
 			getche();
 			goto menu;
 
@@ -256,6 +256,30 @@ void removePatient()
 	clrscr();
 	cout<<6;
 }
+void exitprogram()
+{
+		clrscr();
+			char op;
+			gotoxy(25,8);
+			cout<<"THANK YOU FOR USING THE PROGRAM";
+			gotoxy(25,10);
+			cout<<"Press 1 to EXIT the program";
+			gotoxy(25,11);
+			cout<<"Press 2 for a suprise..";
+			gotoxy(25,13);
+			cout<<"Enter your choice: ";
+			op=getche();
+			switch(op)
+			{
+			  case '1':
+			  exit(0);
+			  case '2':
+			  clrscr();
+			  cout<<"game";
+			}
+
+}
+
  //***********
 //Main Function
 //***********
