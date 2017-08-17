@@ -89,6 +89,7 @@ void align(char* text,int x,int y)
   gotoxy(x,y);
   cout<<text;
 }
+//Displays dixit, give x and y for its position
 void dixit(int x=10,int y=1)
 {
         align("¯\\_('_')_/¯",x,y);
