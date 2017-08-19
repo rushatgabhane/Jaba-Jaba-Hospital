@@ -22,6 +22,8 @@ void facilities();      //Function To Display Facilities Offered
 void ShowReport();      //Function To Display Patient Report
 void exitprogram();     //Function asking to exit or play a game
 void game();            //Function to Play a game
+void facilities(int);      //Function To Display Facilities Offered
+void ShowReport();        //Function To Display Patient Report;
 //***********
 //User Class
 //***********
@@ -67,7 +69,7 @@ public:
 		borders();
 		center("NEW ADMISSION",2);
 		hr(4,'*');
-		facilities();
+		facilities(fac);
 	}
 	int cprcheck(long cpe)
 	{
@@ -76,6 +78,9 @@ public:
 		else
 		 return 0;
 	}
+	int fac[5];
+public:
+	void input();	
 };
 //*************************
 //Function to add users
@@ -196,7 +201,7 @@ void addPatient()
 	file.close();
 
 }
-void facilities()
+void facilities(int fac[])
 {
   clrscr();
   borders();
@@ -207,11 +212,11 @@ void facilities()
   center("2.Lab",10);
   center("3.Rooms",13);
   center("Enter Your Option:",17);
-  char fac;
-  fac=getche();
-  switch(fac)
+  int op;
+  cin>>op;
+  switch(op)
   {
-	case '1':clrscr();
+	case 1:clrscr();
 			 borders();
 			 center("DEPARTMENTS",2);
 			 hr(4,'*');
@@ -223,9 +228,9 @@ void facilities()
 			 center("Opthamology",14);
 			 center("Dental",16);
 			 center("Enter Your Option",17);
-			 getche();
-			 break;
-	case '2':clrscr();
+			 cin>>fac[1];
+			 goto first_screen;
+	case 2:clrscr();
 			 borders();
 			 center("LAB",2);
 			 hr(4,'*');
@@ -233,9 +238,9 @@ void facilities()
 			 center("ECG",8);
 			 center("Ultrasound",10);
 			 center("MRI",12);
-			 getche();
-			 break;
-	case '3':clrscr();
+			 cin>>fac[2];
+			 goto first_screen;
+	case 3:clrscr();
 			 borders();
 			 center("ROOMS",2);
 			 hr(4,'*');
@@ -244,9 +249,11 @@ void facilities()
 			 center("Double AC Room",10);
 			 center("Double Non-AC Room",12);
 			 center("Family Suite",14);
-			 getche();
-			 break;
+			 cin>>fac[3];
+			 goto first_screen;
+	case 4: return;
 	default:center("Invalid Option",18);
+			goto first_screen;
   }
 }
 void billing()
