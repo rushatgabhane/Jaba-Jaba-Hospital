@@ -71,12 +71,19 @@ public:
 		hr(4,'*');
 		facilities(fac);
 	}
-	int cprcheck(long cpe)
+	int check(long cpr)
 	{
-		if(cpe==cprno)
+		if(cpr==cprno)
 		 return 1;
 		else
 		 return 0;
+	}
+	int check(char* name)
+	{
+		if(strcmpi(name,pname)==0)
+			return 1;
+		else
+			return 0;
 	}
 	int fac[5];
 public:
@@ -196,10 +203,43 @@ void addPatient()
 	patient P;
 	P.input();
 	ofstream file;
-	file.open("patients.dat",ios::out||ios::binary);
+	file.open("patients.dat",ios::app||ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
 
+}
+int searchPatient(long cpr)
+{
+	patient P;
+	file.open("patients.dat",ios::in||ios::binary);
+	while(!file.eof())
+	{
+		file.read((char*)&P,sizeof(P));
+		if(P.check(cpr))
+		{
+			int point = file.tellg();
+			return point;
+			file.close();
+			break;
+		}
+	}
+	file.close();
+}
+void searchPatient(char* name)
+{
+	patient P;
+	file.open("patient.dat",ios::in||ios::binary);
+	while(!file.eof())
+	{
+		file.read((char*)&P,sizeof(P));
+		if(P.check(name))
+		{
+			int point = file.tellg();
+			return point;
+			file.close();
+			break;
+		}
+	}
 }
 void facilities(int fac[])
 {
@@ -270,7 +310,7 @@ void billing()
 	while(!file.eof())
 	{
 		  file.read((char*)&P,sizeof(P));
-		  if(P.cprcheck(cpr))
+		  if(P.check(cpr))
 		  {
 			 gotoxy(25,4);
 			 cout<<"it worked";
