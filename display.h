@@ -1,3 +1,4 @@
+//Creates horizontal rule
 void hr(int i,char ch)
 {
   for(int j=0;j<81;j++)
@@ -6,6 +7,7 @@ void hr(int i,char ch)
     cout<<ch;
   }
 }
+//Creates Vertical Rule
 void vr(int i,char ch)
 {
   for(int j=0;j<25;j++)
@@ -14,6 +16,7 @@ void vr(int i,char ch)
     cout<<ch;
   }
 }
+//Creates borders
 void borders()
 {
   char ch = '*';
@@ -22,6 +25,7 @@ void borders()
   vr(0,ch);
   vr(81,ch);
 }
+//Center Functions
 void center(char* word)
 {
   int length = strlen(word);
@@ -33,4 +37,20 @@ void center(char* word,int y)
   int length = strlen(word);
   gotoxy(40.5 - length/2,y);
   cout<<word;
+}
+//Display Menu
+void createMenu(char* word)
+{
+  clrscr();
+  borders();
+  hr(4,'*');
+  center(word,2);
+}
+void errormsg()
+{
+  clrscr();
+  borders();
+  center("Invalid Option");
+  center("Press any key to continue...",17);
+  getche();
 }

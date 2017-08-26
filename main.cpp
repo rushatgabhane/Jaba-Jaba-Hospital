@@ -5,7 +5,7 @@
 #include <process.h>
 #include <stdlib.h>
 #include <windows.h>
-#include "borders.h"
+#include "display.h"
 #include "sfun.h"
 
 //*******************
@@ -18,12 +18,15 @@ void main_menu();       //To output the main menu
 void login(); 		    	//To login
 void billing();			//Billing Function
 void addUser();			//Function to add users
-void facilities();      //Function To Display Facilities Offered
+void facilities(int fac[]);      //Function To Display Facilities Offered
 void ShowReport();      //Function To Display Patient Report
 void exitprogram();     //Function asking to exit or play a game
 void game();            //Function to Play a game
 void facilities(int);      //Function To Display Facilities Offered
 void ShowReport();        //Function To Display Patient Report;
+int searchPatient(long);
+int searchPatient(char*);
+
 //***********
 //User Class
 //***********
@@ -84,11 +87,56 @@ public:
 			return 1;
 		else
 			return 0;
-	}
-	int fac[5];
-public:
-	void input();	
+	}	
 };
+//Search Patient Functions
+int searchPatient()
+{
+	first_screen:
+	createMenu("Patient Search");
+	center("1.Search by Name",6);
+	center("2.Search by CPR",10);
+	center("Enter your option: ",15);
+	int choice;
+	cin>>choice;
+	switch(choice)
+	{
+		case 1:
+			char* name;
+			center("Enter name: ",21);
+			gets(name);
+			break;
+		case 2:
+			long cpr;
+			center("Enter CPR Number: ",21);
+			cin>>cpr;
+			break;
+		default:
+			errormsg();
+			goto first_screen;
+	}
+  patient P;
+  ifstream file;
+  file.open("patients.dat",ios::in||ios::binary);
+  while(!file.eof())
+  {
+    file.read((char*)&P,sizeof(P));
+    if(P.check(cpr) && choice==1)
+    {
+      int point = file.tellg();
+      file.close();
+      return point;
+    }
+    else if (P.check(name) && choice==2)
+    {
+    	int point = file.tellg();
+    	file.close();
+    	return point;
+    }
+  }
+  file.close();
+  return 0;
+}
 //*************************
 //Function to add users
 //*************************
@@ -146,10 +194,7 @@ void login()
 void main_menu()
 {
 	menu:
-	clrscr();
-	borders();
-	hr(5,'*');
-	center("Main Menu",3);
+	createMenu("Main Menu");
 	char option;
 	center("1.New Admission",7);
 	center("2.Search",9);
@@ -166,9 +211,8 @@ void main_menu()
 			addPatient();
 			break;
 	  case '2':
-
+	  		searchPatient();
 	  case '3':
-			facilities();
 			break;
 	  case '4':
 			billing();
@@ -183,11 +227,7 @@ void main_menu()
 			exitprogram();
 			break;
 	default:
-			clrscr();
-			borders();
-			center("Invalid Option");
-			center("Press any key to continue...",17);
-			getche();
+			errormsg();
 			goto menu;
 	}
 }
@@ -208,44 +248,11 @@ void addPatient()
 	file.close();
 
 }
-int searchPatient(long cpr)
-{
-	patient P;
-	file.open("patients.dat",ios::in||ios::binary);
-	while(!file.eof())
-	{
-		file.read((char*)&P,sizeof(P));
-		if(P.check(cpr))
-		{
-			int point = file.tellg();
-			return point;
-			file.close();
-			break;
-		}
-	}
-	file.close();
-}
-void searchPatient(char* name)
-{
-	patient P;
-	file.open("patient.dat",ios::in||ios::binary);
-	while(!file.eof())
-	{
-		file.read((char*)&P,sizeof(P));
-		if(P.check(name))
-		{
-			int point = file.tellg();
-			return point;
-			file.close();
-			break;
-		}
-	}
-}
 void facilities(int fac[])
 {
+first_screen:
   clrscr();
   borders();
-  first_screen:
   center("FACILITIES",2);
   hr(4,'*');
   center("1.Departments",7);
