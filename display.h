@@ -46,6 +46,16 @@ void createMenu(char* word)
   hr(4,'*');
   center(word,2);
 }
+/*
+void createMenu(char* word,char* array[],int step)
+{
+  clrscr();
+  borders();
+  hr(4,'*');
+  center(word,2);
+  dispArray(array[],step,6)
+}
+*/
 void errormsg()
 {
   clrscr();
@@ -53,4 +63,11 @@ void errormsg()
   center("Invalid Option");
   center("Press any key to continue...",17);
   getche();
+}
+void dispArray(char* array[],int step,int start)
+{
+  for(int i=0; i<sizeof(array);i++)
+  {
+    center(array[i],start+(i*step));
+  }
 }

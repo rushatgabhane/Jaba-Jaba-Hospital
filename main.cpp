@@ -7,7 +7,11 @@
 #include <windows.h>
 #include "display.h"
 #include "sfun.h"
-
+//*****************
+//Global Variables
+//*****************
+char* Departments[] = {"1.General Medicine","2.ENT","3.Pediatrics","4.Neurology","5.Gynacology","6.Opthamology","7.Dental"};
+char* Mainmenu[] = {"1.New Admission","2.Search","3.Facilities","4.Billing","5.Reports","6.Patient Checkout","7.Exit"};
 //*******************
 //Function prototypes
 //*******************
@@ -23,9 +27,8 @@ void ShowReport();      //Function To Display Patient Report
 void exitprogram();     //Function asking to exit or play a game
 void game();            //Function to Play a game
 void facilities(int);      //Function To Display Facilities Offered
-void ShowReport();        //Function To Display Patient Report;
-int searchPatient(long);
-int searchPatient(char*);
+void ShowReport();        //Function To Display Patient Report
+int searchPatient();
 
 //***********
 //User Class
@@ -61,6 +64,7 @@ class patient
 	char pname[200];
 	long cprno,bill;
 	int fac[];
+	int roomNo;
 public:
 	void input()
 	{
@@ -73,6 +77,11 @@ public:
 		center("NEW ADMISSION",2);
 		hr(4,'*');
 		facilities(fac);
+	}
+	void display()
+	{
+		createMenu("Patient Details");
+
 	}
 	int check(long cpr)
 	{
@@ -99,15 +108,15 @@ int searchPatient()
 	center("Enter your option: ",15);
 	int choice;
 	cin>>choice;
+	char* name;
+	long cpr;
 	switch(choice)
 	{
 		case 1:
-			char* name;
 			center("Enter name: ",21);
 			gets(name);
 			break;
 		case 2:
-			long cpr;
 			center("Enter CPR Number: ",21);
 			cin>>cpr;
 			break;
@@ -196,6 +205,8 @@ void main_menu()
 	menu:
 	createMenu("Main Menu");
 	char option;
+	dispArray(Mainmenu,2,6);
+	/*
 	center("1.New Admission",7);
 	center("2.Search",9);
 	center("3.Facilities",11);
@@ -203,6 +214,7 @@ void main_menu()
 	center("5.Reports",15);
 	center("6.Patient Checkout",17);
 	center("7.Exit",19);
+	*/
 	center("Enter Your Option:",21);
 	option=getche();
 	switch(option)
@@ -211,7 +223,12 @@ void main_menu()
 			addPatient();
 			break;
 	  case '2':
-	  		searchPatient();
+	  		/*
+	  		int point = searchPatient();
+	  		ifstream file;
+	  		file.open("patients.dat",ios::in||ios::binary);
+	  		*/
+
 	  case '3':
 			break;
 	  case '4':
@@ -251,10 +268,7 @@ void addPatient()
 void facilities(int fac[])
 {
 first_screen:
-  clrscr();
-  borders();
-  center("FACILITIES",2);
-  hr(4,'*');
+  createMenu("FACILITIES");
   center("1.Departments",7);
   center("2.Lab",10);
   center("3.Rooms",13);
@@ -263,10 +277,9 @@ first_screen:
   cin>>op;
   switch(op)
   {
-	case 1:clrscr();
-			 borders();
-			 center("DEPARTMENTS",2);
-			 hr(4,'*');
+	case 1:
+			 createMenu("DEPARTMENTS");
+			 /*
 			 center("General Medicine",6);
 			 center("ENT",18);
 			 center("Pediatrics",8);
@@ -276,26 +289,28 @@ first_screen:
 			 center("Dental",16);
 			 center("Enter Your Option",17);
 			 cin>>fac[1];
+			 goto first_screen; 
+			 */
+			 dispArray(Departments,2,6);
 			 goto first_screen;
-	case 2:clrscr();
-			 borders();
-			 center("LAB",2);
-			 hr(4,'*');
+
+	case 2:
+			 createMenu("LAB");
 			 center("X-Ray",6);
 			 center("ECG",8);
 			 center("Ultrasound",10);
 			 center("MRI",12);
+			 center("Enter Your Option",17);
 			 cin>>fac[2];
 			 goto first_screen;
-	case 3:clrscr();
-			 borders();
-			 center("ROOMS",2);
-			 hr(4,'*');
+	case 3:
+			 createMenu("ROOMS");
 			 center("Single AC Room",6);
 			 center("Single Non-AC Room",8);
 			 center("Double AC Room",10);
 			 center("Double Non-AC Room",12);
 			 center("Family Suite",14);
+			 center("Enter Your Option",17);
 			 cin>>fac[3];
 			 goto first_screen;
 	case 4: return;
