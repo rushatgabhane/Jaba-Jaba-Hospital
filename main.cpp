@@ -121,7 +121,7 @@ int searchPatient()
 			cin>>cpr;
 			break;
 		default:
-			errormsg();
+			errormsg("Invalid Option....");
 			goto first_screen;
 	}
   patient P;
@@ -244,7 +244,7 @@ void main_menu()
 			exitprogram();
 			break;
 	default:
-			errormsg();
+			errormsg("Invalid Option...");
 			goto menu;
 	}
 }
