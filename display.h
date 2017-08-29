@@ -25,19 +25,15 @@ void borders()
   vr(0,ch);
   vr(81,ch);
 }
+
 //Center Functions
-void center(char* word)
-{
-  int length = strlen(word);
-  gotoxy(40.5 - length/2,12.5);
-  cout<<word;
-}
-void center(char* word,int y)
+void center(char* word,int y=12.5)
 {
   int length = strlen(word);
   gotoxy(40.5 - length/2,y);
   cout<<word;
 }
+
 //Display Menu
 /*void createMenu(char* word)
 {
@@ -47,13 +43,13 @@ void center(char* word,int y)
   center(word,2);
 }*/
 
-void createMenu(char* word,char* array[],int step=3)
+void createMenu(char* word,char* array[],int arraySize,int step=3)
 {
   clrscr();
   borders();
   hr(4,'*');
   center(word,2);
-  dispArray(array[],step,6)
+  dispArray(array[],arraySize,step,6)
 }
 
 void errormsg(char* error)
