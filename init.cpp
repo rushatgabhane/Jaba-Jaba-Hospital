@@ -6,7 +6,7 @@
 #include "borders.h"
 void main()
 {
-	class user
+class user
 {
   char uname[200];
   char pass[200];
@@ -21,12 +21,12 @@ public:
 	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));
   }
-  int access(char upass[])
+  int access(char ename[],char epass[])
   {
-	if(strcmp(upass,pass)==0)
-		return 1;
-	else
-		return 0;
+  	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
+  		return 1;
+  	else
+  		return 0;
   }
 };
 	fstream file1,file2,file3;
