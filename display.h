@@ -46,7 +46,7 @@ void createMenu(char* word)
   hr(4,'*');
   center(word,2);
 }
-/*
+
 void createMenu(char* word,char* array[],int step)
 {
   clrscr();
@@ -55,7 +55,7 @@ void createMenu(char* word,char* array[],int step)
   center(word,2);
   dispArray(array[],step,6)
 }
-*/
+
 void errormsg(char* error)
 {
   clrscr();
@@ -64,9 +64,9 @@ void errormsg(char* error)
   center("Press any key to continue...",17);
   getche();
 }
-void dispArray(char* array[],int step,int start)
+void dispArray(char* array[],int arraySize,int step,int start)
 {
-  for(int i=0; i<strlen(array);i++)
+  for(int i=0; i<arraySize;i++)
   {
     center(array[i],start+(i*step));
   }
