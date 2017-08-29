@@ -102,9 +102,10 @@ public:
 int searchPatient()
 {
 	first_screen:
-	createMenu("Patient Search");
-	center("1.Search by Name",6);
-	center("2.Search by CPR",10);
+	
+	char* pSearchMenu[]={"1.Search by Name","2.Search by CPR"};
+	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
+	
 	center("Enter your option: ",15);
 	int choice;
 	cin>>choice;
@@ -187,11 +188,7 @@ void login()
 			}
 			else
 			{
-				clrscr();
-				borders();
-				center("Incorrect username or password");
-				center("Press any key to continue...",17);
-				getche();
+				errormsg("Incorrect username or password");
 				clrscr();
 				goto login;
 			}
@@ -203,20 +200,10 @@ void login()
 void main_menu()
 {
 	menu:
-	createMenu("Main Menu");
-	char option;
-	dispArray(Mainmenu,2,6);
-	/*
-	center("1.New Admission",7);
-	center("2.Search",9);
-	center("3.Facilities",11);
-	center("4.Billing",13);
-	center("5.Reports",15);
-	center("6.Patient Checkout",17);
-	center("7.Exit",19);
-	*/
+	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
 	center("Enter Your Option:",21);
-	option=getche();
+	
+	char option=getche();
 	switch(option)
 	{
 	  case '1':
@@ -268,54 +255,35 @@ void addPatient()
 void facilities(int fac[])
 {
 first_screen:
-  createMenu("FACILITIES");
-  center("1.Departments",7);
-  center("2.Lab",10);
-  center("3.Rooms",13);
+  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms"};
+  createMenu("FACILITIES",facilityMenu,sizeof(facilityMenu)/4);
   center("Enter Your Option:",17);
+  
   int op;
   cin>>op;
   switch(op)
   {
-	case 1:
-			 createMenu("DEPARTMENTS");
-			 /*
-			 center("General Medicine",6);
-			 center("ENT",18);
-			 center("Pediatrics",8);
-			 center("Neurology",10);
-			 center("Gynacology",12);
-			 center("Opthamology",14);
-			 center("Dental",16);
-			 center("Enter Your Option",17);
+	  case 1:	 createMenu("DEPARTMENTS",Departments,sizeof(Departments)/4,2);
+			 center("Enter Your Option",19);
 			 cin>>fac[1];
 			 goto first_screen; 
-			 */
-			 dispArray(Departments,2,6);
-			 goto first_screen;
-
-	case 2:
-			 createMenu("LAB");
-			 center("X-Ray",6);
-			 center("ECG",8);
-			 center("Ultrasound",10);
-			 center("MRI",12);
+			 
+	  case 2:	 char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"}; 
+		  	 createMenu("LAB",labMenu,sizeof(labMenu)/4,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[2];
 			 goto first_screen;
-	case 3:
-			 createMenu("ROOMS");
-			 center("Single AC Room",6);
-			 center("Single Non-AC Room",8);
-			 center("Double AC Room",10);
-			 center("Double Non-AC Room",12);
-			 center("Family Suite",14);
+	
+	  case 3:	 char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
+		  	 createMenu("ROOMS",roomMenu,sizeof(roomMenu)/4,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[3];
 			 goto first_screen;
-	case 4: return;
-	default:center("Invalid Option",18);
-			goto first_screen;
+	
+	  case 4: 	 return;
+	  
+	  default:	 center("Invalid Option",18);
+			 goto first_screen;
   }
 }
 void billing()
@@ -339,15 +307,8 @@ void billing()
 		  }
 		  else
 		  {
-			 clrscr();
-			 borders();
-			 gotoxy(25,7);
-			 cout<<"The entered CPR no. doesn't exist";
-			 gotoxy(25,8);
-			 cout<<"Press any key to continue..";
-			 getche();
+			 errormsg("The entered CPR no. doesn't exist");
 			 main_menu();
-			 break;
 		  }
 	}
 }
