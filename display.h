@@ -39,15 +39,15 @@ void center(char* word,int y)
   cout<<word;
 }
 //Display Menu
-void createMenu(char* word)
+/*void createMenu(char* word)
 {
   clrscr();
   borders();
   hr(4,'*');
   center(word,2);
-}
+}*/
 
-void createMenu(char* word,char* array[],int step)
+void createMenu(char* word,char* array[],int step=3)
 {
   clrscr();
   borders();
@@ -64,7 +64,7 @@ void errormsg(char* error)
   center("Press any key to continue...",17);
   getche();
 }
-void dispArray(char* array[],int arraySize,int step,int start)
+void dispArray(char* array[],int arraySize,int step=3,int start=6)
 {
   for(int i=0; i<arraySize;i++)
   {
