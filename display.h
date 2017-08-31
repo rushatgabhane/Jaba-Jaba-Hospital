@@ -47,7 +47,12 @@ void dispArray(char* array[],int arraySize,int step=3,int start=6)
 {
   for(int i=0; i<arraySize;i++)
   {
-	 center(array[i],start+(i*step));
+    char word[50] = {i+49,'.'};
+    for(int j = 2; array[i][j-2]!='\0';j++)
+    {
+      word[j]=array[i][j-2];
+    }
+   center(word,start+(i*step));
   }
 }
 

@@ -10,8 +10,8 @@
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"1.General Medicine","2.ENT","3.Pediatrics","4.Neurology","5.Gynacology","6.Opthamology","7.Dental"};
-char* Mainmenu[] = {"1.New Admission","2.Search","3.Facilities","4.Billing","5.Reports","6.Patient Checkout","7.Exit"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","6.Opthamology","Dental"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 //*******************
 //Function prototypes
 //*******************
@@ -103,7 +103,7 @@ int searchPatient()
 {
 	first_screen:
 
-	char* pSearchMenu[]={"1.Search by Name","2.Search by CPR"};
+	char* pSearchMenu[]={"Search by Name","Search by CPR"};
 	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
 	
 	center("Enter your option: ",15);
@@ -257,7 +257,7 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms","4.Main Menu"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
