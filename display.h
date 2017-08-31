@@ -25,37 +25,41 @@ void borders()
   vr(0,ch);
   vr(81,ch);
 }
+
 //Center Functions
-void center(char* word)
-{
-  int length = strlen(word);
-  gotoxy(40.5 - length/2,12.5);
-  cout<<word;
-}
-void center(char* word,int y)
+void center(char* word,int y=12.5)
 {
   int length = strlen(word);
   gotoxy(40.5 - length/2,y);
   cout<<word;
 }
+
 //Display Menu
-void createMenu(char* word)
+/*void createMenu(char* word)
 {
   clrscr();
   borders();
   hr(4,'*');
   center(word,2);
+}*/
+
+void dispArray(char* array[],int arraySize,int step=3,int start=6)
+{
+  for(int i=0; i<arraySize;i++)
+  {
+	 center(array[i],start+(i*step));
+  }
 }
-/*
-void createMenu(char* word,char* array[],int step)
+
+void createMenu(char* word,char* array[],int arraySize,int step=3)
 {
   clrscr();
   borders();
   hr(4,'*');
   center(word,2);
-  dispArray(array[],step,6)
+  dispArray(array,arraySize,step,6);
 }
-*/
+
 void errormsg(char* error)
 {
   clrscr();
@@ -63,11 +67,4 @@ void errormsg(char* error)
   center(error);
   center("Press any key to continue...",17);
   getche();
-}
-void dispArray(char* array[],int step,int start)
-{
-  for(int i=0; i<strlen(array);i++)
-  {
-    center(array[i],start+(i*step));
-  }
 }

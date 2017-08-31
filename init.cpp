@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "sfun.h"
-#include "borders.h"
+#include "display.h"
 void main()
 {
 class user
