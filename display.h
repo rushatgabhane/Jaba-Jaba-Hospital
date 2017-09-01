@@ -64,11 +64,12 @@ void createMenu(char* word,char* array[],int arraySize,int step=3)
   dispArray(array,arraySize,step,6);
 }
 
-void errormsg(char* error)
+void errormsg(char* error="null")
 {
   clrscr();
   borders();
-  center(error);
+  if(strcmp(error,"null"))
+    center(error);
   center("Press any key to continue...",17);
   getche();
 }
