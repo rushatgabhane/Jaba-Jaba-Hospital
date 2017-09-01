@@ -10,8 +10,8 @@
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","6.Opthamology","Dental"};
-char* Mainmenu[] = {"1.New Admission","2.Search","3.Facilities","4.Billing","5.Reports","6.Patient Checkout","7.Exit"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 //*******************
 //Function prototypes
 //*******************
