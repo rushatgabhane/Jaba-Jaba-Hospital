@@ -58,9 +58,10 @@ public:
 class patient
 {
 	char pname[20];
-	long cprno,pBill;
+	long cprno;
 	int fac[];
 	int roomNo;
+	float pBill;
 public:
 	void input()
 	{
