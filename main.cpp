@@ -66,21 +66,28 @@ class patient
 public:
 	void input()
 	{
-		center("Patient Name: ",15);
+		Lalign("Patient Name: ",10);
 		gets(pname);
-		center("CPR No: ",17);
+		Lalign("CPR No: ",12);
 		cin>>cprno;
+		Lalign("Room No.: ",14);
+		cin>>roomNo;
 		clrscr();
 		borders();
 		center("NEW ADMISSION",2);
 		hr(4,'*');
 		facilities(fac);
 	}
-	/*void display()
+	void display()
 	{
 		createMenu("Patient Details");
-
-	}*/
+		Lalign("Name: ",5);
+		cout<<pname;
+		Lalign("CPR No.: ",7);
+		cout<<cprno;
+		Lalign("Room No: ",9);
+		cout<<roomNo;
+	}
 	int check(long cpr)
 	{
 	  int x=(cpr=cprno?1:0);

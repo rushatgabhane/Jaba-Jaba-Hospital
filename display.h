@@ -55,6 +55,8 @@ void dispArray(char* array[],int arraySize,int step=3,int start=6)
    center(word,start+(i*step));
   }
 }
+//Menu functions
+//Creates a menu with the given heading and the elements passed through the array
 void createMenu(char* word,char* array[],int arraySize,int step=3)
 {
   clrscr();
@@ -63,7 +65,14 @@ void createMenu(char* word,char* array[],int arraySize,int step=3)
   center(word,2);
   dispArray(array,arraySize,step,6);
 }
-
+//Creates output screen with border and heading
+void createMenu(char* word)
+{
+  clrscr();
+  borders();
+  hr(4,'*');
+  center(word,2);
+}
 void errormsg(char* error="null")
 {
   clrscr();
@@ -74,7 +83,7 @@ void errormsg(char* error="null")
   getche();
 }
 //push the output in middle of screen, left alignment 
-void align(char* text,int y=7)
+void Lalign(char* text,int y=7)
 {
   gotoxy(35,y);
   cout<<text;
