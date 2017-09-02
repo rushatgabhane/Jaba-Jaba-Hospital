@@ -75,6 +75,7 @@ void createMenu(char* word)
 }
 void errormsg(char* error="null")
 {
+<<<<<<< HEAD
 	clrscr();
 	borders();
 	if(strcmp(error,"null"))
@@ -82,9 +83,9 @@ void errormsg(char* error="null")
 	center("Press any key to continue...",17);
 	getche();
 }
-//push the output in middle of screen, left alignment 
-void Lalign(char* text,int y=7)
+//Simplified gotoxy to align text 
+void align(char* text,int x,int y)
 {
-	gotoxy(35,y);
-	cout<<text;
+  gotoxy(x,y);
+  cout<<text;
 }
