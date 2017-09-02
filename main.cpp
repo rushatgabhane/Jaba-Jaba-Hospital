@@ -75,12 +75,21 @@ public:
 	void display()
 	{
 		createMenu("Patient Details");
-		gotoxy(30,5);
+		align("Patient Name: ",30,10);
+		cout<<pname;
+		align("CPR No: ",30,12);
+		cout<<cprno;
+		align("Room No: ",30,14);
+		cout<<roomNo;
+		center("Press any key to continue",17);
+		getch();
+		main_menu();
+		/*gotoxy(30,5);
 		cout<<"Patient Name: "<<pname;
 		gotoxy(30,7);
 		cout<<"CPR No: "<<cprno;
 		gotoxy(30,9);
-		cout<<"Room No: "<<roomNo;
+		cout<<"Room No: "<<roomNo;*/
 	}
 	int check(long cpr)
 	{
@@ -116,7 +125,7 @@ public:
 	  cout<<"Total Bill       : "<<pBill<<" BD";
 	}
 };
-//Search Patient Functions
+//Search Patient Function
 int searchPatient()
 {
 	first_screen:
@@ -151,17 +160,20 @@ int searchPatient()
 	 file.read((char*)&P,sizeof(P));
 	 if(P.check(cpr) && choice==1)
 	 {
+	 	cout<<"check1";
 		int point = file.tellg();
 		file.close();
 		return point;
 	 }
 	 else if (P.check(name) && choice==2)
 	 {
+	 	cout<<"check2";
 		int point = file.tellg();
 		file.close();
 		return point;
 	 }
   }
+  cout<<"check3";
   file.close();
   return 0;
 }
@@ -218,7 +230,9 @@ void main_menu()
 	menu:
 	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
 	center("Enter Your Option:",21);
-
+	patient P;
+	ifstream file;
+	int point;
 	int option;
 	cin>>option;
 	switch(option)
@@ -227,11 +241,13 @@ void main_menu()
 			addPatient();
 			break;
 	  case 2:
-			/*
-			int point = searchPatient();
-			ifstream file;
-			file.open("patients.dat",ios::in||ios::binary);
-			*/
+			point = searchPatient();
+			point -= sizeof(P);
+			file.open("patients.dat",ios::in|ios::binary);
+			file.seekg(point);
+			file.read((char*)&P,sizeof(P));
+			P.display();
+			break;
 	  case 3:
 			break;
 	  case 4:

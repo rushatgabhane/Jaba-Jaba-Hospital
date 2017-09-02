@@ -75,9 +75,9 @@ void createMenu(char* word)
 }
 void errormsg(char* error="null")
 {
-<<<<<<< HEAD
 	clrscr();
 	borders();
+  createMenu("ERROR");
 	if(strcmp(error,"null"))
 		center(error);
 	center("Press any key to continue...",17);
