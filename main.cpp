@@ -10,8 +10,8 @@
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"1.General Medicine","2.ENT","3.Pediatrics","4.Neurology","5.Gynacology","6.Opthamology","7.Dental"};
-char* Mainmenu[] = {"1.New Admission","2.Search","3.Facilities","4.Billing","5.Reports","6.Patient Checkout","7.Exit"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 //*******************
 //Function prototypes
 //*******************
@@ -26,8 +26,8 @@ void facilities(int fac[]);      //Function To Display Facilities Offered
 void ShowReport();      //Function To Display Patient Report
 void exitprogram();     //Function asking to exit or play a game
 void game();            //Function to Play a game
-void facilities(int);      //Function To Display Facilities Offered
-void ShowReport();        //Function To Display Patient Report
+void facilities(int);   //Function To Display Facilities Offered
+void ShowReport();      //Function To Display Patient Report
 int searchPatient();
 
 //***********
@@ -35,25 +35,21 @@ int searchPatient();
 //***********
 class user
 {
-  char uname[200];
-  char pass[200];
+	char uname[200];
+	char pass[200];
 public:
   void input()
   {
-	gotoxy(30,10);
-	cout<<"Enter username: ";
+	align("Enter Username: ",30,10);
 	gets(uname);
-	gotoxy(30,12);
-	cout<<"Enter password: ";
+	align("Enter Password: ",30,12);
 	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));
   }
   int access(char ename[],char epass[])
   {
-	if(strcmp(epass,pass)==0 && strcmp(ename,uname)==0)
-		return 1;
-	else
-		return 0;
+	int x=((strcmp(epass,pass)==0 && strcmp(ename,uname)==0)?1:0);
+	return x;
   }
 };
 ///////////////////
@@ -61,51 +57,82 @@ public:
 ///////////////////
 class patient
 {
-	char pname[200];
-	long cprno,bill;
+	char pname[20];
+	long cprno;
 	int fac[];
 	int roomNo;
+	float pBill;
 public:
 	void input()
 	{
-		center("Patient Name: ",15);
+		align("Patient Name: ",25,10);
 		gets(pname);
-		center("CPR No: ",17);
+		align("CPR Number: ",25,12);
 		cin>>cprno;
-		clrscr();
-		borders();
-		center("NEW ADMISSION",2);
-		hr(4,'*');
-		facilities(fac);
+		align("Room Number: ",25,14);
+		cin>>roomNo;
 	}
-	/*void display()
+	void display()
 	{
 		createMenu("Patient Details");
-
-	}*/
+		align("Patient Name: ",30,10);
+		cout<<pname;
+		align("CPR No: ",30,12);
+		cout<<cprno;
+		align("Room No: ",30,14);
+		cout<<roomNo;
+		center("Press any key to continue",17);
+		getch();
+		main_menu();
+		/*gotoxy(30,5);
+		cout<<"Patient Name: "<<pname;
+		gotoxy(30,7);
+		cout<<"CPR No: "<<cprno;
+		gotoxy(30,9);
+		cout<<"Room No: "<<roomNo;*/
+	}
 	int check(long cpr)
 	{
-		if(cpr==cprno)
-		 return 1;
-		else
-		 return 0;
+	  int x=(cprno==cpr?1:0);
+	  return x;
 	}
 	int check(char* name)
 	{
-		if(strcmpi(name,pname)==0)
-			return 1;
-		else
-			return 0;
+	  int	x=(strcmpi(name,pname)==1?1:0);
+	  return x;
+	}
+	void bill()
+	{
+	  float x,y,z;   //for lab charge, pharmacy charge etc
+	  clrscr();
+	  randomize();
+	  x=1+random(15);
+	  y=1.5+random(5);
+	  z=1+random(7);
+	  pBill=x+y+z+5+10;
+
+	  createMenu("Billing Information ");
+	  align("Admission Fee    : 5 BD",29,8);
+	  gotoxy(29,10);
+	  cout<<"Laboratory charge: "<<x<<" BD";
+	  gotoxy(29,12);
+	  cout<<"Pharmacy         : "<<y<<" BD";
+	  gotoxy(29,14);
+	  cout<<"Physical Therapy : "<<z<<" BD";
+	  align("Accomodation     : 10 BD",29,16);
+	  align("_________________________",29,17);
+	  gotoxy(29,18);
+	  cout<<"Total Bill       : "<<pBill<<" BD";
 	}
 };
-//Search Patient Functions
+//Search Patient Function
 int searchPatient()
 {
 	first_screen:
 
-	char* pSearchMenu[]={"1.Search by Name","2.Search by CPR"};
+	char* pSearchMenu[]={"Search by Name","Search by CPR"};
 	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
-	
+
 	center("Enter your option: ",15);
 	int choice;
 	cin>>choice;
@@ -127,23 +154,26 @@ int searchPatient()
 	}
   patient P;
   ifstream file;
-  file.open("patients.dat",ios::in||ios::binary);
+  file.open("patients.dat",ios::in|ios::binary);
   while(!file.eof())
   {
 	 file.read((char*)&P,sizeof(P));
-    if(P.check(cpr) && choice==1)
+	 if(P.check(cpr) && choice==1)
 	 {
-      int point = file.tellg();
-		file.close();
-      return point;
-	 }
-    else if (P.check(name) && choice==2)
-	 {
+		cout<<"check1";
 		int point = file.tellg();
 		file.close();
-    	return point;
+		return point;
+	 }
+	 else if (P.check(name) && choice==2)
+	 {
+		cout<<"check2";
+		int point = file.tellg();
+		file.close();
+		return point;
 	 }
   }
+  cout<<"check3";
   file.close();
   return 0;
 }
@@ -164,35 +194,33 @@ void addUser()
 //****************
 void login()
 {
-	char uname[200],pass[200];
-	login:
-		borders();
-		gotoxy(36,7);
-		cout<<"LOGIN";
-		gotoxy(30,10);
-		cout<<"Enter username: ";
-		gets(uname);
-		gotoxy(30,12);
-		cout<<"Enter password: ";
-		strcpy(pass,getpass());
-		strcpy(pass,encrypt(pass));
-		ifstream file;
-		file.open("users.dat",ios::in|ios::binary);
-		user U;
-		while(!file.eof())
-		{
-			file.read((char*)&U,sizeof(U));
-			if(U.access(uname,pass))
-			{
-				main_menu();
-			}
-			else
-			{
-				errormsg("Incorrect username or password");
-				clrscr();
-				goto login;
-			}
-		}
+ char uname[200],pass[200];
+ login:
+	 borders();
+	 align("LOGIN",36,7);
+	 align("Enter Username: ",30,10);
+	 gets(uname);
+	 align("Enter Password: ",30,12);
+	 strcpy(pass,getpass());
+	 strcpy(pass,encrypt(pass));
+	 ifstream file;
+	 file.open("users.dat",ios::in|ios::binary);
+	 user U;
+	 while(!file.eof())
+	 {
+		file.read((char*)&U,sizeof(U));
+		if(U.access(uname,pass))
+	  {
+		main_menu();
+	  }
+		else
+	  {
+		errormsg("Incorrect username or password");
+		clrscr();
+		goto
+		login;
+	  }
+	 }
 }
 //***********
 //Main Menu
@@ -202,32 +230,36 @@ void main_menu()
 	menu:
 	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
 	center("Enter Your Option:",21);
-
-	char option=getche();
+	patient P;
+	ifstream file;
+	int point;
+	int option;
+	cin>>option;
 	switch(option)
 	{
-	  case '1':
+	  case 1:
 			addPatient();
 			break;
-	  case '2':
-			/*
-	  		int point = searchPatient();
-			ifstream file;
-	  		file.open("patients.dat",ios::in||ios::binary);
-			*/
-
-	  case '3':
+	  case 2:
+			point = searchPatient();
+			point -= sizeof(P);
+			file.open("patients.dat",ios::in|ios::binary);
+			file.seekg(point);
+			file.read((char*)&P,sizeof(P));
+			P.display();
 			break;
-	  case '4':
+	  case 3:
+			break;
+	  case 4:
 			billing();
 			break;
-	  case '5':
+	  case 5:
 			ShowReport();
 			break;
-	  case '6':
+	  case 6:
 			removePatient();
 			break;
-	  case '7':
+	  case 7:
 			exitprogram();
 			break;
 	default:
@@ -247,16 +279,15 @@ void addPatient()
 	patient P;
 	P.input();
 	ofstream file;
-	file.open("patients.dat",ios::app||ios::binary);
+	file.open("patients.dat",ios::app|ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
-
 }
 void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"1.Departments","2.Lab","3.Rooms"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
@@ -282,7 +313,8 @@ first_screen:
 			 cin>>fac[3];
 			 goto first_screen;
 
-	  case 4: 	 return;
+	  case 4:    main_menu();
+			 break;
 
 	  default:	 errormsg("Invalid Option");
 			 goto first_screen;
@@ -294,25 +326,30 @@ void billing()
 	borders();
 	patient P;
 	long cpr;
-	gotoxy(22,7);
-	cout<<"Enter CPR number to view the Bill ";
+	borders();
+	align("Enter CPR number to view the Bill: ",17,12);
 	cin>>cpr;
 	ifstream file;
-	file.open("users.dat",ios::in|ios::binary);
+	file.open("patients.dat",ios::in|ios::binary);
 	while(!file.eof())
 	{
-		  file.read((char*)&P,sizeof(P));
-		  if(P.check(cpr))
-		  {
-			 gotoxy(25,4);
-			 cout<<"it worked";
-		  }
-		  else
-		  {
-			 errormsg("The entered CPR no. doesn't exist");
-			 main_menu();
-		  }
+		file.read((char*)&P,sizeof(P));
+		if(P.check(cpr))
+	  {
+		  P.bill();
+		  align("Press any key to go to Main Menu..",25,24);
+		  getche();
+		  main_menu();
+		  break;
+	  }
+		else
+	  {
+		errormsg("The entered CPR no. doesn't exist");
+		main_menu();
+		break;
+	  }
 	}
+  file.close();
 }
 void ShowReport()
 {
@@ -328,7 +365,7 @@ void exitprogram()
 {
 	clrscr();
 	borders();
-	char op;
+	int op;
 	gotoxy(25,8);
 	cout<<"THANK YOU FOR USING THE PROGRAM";
 	gotoxy(25,10);
@@ -337,12 +374,12 @@ void exitprogram()
 	cout<<"Press 2 to play a game!";
 	gotoxy(25,13);
 	cout<<"Enter your choice: ";
-	op=getche();
+	cin>>op;
 	switch(op)
 	{
-	  case '1':
+	  case 1:
 		  exit(0);
-	  case '2':
+	  case 2:
 		  clrscr();
 		  game();
 	}
@@ -368,20 +405,15 @@ void game()
 	int n=random(10);
 	strcpy(word,words[n]);
 	Unknown(word, unknown);
-	gotoxy(1,2);
-	cout<<"Welcome to hangman";
-	gotoxy(1,3);
-	cout<<"Guess the country name";
-	gotoxy(1,4);
-	cout<<"You have 5 tries"<<endl;
-	gotoxy(1,5);
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~";
+	align("Welcome to hangman",1,2);
+	align("Guess the country name",1,3);
+	align("You have 5 guesses left",1,4);
+	align("~~~~~~~~~~~~~~~~~~~~~~~~",1,5);
 	while (WrongGuess <mt)
 	{
 		gotoxy(1,6);
 		cout<<endl<<endl<<unknown;
-		gotoxy(1,7);
-		cout<<"\n\nGuess a letter: ";
+		align("\n\nGuess a letter: ",1,7);
 		cin>>letter;
 		if (letterFill(letter, word, unknown)==0)
 		{
@@ -398,8 +430,7 @@ void game()
 		{
 			gotoxy(1,8);
 			cout<<word<<endl;
-			gotoxy(1,9);
-			cout<<"You guessed it right!";
+			align("You guessed it right!",1,9);
 			exit(0);
 			break;
 		}
@@ -407,33 +438,36 @@ void game()
 	  if(WrongGuess == mt)
 	  {
 			gotoxy(1,7);
-			cout<<endl<<"You lose... you've been hanged." << endl;
-			gotoxy(1,9);
+			cout<<endl<<"You lose... you've been hanged."<<endl;
+			gotoxy(1,6);
 			cout<<"The word was: "<<word<<endl;
+			dixit(33,3);
+			dixit(47,3);
+			dixit(61,3);
 			exit(0);
-	 }
+	  }
 	 getch();
 	 }
 int letterFill (char guess, char secretword[], char guessword[])
 {
 	int matches=0;
 	for (int i = 0; secretword[i]!='\0'; i++)
+  {
+	 if (guess == guessword[i])
+		 return 0;
+	 if (guess == secretword[i])
 	{
-		if (guess == guessword[i])
-			return 0;
-			if (guess == secretword[i])
-		{
-			guessword[i] = guess;
-			matches++;
-		}
+	 guessword[i] = guess;
+	 matches++;
 	}
+  }
 	return matches;
 }
 void Unknown (char word[], char unknown[])
 {
 	for (int i = 0; i<strlen(word) ; i++)
-	  unknown[i]='*';
-	  unknown[i]='\0';
+	unknown[i]='*';
+	unknown[i]='\0';
 }
 //***********
 //Main Function

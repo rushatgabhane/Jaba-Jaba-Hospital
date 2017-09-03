@@ -13,13 +13,15 @@ class user
 public:
   void input()
   {
-	gotoxy(30,10);
-	cout<<"Enter username: ";
+	center("Create New Account",8);
+	align("Enter Username: ",30,10);
 	gets(uname);
-	gotoxy(30,12);
-	cout<<"Enter password: ";
+	align("Enter Password: ",30,12);
 	strcpy(pass,getpass());
 	strcpy(pass,encrypt(pass));
+	clrscr();
+	center("Account Created!",10);
+	center("Please head over to the main fuction.",12);
   }
   int access(char ename[],char epass[])
   {
