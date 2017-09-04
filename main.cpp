@@ -134,17 +134,16 @@ int searchPatient()
 	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
 
 	center("Enter your option: ",15);
-	int choice;
-	cin>>choice;
 	char* name;
 	long cpr;
+	char choice=getch();
 	switch(choice)
 	{
-		case 1:
+		case '1':
 			center("Enter name: ",21);
 			gets(name);
 			break;
-		case 2:
+		case '2':
 			center("Enter CPR Number: ",21);
 			cin>>cpr;
 			break;
@@ -233,14 +232,13 @@ void main_menu()
 	patient P;
 	ifstream file;
 	int point;
-	int option;
-	cin>>option;
+	char option=getch();
 	switch(option)
 	{
-	  case 1:
+	  case '1':
 			addPatient();
 			break;
-	  case 2:
+	  case '2':
 			point = searchPatient();
 			point -= sizeof(P);
 			file.open("patients.dat",ios::in|ios::binary);
@@ -248,18 +246,18 @@ void main_menu()
 			file.read((char*)&P,sizeof(P));
 			P.display();
 			break;
-	  case 3:
+	  case '3':
 			break;
-	  case 4:
+	  case '4':
 			billing();
 			break;
-	  case 5:
+	  case '5':
 			ShowReport();
 			break;
-	  case 6:
+	  case '6':
 			removePatient();
 			break;
-	  case 7:
+	  case '7':
 			exitprogram();
 			break;
 	default:
