@@ -23,24 +23,24 @@ char* getpass()
 	int i=0;
    while(1)
    {
-    pass[i] = getch();
-    if(pass[i]==13)
-    {
-  		pass[i]='\0';
-  		break;
-    }
-    else if(i>=1 && pass[i]==8)  //Checks for backspace
-    {
-  		i--;
-  		gotoxy(46+i,12);
-  		cout<<" ";
-  		gotoxy(46+i,12);
-    }
-    else
-    {
-  		cout<<'*';
-  		i++;
-    }
+	pass[i] = getch();
+	if(pass[i]==13)
+	{
+		pass[i]='\0';
+		break;
+	}
+	else if(i>=1 && pass[i]==8)  //Checks for backspace
+	{
+		i--;
+		gotoxy(46+i,12);
+		cout<<" ";
+		gotoxy(46+i,12);
+	}
+	else
+	{
+		cout<<'*';
+		i++;
+	}
 	}
 	return pass;
 }
@@ -142,12 +142,12 @@ void align(char* text,int x,int y)
 //Displays dixit, give x and y for its position
 void dixit(int x=10,int y=1)
 {
-        align("¯\\_('_')_/¯",x,y);
-        align("|",x+5,y+1);       
-        align("|",x+5,y+2);
-        align("|",x+5,y+3);
-        align("/ \\",x+4,y+4);
-        align("_/   \\_",x+2,y+5);  
+		align("¯\\_('_')_/¯",x,y);
+		align("|",x+5,y+1);       
+		align("|",x+5,y+2);
+		align("|",x+5,y+3);
+		align("/ \\",x+4,y+4);
+		align("_/   \\_",x+2,y+5);  
 }
 //*****************
 //Global Variables
