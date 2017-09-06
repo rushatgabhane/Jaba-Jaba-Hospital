@@ -503,6 +503,8 @@ void removePatient()
 }
 void exitprogram()
 {
+exit_screen:
+
 	clrscr();
 	borders();
 	int op;
@@ -512,7 +514,9 @@ void exitprogram()
 	cout<<"Press 1 to confirm EXIT";
 	gotoxy(25,11);
 	cout<<"Press 2 to play a game!";
-	gotoxy(25,13);
+	gotoxy(25,12);
+	cout<<"Press 3 to Return To Main Menu";
+	gotoxy(25,14);
 	cout<<"Enter your choice: ";
 	cin>>op;
 	switch(op)
@@ -522,6 +526,10 @@ void exitprogram()
 	  case 2:
 		  clrscr();
 		  game();
+	  case 3:
+			clrscr();
+			main_menu();
+
 	}
 }
 
@@ -571,7 +579,9 @@ void game()
 			gotoxy(1,8);
 			cout<<word<<endl;
 			align("You guessed it right!",1,9);
-			exit(0);
+			align("Press Any Key To Continue",27,15);
+			getche();
+			exitprogram();
 			break;
 		}
 	 }
@@ -584,7 +594,9 @@ void game()
 			dixit(33,3);
 			dixit(47,3);
 			dixit(61,3);
-			exit(0);
+			align("Press Any Key To Continue",27,15);
+			getche();
+			exitprogram();
 	  }
 	 getch();
 	 }
