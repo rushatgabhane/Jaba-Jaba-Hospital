@@ -8,7 +8,8 @@
 //Special Functions
 //*****************
 //Encrypt function
-char* encrypt(char pass[])
+//Encrypts the entered word by adding the length of the string to each character
+char* encrypt(char pass[])    
 {
   int i=0;
   for(i=0;pass[i]!='\0';i++)
@@ -57,7 +58,7 @@ void hr(int i,char ch)
 		cout<<ch;
 	}
 }
-//Creates Vertical Rule
+//Creates vertical rule
 void vr(int i,char ch)
 {
 	for(int j=0;j<25;j++)
@@ -92,12 +93,12 @@ void center(char* word,int y=12.5)
 	hr(4,'*');
 	center(word,2);
 }*/
-
+//Displays the elements of a passed array by calling the center function
 void dispArray(char* array[],int arraySize,int step=3,int start=6)
 {
 	for(int i=0; i<arraySize;i++)
 	{
-		char word[50] = {i+49,'.'};
+		char word[50] = {i+49,'.'};				//Makes the list of items numbered
 		for(int j = 2; array[i][j-2]!='\0';j++)
 		{
 			word[j]=array[i][j-2];
@@ -123,6 +124,7 @@ void createMenu(char* word)
 	hr(4,'*');
 	center(word,2);
 }
+//Can be called to create a simple error screen
 void errormsg(char* error="null")
 {
 	clrscr();
@@ -157,20 +159,20 @@ char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","P
 //*******************
 //Function prototypes
 //*******************
-void getdoctor();       //To assign a doctor to a patient
-void addPatient();      //To add a patient
-void removePatient();   //To archive patient records
-void main_menu();       //To output the main menu
-void login(); 		    	//To login
-void billing();			//Billing Function
-void addUser();			//Function to add users
-void facilities(int fac[]);      //Function To Display Facilities Offered
-void ShowReport();      //Function To Display Patient Report
-void exitprogram();     //Function asking to exit or play a game
-void game();            //Function to Play a game
-void facilities(int);   //Function To Display Facilities Offered
-void ShowReport();      //Function To Display Patient Report
-int searchPatient();
+void getdoctor();			//To assign a doctor to a patient
+void addPatient();			//To add a patient
+void removePatient();		//To archive patient records
+void main_menu();			//To output the main menu
+void login();				//To login
+void billing();				//Billing Function
+void addUser();				//Function to add users
+void facilities(int fac[]);	//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+void exitprogram();			//Function asking to exit or play a game
+void game();				//Function to Play a game
+void facilities(int);		//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+int searchPatient();		//Funtion to search for a patient
 
 //***********
 //User Class
@@ -205,7 +207,7 @@ class patient
 	int roomNo;
 	float pBill;
 public:
-	void input()
+	void input()	//Inputs patient details
 	{
 		align("Patient Name: ",25,10);
 		gets(pname);
@@ -214,7 +216,7 @@ public:
 		align("Room Number: ",25,14);
 		cin>>roomNo;
 	}
-	void display()
+	void display()	//Displays patient details
 	{
 		createMenu("Patient Details");
 		align("Patient Name: ",30,10);
@@ -226,12 +228,6 @@ public:
 		center("Press any key to continue",17);
 		getch();
 		main_menu();
-		/*gotoxy(30,5);
-		cout<<"Patient Name: "<<pname;
-		gotoxy(30,7);
-		cout<<"CPR No: "<<cprno;
-		gotoxy(30,9);
-		cout<<"Room No: "<<roomNo;*/
 	}
 	int check(long cpr)
 	{
