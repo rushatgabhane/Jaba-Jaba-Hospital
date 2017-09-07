@@ -85,14 +85,6 @@ void center(char* word,int y=12.5)
 	cout<<word;
 }
 
-//Display Menu
-/*void createMenu(char* word)
-{
-	clrscr();
-	borders();
-	hr(4,'*');
-	center(word,2);
-}*/
 //Displays the elements of a passed array by calling the center function
 void dispArray(char* array[],int arraySize,int step=3,int start=6)
 {
@@ -156,6 +148,7 @@ void dixit(int x=10,int y=1)
 //*****************
 char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
 char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
 //*******************
 //Function prototypes
 //*******************
@@ -207,15 +200,25 @@ class patient
 	float amount[20];		//Stores the price of each corresponding treatment
 	int roomNo;
 	float pBill;
+	int i = 2;
+	char doa[7];
 public:
 	void input()	//Inputs patient details
 	{
+		align("Date of Admission: ",25,10);
+		gets(doa);
 		align("Patient Name: ",25,10);
 		gets(pname);
 		align("CPR Number: ",25,12);
 		cin>>cprno;
 		align("Room Number: ",25,14);
 		cin>>roomNo;
+		createMenu("ROOM TYPE",roomMenu,sizeof(roomMenu)/4,2);
+		cout<<"Enter your option: ";
+		int opt;
+		cin>>opt;
+		description[0]=roomMenu[opt-1];
+		amount[0]=5*opt;
 	}
 	void display()	//Displays patient details
 	{
