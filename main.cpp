@@ -203,7 +203,8 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	int fac[];
+	char* description[20];	//Stores description about the treatment
+	float amount[20];		//Stores the price of each corresponding treatment
 	int roomNo;
 	float pBill;
 public:
@@ -241,26 +242,31 @@ public:
 	}
 	void bill()
 	{
-	  float x,y,z;   //for lab charge, pharmacy charge etc
-	  clrscr();
-	  randomize();
-	  x=1+random(15);
-	  y=1.5+random(5);
-	  z=1+random(7);
-	  pBill=x+y+z+5+10;
+		float x,y,z;   //for lab charge, pharmacy charge etc
+		clrscr();
+		randomize();
+		x=1+random(15);
+		y=1.5+random(5);
+		z=1+random(7);
+		pBill=x+y+z+5+10;
 
-	  createMenu("Billing Information ");
-	  align("Admission Fee    : 5 BD",29,8);
-	  gotoxy(29,10);
-	  cout<<"Laboratory charge: "<<x<<" BD";
-	  gotoxy(29,12);
-	  cout<<"Pharmacy         : "<<y<<" BD";
-	  gotoxy(29,14);
-	  cout<<"Physical Therapy : "<<z<<" BD";
-	  align("Accomodation     : 10 BD",29,16);
-	  align("_________________________",29,17);
-	  gotoxy(29,18);
-	  cout<<"Total Bill       : "<<pBill<<" BD";
+		createMenu("Billing Information ");
+		align("Admission Fee    : 5 BD",29,8);
+		gotoxy(29,10);
+		cout<<"Laboratory charge: "<<x<<" BD";
+		gotoxy(29,12);
+		cout<<"Pharmacy         : "<<y<<" BD";
+		gotoxy(29,14);
+		cout<<"Physical Therapy : "<<z<<" BD";
+		align("Accomodation     : 10 BD",29,16);
+		align("_________________________",29,17);
+		gotoxy(29,18);
+		cout<<"Total Bill       : "<<pBill<<" BD";
+	}
+	void addTreatment()
+	{
+		createMenu("ADD TREATMENT");
+		
 	}
 };
 //Search Patient Function
