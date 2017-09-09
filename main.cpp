@@ -86,9 +86,9 @@ void center(char* word,int y=12.5)
 }
 
 //Displays the elements of a passed array by calling the center function
-void dispArray(char* array[],int arraySize,int step=3,int start=6)
+void dispArray(char* array[],int step=3,int start=6)
 {
-	for(int i=0; i<arraySize;i++)
+	for(int i=0;strcmp(array[i],"null");i++)
 	{
 		char word[50] = {i+49,'.'};				//Makes the list of items numbered
 		for(int j = 2; array[i][j-2]!='\0';j++)
@@ -100,7 +100,7 @@ void dispArray(char* array[],int arraySize,int step=3,int start=6)
 }
 //Menu functions
 //Creates a menu with the given heading and the elements passed through the array
-void createMenu(char* word,char* array[],int arraySize,int step=3)
+void createMenu(char* word,char* array[],int step=3)
 {
 	clrscr();
 	borders();
@@ -146,9 +146,9 @@ void dixit(int x=10,int y=1)
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
-char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
-char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental","null"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit","null"};
+char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite","null"};
 //*******************
 //Function prototypes
 //*******************
@@ -213,7 +213,7 @@ public:
 		cin>>cprno;
 		align("Room Number: ",25,14);
 		cin>>roomNo;
-		createMenu("ROOM TYPE",roomMenu,sizeof(roomMenu)/4,2);
+		createMenu("ROOM TYPE",roomMenu,2);
 		cout<<"Enter your option: ";
 		int opt;
 		cin>>opt;
@@ -277,8 +277,8 @@ int searchPatient()
 {
 	first_screen:
 
-	char* pSearchMenu[]={"Search by Name","Search by CPR"};
-	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
+	char* pSearchMenu[]={"Search by Name","Search by CPR","null"};
+	createMenu("Patient Search",pSearchMenu,4);
 
 	center("Enter your option: ",15);
 	char* name;
@@ -374,7 +374,7 @@ void login()
 void main_menu()
 {
 	menu:
-	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
+	createMenu("Main Menu",Mainmenu,2);
 	center("Enter Your Option:",21);
 	patient P;
 	ifstream file;
@@ -432,28 +432,28 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
-  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
-  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu","null"};
+  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"."null"};
+  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite","null"};
 
-  createMenu("FACILITIES",facilityMenu,sizeof(facilityMenu)/4);
+  createMenu("FACILITIES",facilityMenu);
   center("Enter Your Option:",17);
 
   int op;
   cin>>op;
   switch(op)
   {
-	  case 1:	 createMenu("DEPARTMENTS",Departments,sizeof(Departments)/4,2);
+	  case 1:	 createMenu("DEPARTMENTS",Departments,2);
 			 center("Enter Your Option",19);
 			 cin>>fac[1];
 			 goto first_screen;
 
-	  case 2:	 createMenu("LAB",labMenu,sizeof(labMenu)/4,2);
+	  case 2:	 createMenu("LAB",labMenu,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[2];
 			 goto first_screen;
 
-	  case 3:	 createMenu("ROOMS",roomMenu,sizeof(roomMenu)/4,2);
+	  case 3:	 createMenu("ROOMS",roomMenu,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[3];
 			 goto first_screen;
