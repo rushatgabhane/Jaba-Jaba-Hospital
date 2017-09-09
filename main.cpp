@@ -269,7 +269,20 @@ public:
 	void addTreatment()
 	{
 		createMenu("ADD TREATMENT");
-		
+		center("Enter number of treatments: ");
+		int j;
+		cin>>j;
+		j+=i;
+		for(i;i<j;i++)
+		{
+			createMenu("ADD TREATMENT");
+			center("Enter description: ",10);
+			gets(description[i]);
+			center("Enter Amount: BD ");
+			gets(amount[i]);
+		}
+		errormsg("Added Treatments..");
+		main_menu();
 	}
 };
 //Search Patient Function
