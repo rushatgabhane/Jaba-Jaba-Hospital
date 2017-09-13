@@ -4,31 +4,168 @@
 #include <string.h>
 #include <process.h>
 #include <stdlib.h>
-#include <windows.h>
-#include "display.h"
-#include "sfun.h"
+//*****************
+//Special Functions
+//*****************
+//Encrypt function
+//Encrypts the entered word by adding the length of the string to each character
+char* encrypt(char pass[])    
+{
+  int i=0;
+  for(i=0;pass[i]!='\0';i++)
+   pass[i]+=strlen(pass);
+  return pass;
+}
+
+//Function to get password
+char* getpass()
+{
+	char pass[200];
+	int i=0;
+   while(1)
+   {
+	pass[i] = getch();
+	if(pass[i]==13)
+	{
+		pass[i]='\0';
+		break;
+	}
+	else if(i>=1 && pass[i]==8)  //Checks for backspace
+	{
+		i--;
+		gotoxy(46+i,12);
+		cout<<" ";
+		gotoxy(46+i,12);
+	}
+	else
+	{
+		cout<<'*';
+		i++;
+	}
+	}
+	return pass;
+}
+//*****************
+//Display Functions
+//*****************
+
+//Creates horizontal rule
+void hr(int i,char ch)
+{
+	for(int j=0;j<81;j++)
+	{
+		gotoxy(j,i);
+		cout<<ch;
+	}
+}
+//Creates vertical rule
+void vr(int i,char ch)
+{
+	for(int j=0;j<25;j++)
+	{
+		gotoxy(i,j);
+		cout<<ch;
+	}
+}
+//Creates borders
+void borders()
+{
+	char ch = '*';
+	hr(0,ch);
+	hr(25,ch);
+	vr(0,ch);
+	vr(81,ch);
+}
+
+//Center Functions
+void center(char* word,int y=12.5)
+{
+	int length = strlen(word);
+	gotoxy(40.5 - length/2,y);
+	cout<<word;
+}
+
+//Displays the elements of a passed array by calling the center function
+void dispArray(char* array[],int step=3,int start=6)
+{
+	for(int i=0;strcmp(array[i],"null");i++)
+	{
+		char word[50] = {i+49,'.'};				//Makes the list of items numbered
+		for(int j = 2; array[i][j-2]!='\0';j++)
+		{
+			word[j]=array[i][j-2];
+		}
+	 center(word,start+(i*step));
+	}
+}
+//Menu functions
+//Creates a menu with the given heading and the elements passed through the array
+void createMenu(char* word,char* array[],int step=3)
+{
+	clrscr();
+	borders();
+	hr(4,'*');
+	center(word,2);
+	dispArray(array,arraySize,step,6);
+}
+//Creates output screen with border and heading
+void createMenu(char* word)
+{
+	clrscr();
+	borders();
+	hr(4,'*');
+	center(word,2);
+}
+//Can be called to create a simple error screen
+void errormsg(char* error="null")
+{
+	clrscr();
+	borders();
+  createMenu("ERROR");
+	if(strcmp(error,"null"))
+		center(error);
+	center("Press any key to continue...",17);
+	getche();
+}
+//Simplified gotoxy to align text 
+void align(char* text,int x,int y)
+{
+  gotoxy(x,y);
+  cout<<text;
+}
+//Displays dixit, give x and y for its position
+void dixit(int x=10,int y=1)
+{
+		align("¯\\_('_')_/¯",x,y);
+		align("|",x+5,y+1);       
+		align("|",x+5,y+2);
+		align("|",x+5,y+3);
+		align("/ \\",x+4,y+4);
+		align("_/   \\_",x+2,y+5);  
+}
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
-char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental","null"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit","null"};
+char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite","null"};
 //*******************
 //Function prototypes
 //*******************
-void getdoctor();       //To assign a doctor to a patient
-void addPatient();      //To add a patient
-void removePatient();   //To archive patient records
-void main_menu();       //To output the main menu
-void login(); 		    	//To login
-void billing();			//Billing Function
-void addUser();			//Function to add users
-void facilities(int fac[]);      //Function To Display Facilities Offered
-void ShowReport();      //Function To Display Patient Report
-void exitprogram();     //Function asking to exit or play a game
-void game();            //Function to Play a game
-void facilities(int);   //Function To Display Facilities Offered
-void ShowReport();      //Function To Display Patient Report
-int searchPatient();
+void getdoctor();			//To assign a doctor to a patient
+void addPatient();			//To add a patient
+void removePatient();		//To archive patient records
+void main_menu();			//To output the main menu
+void login();				//To login
+void billing();				//Billing Function
+void addUser();				//Function to add users
+void facilities(int fac[]);	//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+void exitprogram();			//Function asking to exit or play a game
+void game();				//Function to Play a game
+void facilities(int);		//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+int searchPatient();		//Funtion to search for a patient
 
 //***********
 //User Class
@@ -59,20 +196,31 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	int fac[];
+	char* description[20];	//Stores description about the treatment
+	float amount[20];		//Stores the price of each corresponding treatment
 	int roomNo;
 	float pBill;
+	int i = 2;
+	char doa[7];
 public:
-	void input()
+	void input()	//Inputs patient details
 	{
+		align("Date of Admission: ",25,10);
+		gets(doa);
 		align("Patient Name: ",25,10);
 		gets(pname);
 		align("CPR Number: ",25,12);
 		cin>>cprno;
 		align("Room Number: ",25,14);
 		cin>>roomNo;
+		createMenu("ROOM TYPE",roomMenu,2);
+		cout<<"Enter your option: ";
+		int opt;
+		cin>>opt;
+		description[0]=roomMenu[opt-1];
+		amount[0]=5*opt;
 	}
-	void display()
+	void display()	//Displays patient details
 	{
 		createMenu("Patient Details");
 		align("Patient Name: ",30,10);
@@ -84,12 +232,6 @@ public:
 		center("Press any key to continue",17);
 		getch();
 		main_menu();
-		/*gotoxy(30,5);
-		cout<<"Patient Name: "<<pname;
-		gotoxy(30,7);
-		cout<<"CPR No: "<<cprno;
-		gotoxy(30,9);
-		cout<<"Room No: "<<roomNo;*/
 	}
 	int check(long cpr)
 	{
@@ -103,26 +245,44 @@ public:
 	}
 	void bill()
 	{
-	  float x,y,z;   //for lab charge, pharmacy charge etc
-	  clrscr();
-	  randomize();
-	  x=1+random(15);
-	  y=1.5+random(5);
-	  z=1+random(7);
-	  pBill=x+y+z+5+10;
+		float x,y,z;   //for lab charge, pharmacy charge etc
+		clrscr();
+		randomize();
+		x=1+random(15);
+		y=1.5+random(5);
+		z=1+random(7);
+		pBill=x+y+z+5+10;
 
-	  createMenu("Billing Information ");
-	  align("Admission Fee    : 5 BD",29,8);
-	  gotoxy(29,10);
-	  cout<<"Laboratory charge: "<<x<<" BD";
-	  gotoxy(29,12);
-	  cout<<"Pharmacy         : "<<y<<" BD";
-	  gotoxy(29,14);
-	  cout<<"Physical Therapy : "<<z<<" BD";
-	  align("Accomodation     : 10 BD",29,16);
-	  align("_________________________",29,17);
-	  gotoxy(29,18);
-	  cout<<"Total Bill       : "<<pBill<<" BD";
+		createMenu("Billing Information ");
+		align("Admission Fee    : 5 BD",29,8);
+		gotoxy(29,10);
+		cout<<"Laboratory charge: "<<x<<" BD";
+		gotoxy(29,12);
+		cout<<"Pharmacy         : "<<y<<" BD";
+		gotoxy(29,14);
+		cout<<"Physical Therapy : "<<z<<" BD";
+		align("Accomodation     : 10 BD",29,16);
+		align("_________________________",29,17);
+		gotoxy(29,18);
+		cout<<"Total Bill       : "<<pBill<<" BD";
+	}
+	void addTreatment()
+	{
+		createMenu("ADD TREATMENT");
+		center("Enter number of treatments: ");
+		int j;
+		cin>>j;
+		j+=i;
+		for(i;i<j;i++)
+		{
+			createMenu("ADD TREATMENT");
+			center("Enter description: ",10);
+			gets(description[i]);
+			center("Enter Amount: BD ");
+			gets(amount[i]);
+		}
+		errormsg("Added Treatments..");
+		main_menu();
 	}
 };
 //Search Patient Function
@@ -130,8 +290,8 @@ int searchPatient()
 {
 	first_screen:
 
-	char* pSearchMenu[]={"Search by Name","Search by CPR"};
-	createMenu("Patient Search",pSearchMenu,sizeof(pSearchMenu)/4,4);
+	char* pSearchMenu[]={"Search by Name","Search by CPR","null"};
+	createMenu("Patient Search",pSearchMenu,4);
 
 	center("Enter your option: ",15);
 	char* name;
@@ -227,7 +387,7 @@ void login()
 void main_menu()
 {
 	menu:
-	createMenu("Main Menu",Mainmenu,sizeof(Mainmenu)/4,2);
+	createMenu("Main Menu",Mainmenu,2);
 	center("Enter Your Option:",21);
 	patient P;
 	ifstream file;
@@ -285,28 +445,28 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
-  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
-  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu","null"};
+  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"."null"};
+  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite","null"};
 
-  createMenu("FACILITIES",facilityMenu,sizeof(facilityMenu)/4);
+  createMenu("FACILITIES",facilityMenu);
   center("Enter Your Option:",17);
 
   int op;
   cin>>op;
   switch(op)
   {
-	  case 1:	 createMenu("DEPARTMENTS",Departments,sizeof(Departments)/4,2);
+	  case 1:	 createMenu("DEPARTMENTS",Departments,2);
 			 center("Enter Your Option",19);
 			 cin>>fac[1];
 			 goto first_screen;
 
-	  case 2:	 createMenu("LAB",labMenu,sizeof(labMenu)/4,2);
+	  case 2:	 createMenu("LAB",labMenu,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[2];
 			 goto first_screen;
 
-	  case 3:	 createMenu("ROOMS",roomMenu,sizeof(roomMenu)/4,2);
+	  case 3:	 createMenu("ROOMS",roomMenu,2);
 			 center("Enter Your Option",17);
 			 cin>>fac[3];
 			 goto first_screen;
@@ -361,6 +521,8 @@ void removePatient()
 }
 void exitprogram()
 {
+exit_screen:
+
 	clrscr();
 	borders();
 	int op;
@@ -370,7 +532,9 @@ void exitprogram()
 	cout<<"Press 1 to confirm EXIT";
 	gotoxy(25,11);
 	cout<<"Press 2 to play a game!";
-	gotoxy(25,13);
+	gotoxy(25,12);
+	cout<<"Press 3 to Return To Main Menu";
+	gotoxy(25,14);
 	cout<<"Enter your choice: ";
 	cin>>op;
 	switch(op)
@@ -380,6 +544,10 @@ void exitprogram()
 	  case 2:
 		  clrscr();
 		  game();
+	  case 3:
+			clrscr();
+			main_menu();
+
 	}
 }
 
@@ -429,7 +597,9 @@ void game()
 			gotoxy(1,8);
 			cout<<word<<endl;
 			align("You guessed it right!",1,9);
-			exit(0);
+			align("Press Any Key To Continue",27,15);
+			getche();
+			exitprogram();
 			break;
 		}
 	 }
@@ -442,7 +612,9 @@ void game()
 			dixit(33,3);
 			dixit(47,3);
 			dixit(61,3);
-			exit(0);
+			align("Press Any Key To Continue",27,15);
+			getche();
+			exitprogram();
 	  }
 	 getch();
 	 }
