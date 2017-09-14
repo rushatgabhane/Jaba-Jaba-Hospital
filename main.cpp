@@ -186,7 +186,7 @@ public:
   int access(char ename[],char epass[])
   {
 	int x=((strcmp(epass,pass)==0 && strcmp(ename,uname)==0)?1:0);
-	return x;
+	turn x;
   }
 };
 ///////////////////
@@ -201,12 +201,25 @@ class patient
 	int roomNo;
 	float pBill;
 	int i = 2;
-	char doa[7];
+	int date[3];
 public:
+	void getDate()
+	{
+		time_t rawtime=time(0);			//gets the unix timestamp. ie, no. of seconds since 1 Jan 1970
+		struct tm *now;
+		now=localtime(&rawtime);		//converts rawtime to local time in the form of struct tm
+		date[0]=now->tm_mday;
+		date[1]=now->tm_mon;
+		date[2]=(now->tm_year)-100;
+	}
+	void dispDate()
+	{
+		cout<<date[0]<<'/'<<date[1]<<'/'<<date[2];
+	}
 	void input()	//Inputs patient details
 	{
 		align("Date of Admission: ",25,10);
-		gets(doa);
+		getDate();		
 		align("Patient Name: ",25,10);
 		gets(pname);
 		align("CPR Number: ",25,12);
