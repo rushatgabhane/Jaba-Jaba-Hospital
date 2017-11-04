@@ -4,16 +4,17 @@
 #include <string.h>
 #include <process.h>
 #include <stdlib.h>
+#include <time.h>
 //*****************
 //Special Functions
 //*****************
 //Encrypt function
 //Encrypts the entered word by adding the length of the string to each character
-char* encrypt(char pass[])    
+char* encrypt(char pass[])
 {
   int i=0;
   for(i=0;pass[i]!='\0';i++)
-   pass[i]+=strlen(pass);
+	pass[i]+=strlen(pass);
   return pass;
 }
 
@@ -22,8 +23,8 @@ char* getpass()
 {
 	char pass[200];
 	int i=0;
-   while(1)
-   {
+	while(1)
+	{
 	pass[i] = getch();
 	if(pass[i]==13)
 	{
@@ -106,7 +107,7 @@ void createMenu(char* word,char* array[],int step=3)
 	borders();
 	hr(4,'*');
 	center(word,2);
-	dispArray(array,arraySize,step,6);
+	dispArray(array,step,6);
 }
 //Creates output screen with border and heading
 void createMenu(char* word)
@@ -127,7 +128,7 @@ void errormsg(char* error="null")
 	center("Press any key to continue...",17);
 	getche();
 }
-//Simplified gotoxy to align text 
+//Simplified gotoxy to align text
 void align(char* text,int x,int y)
 {
   gotoxy(x,y);
@@ -137,11 +138,11 @@ void align(char* text,int x,int y)
 void dixit(int x=10,int y=1)
 {
 		align("¯\\_('_')_/¯",x,y);
-		align("|",x+5,y+1);       
+		align("|",x+5,y+1);
 		align("|",x+5,y+2);
 		align("|",x+5,y+3);
 		align("/ \\",x+4,y+4);
-		align("_/   \\_",x+2,y+5);  
+		align("_/   \\_",x+2,y+5);
 }
 //*****************
 //Global Variables
@@ -186,7 +187,7 @@ public:
   int access(char ename[],char epass[])
   {
 	int x=((strcmp(epass,pass)==0 && strcmp(ename,uname)==0)?1:0);
-	turn x;
+	return x;
   }
 };
 ///////////////////
@@ -200,9 +201,15 @@ class patient
 	float amount[20];		//Stores the price of each corresponding treatment
 	int roomNo;
 	float pBill;
-	int i = 2;
+	int i;
 	int date[3];
 public:
+	patient()
+	{
+		i=2;
+		strcpy(pname,"John Doe");
+		cprno=999999999;
+	}
 	void getDate()
 	{
 		time_t rawtime=time(0);			//gets the unix timestamp. ie, no. of seconds since 1 Jan 1970
@@ -219,7 +226,7 @@ public:
 	void input()	//Inputs patient details
 	{
 		align("Date of Admission: ",25,10);
-		getDate();		
+		getDate();
 		align("Patient Name: ",25,10);
 		gets(pname);
 		align("CPR Number: ",25,12);
@@ -286,13 +293,13 @@ public:
 		int j;
 		cin>>j;
 		j+=i;
-		for(i;i<j;i++)
+		for(;i<j;i++)
 		{
 			createMenu("ADD TREATMENT");
 			center("Enter description: ",10);
 			gets(description[i]);
 			center("Enter Amount: BD ");
-			gets(amount[i]);
+			cin>>amount[i];
 		}
 		errormsg("Added Treatments..");
 		main_menu();
@@ -459,7 +466,7 @@ void facilities(int fac[])
 first_screen:
 
   char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu","null"};
-  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"."null"};
+  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI","null"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite","null"};
 
   createMenu("FACILITIES",facilityMenu);
