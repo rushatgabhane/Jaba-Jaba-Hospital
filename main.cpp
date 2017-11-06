@@ -260,7 +260,7 @@ public:
 	}
 	int check(char* name)
 	{
-	  int	x=(strcmpi(name,pname)==1?1:0);
+	  int	x=(strcmpi(name,pname)==0?1:0);
 	  return x;
 	}
 	void bill()
@@ -337,22 +337,19 @@ int searchPatient()
   while(!file.eof())
   {
 	 file.read((char*)&P,sizeof(P));
-	 if(P.check(cpr) && choice==1)
+	 if(P.check(cpr) && choice=='2')
 	 {
-		cout<<"check1";
 		int point = file.tellg();
 		file.close();
 		return point;
 	 }
-	 else if (P.check(name) && choice==2)
+	 else if (P.check(name) && choice=='1')
 	 {
-		cout<<"check2";
 		int point = file.tellg();
 		file.close();
 		return point;
 	 }
   }
-  cout<<"check3";
   file.close();
   return 0;
 }
@@ -444,6 +441,7 @@ void main_menu()
 			errormsg("Invalid Option...");
 			goto menu;
 	}
+	file.close();
 }
 //*******************
 //Main Menu Functions
