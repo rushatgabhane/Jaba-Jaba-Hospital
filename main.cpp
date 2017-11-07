@@ -166,7 +166,7 @@ void exitprogram();			//Function asking to exit or play a game
 void game();				//Function to Play a game
 void facilities(int);		//Function To Display Facilities Offered
 void ShowReport();			//Function To Display Patient Report
-int searchPatient();		//Funtion to search for a patient
+void searchPatient();		//Funtion to search for a patient
 
 //***********
 //User Class
@@ -260,7 +260,7 @@ public:
 	}
 	int check(char* name)
 	{
-	  int	x=(strcmpi(name,pname)==1?1:0);
+	  int	x=(strcmpi(name,pname)==0?1:0);
 	  return x;
 	}
 	void bill()
@@ -306,7 +306,7 @@ public:
 	}
 };
 //Search Patient Function
-int searchPatient()
+void searchPatient()
 {
 	first_screen:
 
@@ -314,7 +314,7 @@ int searchPatient()
 	createMenu("Patient Search",pSearchMenu,4);
 
 	center("Enter your option: ",15);
-	char* name;
+	char name[20];
 	long cpr;
 	char choice=getch();
 	switch(choice)
@@ -334,27 +334,24 @@ int searchPatient()
   patient P;
   ifstream file;
   file.open("patients.dat",ios::in|ios::binary);
+
+  int point = 0;
   while(!file.eof())
   {
 	 file.read((char*)&P,sizeof(P));
-	 if(P.check(cpr) && choice==1)
-	 {
-		cout<<"check1";
-		int point = file.tellg();
-		file.close();
-		return point;
-	 }
-	 else if (P.check(name) && choice==2)
-	 {
-		cout<<"check2";
-		int point = file.tellg();
-		file.close();
-		return point;
-	 }
+	 if(P.check(cpr) && choice=='2')
+		point = file.tellg();
+	 else if (P.check(name) && choice=='1')
+		point = file.tellg();
   }
-  cout<<"check3";
+
+  point-= sizeof(P);
+  file.seekg(point);
+  file.read((char*)&P,sizeof(P));
+  P.display();
+
   file.close();
-  return 0;
+  return;
 }
 //*************************
 //Function to add users
@@ -419,12 +416,7 @@ void main_menu()
 			addPatient();
 			break;
 	  case '2':
-			point = searchPatient();
-			point -= sizeof(P);
-			file.open("patients.dat",ios::in|ios::binary);
-			file.seekg(point);
-			file.read((char*)&P,sizeof(P));
-			P.display();
+			searchPatient();
 			break;
 	  case '3':
 			break;
@@ -444,6 +436,8 @@ void main_menu()
 			errormsg("Invalid Option...");
 			goto menu;
 	}
+	file.close();
+	goto menu;
 }
 //*******************
 //Main Menu Functions
