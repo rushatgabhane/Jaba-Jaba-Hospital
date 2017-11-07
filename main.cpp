@@ -4,10 +4,9 @@
 #include <string.h>
 #include <process.h>
 #include <stdlib.h>
-//*****************
+//*********************************************************************************************
 //Special Functions
-//*****************
-//Encrypt function
+//*********************************************************************************************
 //Encrypts the entered word by adding the length of the string to each character
 char* encrypt(char pass[])    
 {
@@ -45,9 +44,19 @@ char* getpass()
 	}
 	return pass;
 }
-//*****************
+//************************************************************************************************
 //Display Functions
-//*****************
+//************************************************************************************************
+
+// void box(int startX,int startY,int stopX,int stopY,char ch)
+// {
+// 	for(int i=startX;i <= stopX;i++)
+// 	{
+// 		gotoxy(i,startY);
+// 		cout<<ch;
+// 	}
+// 	for(int j=startY;)
+// }
 
 //Creates horizontal rule
 void hr(int i,char ch)
@@ -59,13 +68,20 @@ void hr(int i,char ch)
 	}
 }
 //Creates vertical rule
-void vr(int i,char ch)
+void vr(int i,char ch/*,int mode=1,int stop=0*/)
 {
-	for(int j=0;j<25;j++)
-	{
-		gotoxy(i,j);
-		cout<<ch;
-	}
+	// if(mode)
+	// {
+		for(int j=0;j<25;j++)
+		{
+			gotoxy(i,j);
+			cout<<ch;
+		}
+	// }
+	// else
+	// {
+	// 	for(int )
+	// }
 }
 //Creates borders
 void borders()
@@ -198,6 +214,7 @@ class patient
 	long cprno;
 	char* description[20];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
+	float qty[20];		//Multiplier for treatment
 	int roomNo;
 	float pBill;
 	int i = 2;
@@ -256,33 +273,55 @@ public:
 	  int	x=(strcmpi(name,pname)==1?1:0);
 	  return x;
 	}
+	// void bill()
+	// {
+	// 	float x,y,z;   //for lab charge, pharmacy charge etc
+	// 	clrscr();
+	// 	randomize();
+	// 	x=1+random(15);
+	// 	y=1.5+random(5);
+	// 	z=1+random(7);
+	// 	pBill=x+y+z+5+10;
+
+	// 	createMenu("Billing Information ");
+	// 	align("Admission Fee    : 5 BD",29,8);
+	// 	gotoxy(29,10);
+	// 	cout<<"Laboratory charge: "<<x<<" BD";
+	// 	gotoxy(29,12);
+	// 	cout<<"Pharmacy         : "<<y<<" BD";
+	// 	gotoxy(29,14);
+	// 	cout<<"Physical Therapy : "<<z<<" BD";
+	// 	align("Accomodation     : 10 BD",29,16);
+	// 	align("_________________________",29,17);
+	// 	gotoxy(29,18);
+	// 	cout<<"Total Bill       : "<<pBill<<" BD";
+	// }
 	void bill()
 	{
-		float x,y,z;   //for lab charge, pharmacy charge etc
-		clrscr();
-		randomize();
-		x=1+random(15);
-		y=1.5+random(5);
-		z=1+random(7);
-		pBill=x+y+z+5+10;
-
-		createMenu("Billing Information ");
-		align("Admission Fee    : 5 BD",29,8);
-		gotoxy(29,10);
-		cout<<"Laboratory charge: "<<x<<" BD";
-		gotoxy(29,12);
-		cout<<"Pharmacy         : "<<y<<" BD";
-		gotoxy(29,14);
-		cout<<"Physical Therapy : "<<z<<" BD";
-		align("Accomodation     : 10 BD",29,16);
-		align("_________________________",29,17);
-		gotoxy(29,18);
-		cout<<"Total Bill       : "<<pBill<<" BD";
+		createMenu("PATIENT BILL");
+		errormsg("Bill Processed");
+		{
+			gotoxy(0,2);
+			cout<<"  S.No";
+			cout<<"\t\t";
+			cout<<"Description";
+			cout<<"\t\t\t\t";
+			cout<<"QTY.";
+			gotoxy(70,2);
+			cout<<"Amt";
+			vr(1,'|');
+			vr(8,'|');
+			vr(55,'|');
+			vr(62,'|');
+			vr(80,'|');
+			hr(3,'*');
+			hr(1,'*');
+		}
 	}
 	void addTreatment()
 	{
 		createMenu("ADD TREATMENT");
-		center("Enter number of treatments: ");
+		center("Enter number of items to be added: ");
 		int j;
 		cin>>j;
 		j+=i;
@@ -293,6 +332,8 @@ public:
 			gets(description[i]);
 			center("Enter Amount: BD ");
 			gets(amount[i]);
+			center("Enter quantity: ",14);
+			gets(qty[i]);
 		}
 		errormsg("Added Treatments..");
 		main_menu();
