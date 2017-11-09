@@ -153,15 +153,12 @@ void createMenu(char* word,char array[50][50],int size=0,int step=3,int start=6)
 	}
 }
 //Can be called to create a simple error screen
-void errormsg(char* error="null")
+void delay(long i)
 {
-	clrscr();
-	borders();
-	createMenu("ERROR");
-	if(strcmp(error,"null"))
-		center(error);
-	center("Press any key to continue...",17);
-	getche();
+	for(long a=0;a<i;a++)
+	{
+		cout<<"";
+	}
 }
 //Simplified gotoxy to align text
 void align(char* text,int x,int y)
@@ -172,13 +169,30 @@ void align(char* text,int x,int y)
 //Displays dixit, give x and y for its position
 void dixit(int x=10,int y=1)
 {
-		align("Â¯\\_('_')_/Â¯",x,y);
+		align("¯\\_('_')_/¯",x,y);
 		align("|",x+5,y+1);
 		align("|",x+5,y+2);
 		align("|",x+5,y+3);
 		align("/ \\",x+4,y+4);
 		align("_/   \\_",x+2,y+5);
 }
+void errormsg(char* error="null")
+{
+	clrscr();
+	borders();
+	dixit(24,10);
+	dixit(35,10);
+	dixit(46,10);
+	delay(1095990);
+	clrscr();
+	borders();
+	createMenu("ERROR");
+	if(strcmp(error,"null"))
+		center(error);
+	center("Press any key to continue...",17);
+	getche();
+}
+
 //*****************
 //Global Variables
 //*****************
@@ -202,7 +216,6 @@ void game();				//Function to Play a game
 void facilities();		//Function To Display Facilities Offered
 void ShowReport();			//Function To Display Patient Report
 void searchPatient();		//Funtion to search for a patient
-
 //***********
 //User Class
 //***********
@@ -244,7 +257,7 @@ public:
 	{
 		i=0;
 		strcpy(pname,"John Doe");
-		cprno=999999999;
+		cprno=999999;
 		for(int i=0;i<20;i++)
 			strcpy(description[i]," ");
 	}
