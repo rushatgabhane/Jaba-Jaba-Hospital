@@ -343,7 +343,8 @@ public:
 			gotoxy(64,5+2*i);
 			cout<<amount[i];
 		}
-		
+		align("Press any key to continue....",50,27);
+		main_menu();
 	}
 	void addTreatment()
 	{
@@ -363,6 +364,7 @@ public:
 			cin>>qty[i];
 		}
 		errormsg("Added Treatments..");
+		align("Press any key to continue....",50,27);
 		main_menu();
 	}
 };
@@ -561,7 +563,7 @@ void billing()
 	patient P;
 	long cpr;
 	borders();
-	align("Enter CPR number to view the Bill: ",17,12);
+	align("Enter CPR number: ",17,12);
 	cin>>cpr;
 	ifstream file;
 	file.open("patients.dat",ios::in|ios::binary);
@@ -570,10 +572,6 @@ void billing()
 		file.read((char*)&P,sizeof(P));
 		if(P.check(cpr))
 	  {
-		  P.bill();
-		  align("Press any key to go to Main Menu..",25,24);
-		  getche();
-		  main_menu();
 		  break;
 	  }
 		else
@@ -582,6 +580,15 @@ void billing()
 		main_menu();
 		break;
 	  }
+	}
+	char* opts[]={"Add Treatments","View Bill"};
+	createMenu("BILLING",opts,ArraySize(opts));
+	center("Enter your option: ",18);
+	char ch = getch();
+	switch(ch)
+	{
+		case '1': P.addTreatment();
+		case '2': P.bill();
 	}
   file.close();
 }
