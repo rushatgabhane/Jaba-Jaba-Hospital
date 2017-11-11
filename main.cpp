@@ -118,7 +118,7 @@ void center(char* word,int y=12.5)
 // }
 //Menu functions
 //Creates a menu with the given heading and the elements passed through the array
-void createMenu(char* word,char* array[],int size=0,int step=3,int start=6)
+void createMenu(char* word,char* array[]=NULL,int size=0,int step=3,int start=6)
 {
 	clrscr();
 	borders();
@@ -136,12 +136,21 @@ void createMenu(char* word,char* array[],int size=0,int step=3,int start=6)
 	}
 }
 //Creates output screen with border and heading
-void createMenu(char* word)
+void createMenu(char* word,char array[50][50],int size=0,int step=3,int start=6)
 {
 	clrscr();
 	borders();
 	hr(4,'*');
 	center(word,2);
+	for(int i=0;i<size;i++)
+	{
+		char word[50] = {i+49,'.'};				//Makes the list of items numbered
+		for(int j = 2; array[i][j-2]!='\0';j++)
+		{
+			word[j]=array[i][j-2];
+		}
+	 center(word,start+(i*step));
+	}
 }
 //Can be called to create a simple error screen
 void errormsg(char* error="null")
@@ -223,7 +232,7 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	char* description[20];	//Stores description about the treatment
+	char description[][20];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -236,6 +245,8 @@ public:
 		i=2;
 		strcpy(pname,"John Doe");
 		cprno=999999999;
+		for(int i=0;i<20;i++)
+			strcpy(description[i]," ");
 	}
 	void getDate()
 	{
@@ -263,7 +274,7 @@ public:
 		cout<<"Enter your option: ";
 		int opt;
 		cin>>opt;
-		description[0]=roomMenu[opt-1];
+		strcpy(description[0],roomMenu[opt-1]);
 		amount[0]=5*opt;
 	}
 	void display()	//Displays patient details
@@ -289,29 +300,6 @@ public:
 	  int	x=(strcmpi(name,pname)==0?1:0);
 	  return x;
 	}
-	// void bill()
-	// {
-	// 	float x,y,z;   //for lab charge, pharmacy charge etc
-	// 	clrscr();
-	// 	randomize();
-	// 	x=1+random(15);
-	// 	y=1.5+random(5);
-	// 	z=1+random(7);
-	// 	pBill=x+y+z+5+10;
-
-	// 	createMenu("Billing Information ");
-	// 	align("Admission Fee    : 5 BD",29,8);
-	// 	gotoxy(29,10);
-	// 	cout<<"Laboratory charge: "<<x<<" BD";
-	// 	gotoxy(29,12);
-	// 	cout<<"Pharmacy         : "<<y<<" BD";
-	// 	gotoxy(29,14);
-	// 	cout<<"Physical Therapy : "<<z<<" BD";
-	// 	align("Accomodation     : 10 BD",29,16);
-	// 	align("_________________________",29,17);
-	// 	gotoxy(29,18);
-	// 	cout<<"Total Bill       : "<<pBill<<" BD";
-	// }
 	void bill()
 	{
 		createMenu("PATIENT BILL");
@@ -332,7 +320,7 @@ public:
 		vr(80,'|');
 		hr(3,'*');
 		hr(1,'*');
-		for(int i=0;i<ArraySize(description);i++)
+		for(int i=0;strcmp(description[i]," ");i++)
 		{
 			gotoxy(3,5+2*i);
 			cout<<(i+1);
@@ -344,6 +332,7 @@ public:
 			cout<<amount[i];
 		}
 		align("Press any key to continue....",50,27);
+		getch();
 		main_menu();
 	}
 	void addTreatment()
