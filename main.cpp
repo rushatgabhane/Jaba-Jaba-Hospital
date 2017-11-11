@@ -5,6 +5,7 @@
 #include <process.h>
 #include <stdlib.h>
 #include <time.h>
+#define arraySize(array) sizeof(array)/sizeof(array[0])
 //*********************************************************************************************
 //Special Functions
 //*********************************************************************************************
@@ -75,7 +76,7 @@ void vr(int i,char ch/*,int mode=1,int stop=0*/)
 	// {
 		for(int j=0;j<25;j++)
 		{
-			gotoxy(i,j);
+
 			cout<<ch;
 		}
 	// }
@@ -105,7 +106,7 @@ void center(char* word,int y=12.5)
 //Displays the elements of a passed array by calling the center function
 void dispArray(char* array[],int step=3,int start=6)
 {
-	for(int i=0;strcmp(array[i],"null");i++)
+	for(int i=0;i<arraySize(array);i++)
 	{
 		char word[50] = {i+49,'.'};				//Makes the list of items numbered
 		for(int j = 2; array[i][j-2]!='\0';j++)
@@ -139,7 +140,7 @@ void errormsg(char* error="null")
 	clrscr();
 	borders();
   createMenu("ERROR");
-	if(strcmp(error,"null"))
+	if(strcmp(error))
 		center(error);
 	center("Press any key to continue...",17);
 	getche();
@@ -163,9 +164,9 @@ void dixit(int x=10,int y=1)
 //*****************
 //Global Variables
 //*****************
-char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental","null"};
-char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit","null"};
-char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite","null"};
+char* Departments[] = {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
+char* Mainmenu[] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char* roomMenu[]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
 //*******************
 //Function prototypes
 //*******************
@@ -307,23 +308,27 @@ public:
 	{
 		createMenu("PATIENT BILL");
 		errormsg("Bill Processed");
-		{
-			gotoxy(0,2);
-			cout<<"  S.No";
-			cout<<"\t\t";
-			cout<<"Description";
-			cout<<"\t\t\t\t";
-			cout<<"QTY.";
-			gotoxy(70,2);
-			cout<<"Amt";
-			vr(1,'|');
-			vr(8,'|');
-			vr(55,'|');
-			vr(62,'|');
-			vr(80,'|');
-			hr(3,'*');
-			hr(1,'*');
-		}
+		
+		gotoxy(0,2);
+		cout<<"  S.No";
+		cout<<"\t\t";
+		cout<<"Description";
+		cout<<"\t\t\t\t";
+		cout<<"QTY.";
+		gotoxy(70,2);
+		cout<<"Amt";
+		vr(1,'|');
+		vr(8,'|');
+		vr(55,'|');
+		vr(62,'|');
+		vr(80,'|');
+		hr(3,'*');
+		hr(1,'*');
+		// for(int i=0;i<arraySize(description);i++)
+		// {
+		// 	gotoxy()
+		// }
+		
 	}
 	void addTreatment()
 	{
@@ -351,13 +356,14 @@ void searchPatient()
 {
 	first_screen:
 
-	char* pSearchMenu[]={"Search by Name","Search by CPR","null"};
+	char* pSearchMenu[]={"Search by Name","Search by CPR"};
 	createMenu("Patient Search",pSearchMenu,4);
-
 	center("Enter your option: ",15);
 	char name[20];
 	long cpr;
 	char choice=getch();
+	clrscr();
+	borders();
 	switch(choice)
 	{
 		case '1':
@@ -500,9 +506,9 @@ void facilities(int fac[])
 {
 first_screen:
 
-  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu","null"};
-  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI","null"};
-  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite","null"};
+  char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
+  char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
+  char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
 
   createMenu("FACILITIES",facilityMenu);
   center("Enter Your Option:",17);
