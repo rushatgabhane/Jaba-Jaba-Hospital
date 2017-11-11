@@ -252,7 +252,6 @@ public:
 	}
 	void input()	//Inputs patient details
 	{
-		align("Date of Admission: ",25,10);
 		getDate();
 		align("Patient Name: ",25,10);
 		gets(pname);
