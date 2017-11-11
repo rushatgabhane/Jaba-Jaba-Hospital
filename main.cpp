@@ -271,7 +271,7 @@ public:
 		align("Room Number: ",25,14);
 		cin>>roomNo;
 		createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
-		cout<<"Enter your option: ";
+		align("Enter your option:",27,18);
 		int opt;
 		cin>>opt;
 		strcpy(description[0],roomMenu[opt-1]);
@@ -304,7 +304,7 @@ public:
 	{
 		createMenu("PATIENT BILL");
 		errormsg("Bill Processed");
-		
+		clrscr();
 		gotoxy(0,2);
 		cout<<"  S.No";
 		cout<<"\t\t";
@@ -337,9 +337,9 @@ public:
 	}
 	void addTreatment()
 	{
+		int j=0;
 		createMenu("ADD TREATMENT");
 		center("Enter number of items to be added: ");
-		int j;
 		cin>>j;
 		j+=i;
 		for(;i<j;i++)
@@ -352,6 +352,7 @@ public:
 			center("Enter quantity: ",14);
 			cin>>qty[i];
 		}
+
 		errormsg("Added Treatments..");
 		align("Press any key to continue....",50,27);
 		main_menu();
