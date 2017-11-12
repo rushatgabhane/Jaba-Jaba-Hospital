@@ -242,7 +242,7 @@ class patient
 public:
 	patient()
 	{
-		i=1;
+		i=0;
 		strcpy(pname,"John Doe");
 		cprno=999999999;
 		for(int i=0;i<20;i++)
@@ -526,7 +526,6 @@ void addPatient()
 void facilities()
 {
 first_screen:
-  int fac[10];
   char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
@@ -539,18 +538,15 @@ first_screen:
   switch(op)
   {
 	  case 1:	 createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
-			 center("Enter Your Option:",19);
-			 cin>>fac[1];
+			 getch();
 			 goto first_screen;
 
 	  case 2:	 createMenu("LAB",labMenu,ArraySize(labMenu),2);
-			 center("Enter Your Option:",19);
-			 cin>>fac[2];
+			 getch();
 			 goto first_screen;
 
 	  case 3:	 createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
-			 center("Enter Your Option:",18);
-			 cin>>fac[3];
+			 getch();
 			 goto first_screen;
 
 	  case 4:    main_menu();
