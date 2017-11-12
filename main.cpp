@@ -387,26 +387,38 @@ void searchPatient()
 	}
   patient P;
   ifstream file;
+  int p=0;
   file.open("patients.dat",ios::in|ios::binary);
   int point = 0;
   while(file.read((char*)&P,sizeof(P)))
   {
 	 point = 0;
+	 p=0;
 	 if (P.check(name) && choice=='1')
 	 {
 		point = file.tellg();
+		p=1;
 		break;
 	 }
 	 if(P.check(cpr) && choice=='2')
 	 {
 		point = file.tellg();
+		p=1;
 		break;
 	 }
   }
-  file.seekg(point-sizeof(P));
-  P.display();
-  file.close();
-  return;
+  if(p==0)
+  {
+	errormsg("Record Doesn't Exsist");
+	main_menu();
+  }
+  else
+  {
+	file.seekg(point-sizeof(P));
+	P.display();
+	file.close();
+	return;
+  }
 }
 //*************************
 //Function to add users
