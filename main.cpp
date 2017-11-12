@@ -199,7 +199,7 @@ void facilities(int fac[]);	//Function To Display Facilities Offered
 void ShowReport();			//Function To Display Patient Report
 void exitprogram();			//Function asking to exit or play a game
 void game();				//Function to Play a game
-void facilities(int);		//Function To Display Facilities Offered
+void facilities();		//Function To Display Facilities Offered
 void ShowReport();			//Function To Display Patient Report
 void searchPatient();		//Funtion to search for a patient
 
@@ -242,7 +242,7 @@ class patient
 public:
 	patient()
 	{
-		i=2;
+		i=1;
 		strcpy(pname,"John Doe");
 		cprno=999999999;
 		for(int i=0;i<20;i++)
@@ -388,22 +388,23 @@ void searchPatient()
   patient P;
   ifstream file;
   file.open("patients.dat",ios::in|ios::binary);
-
   int point = 0;
-  while(!file.eof())
+  while(file.read((char*)&P,sizeof(P)))
   {
-	 file.read((char*)&P,sizeof(P));
+	 point = 0;
+	 if (P.check(name) && choice=='1')
+	 {
+		point = file.tellg();
+		break;
+	 }
 	 if(P.check(cpr) && choice=='2')
+	 {
 		point = file.tellg();
-	 else if (P.check(name) && choice=='1')
-		point = file.tellg();
+		break;
+	 }
   }
-
-  point-= sizeof(P);
-  file.seekg(point);
-  file.read((char*)&P,sizeof(P));
+  file.seekg(point-sizeof(P));
   P.display();
-
   file.close();
   return;
 }
@@ -473,6 +474,7 @@ void main_menu()
 			searchPatient();
 			break;
 	  case '3':
+			facilities();
 			break;
 	  case '4':
 			billing();
@@ -498,21 +500,21 @@ void main_menu()
 //*******************
 void addPatient()
 {
+	patient P;
 	clrscr();
 	borders();
 	center("NEW ADMISSION",2);
 	hr(4,'*');
-	patient P;
 	P.input();
 	ofstream file;
 	file.open("patients.dat",ios::app|ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
 }
-void facilities(int fac[])
+void facilities()
 {
 first_screen:
-
+  int fac[10];
   char* facilityMenu[]={"Departments","Lab","Rooms","Main Menu"};
   char* labMenu[]={"X-Ray","ECG","Ultrasound","MRI"};
   char* roomMenu[]={"Single AC Room","Single Non-AC Room","Double AC Room","Double Non-AC Room","Family Suite"};
@@ -525,17 +527,17 @@ first_screen:
   switch(op)
   {
 	  case 1:	 createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
-			 center("Enter Your Option",19);
+			 center("Enter Your Option:",19);
 			 cin>>fac[1];
 			 goto first_screen;
 
 	  case 2:	 createMenu("LAB",labMenu,ArraySize(labMenu),2);
-			 center("Enter Your Option",17);
+			 center("Enter Your Option:",19);
 			 cin>>fac[2];
 			 goto first_screen;
 
 	  case 3:	 createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
-			 center("Enter Your Option",17);
+			 center("Enter Your Option:",18);
 			 cin>>fac[3];
 			 goto first_screen;
 
