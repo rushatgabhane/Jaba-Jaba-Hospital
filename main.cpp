@@ -245,7 +245,7 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	char description[][20];	//Stores description about the treatment
+	char description[][50];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -365,10 +365,6 @@ public:
 			center("Enter quantity: ",14);
 			cin>>qty[i];
 		}
-
-		errormsg("Added Treatments..");
-		align("Press any key to continue....",50,27);
-		main_menu();
 	}
 };
 
@@ -427,7 +423,6 @@ void main_menu()
 	center("Enter Your Option:",21);
 	patient P;
 	ifstream file;
-	int point;
 	char option=getch();
 	switch(option)
 	{
@@ -550,23 +545,28 @@ first_screen:
   cin>>op;
   switch(op)
   {
-	  case 1:	 createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
-			 getch();
-			 goto first_screen;
+	case 1:
+	  	createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
+		getch();
+		goto first_screen;
 
-	  case 2:	 createMenu("LAB",labMenu,ArraySize(labMenu),2);
-			 getch();
-			 goto first_screen;
+	case 2:	 
+		createMenu("LAB",labMenu,ArraySize(labMenu),2);
+		getch();
+		goto first_screen;
 
-	  case 3:	 createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
-			 getch();
-			 goto first_screen;
+	case 3:
+	  	createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
+		getch();
+		goto first_screen;
 
-	  case 4:    main_menu();
-			 break;
+	case 4:
+	  	main_menu();
+		break;
 
-	  default:	 errormsg("Invalid Option");
-			 goto first_screen;
+	default:
+	  	errormsg("Invalid Option");
+		goto first_screen;
   }
 }
 void billing()
@@ -578,20 +578,21 @@ void billing()
 	borders();
 	align("Enter CPR number: ",17,12);
 	cin>>cpr;
-	ifstream file;
+	fstream file;
+	int point;
 	file.open("patients.dat",ios::in|ios::binary);
 	while(!file.eof())
 	{
 		file.read((char*)&P,sizeof(P));
 		if(P.check(cpr))
 	  {
-		  break;
+	  	point=file.tellg()-sizeof(P);
+	  	break;
 	  }
 		else
 	  {
 		errormsg("The entered CPR no. doesn't exist");
 		main_menu();
-		break;
 	  }
 	}
 	char* opts[]={"Add Treatments","View Bill"};
@@ -600,7 +601,17 @@ void billing()
 	char ch = getch();
 	switch(ch)
 	{
-		case '1': P.addTreatment();
+		case '1':
+		
+		P.addTreatment();
+		file.close();
+		file.open("patients.dat",ios::app|ios::binary);
+		file.seekp(point);
+		file.write((char*)&P,sizeof(P));
+		errormsg("Added Treatments..");
+		align("Press any key to continue....",50,27);
+		main_menu();
+		
 		case '2': P.bill();
 	}
 	file.close();
