@@ -245,7 +245,6 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	char description[][50];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -253,13 +252,12 @@ class patient
 	int i;
 	int date[3];
 public:
+	char description[][50];	//Stores description about the treatment
 	patient()
 	{
-		i=0;
+		i=1;
 		strcpy(pname,"John Doe");
 		cprno=999999;
-		for(int i=0;i<20;i++)
-			strcpy(description[i]," ");
 	}
 	void getDate()
 	{
@@ -316,7 +314,8 @@ public:
 	void bill()
 	{
 		createMenu("PATIENT BILL");
-		errormsg("Bill Processed");
+		clrscr();
+		center("Bill Processed");
 		clrscr();
 		gotoxy(0,2);
 		cout<<"  S.No";
@@ -333,7 +332,7 @@ public:
 		vr(80,'|');
 		hr(3,'*');
 		hr(1,'*');
-		for(int i=0;strcmp(description[i]," ");i++)
+		for(int i=0;i<10;i++)
 		{
 			gotoxy(3,5+2*i);
 			cout<<(i+1);
@@ -608,7 +607,8 @@ void billing()
 		file.open("patients.dat",ios::app|ios::binary);
 		file.seekp(point);
 		file.write((char*)&P,sizeof(P));
-		errormsg("Added Treatments..");
+		clrscr();
+		center("Added Treatments....");
 		align("Press any key to continue....",50,27);
 		main_menu();
 		
