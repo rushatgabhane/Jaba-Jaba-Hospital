@@ -371,68 +371,7 @@ public:
 		main_menu();
 	}
 };
-//Search Patient Function
-void searchPatient()
-{
-	first_screen:
 
-	char* pSearchMenu[]={"Search by Name","Search by CPR"};
-	createMenu("Patient Search",pSearchMenu,ArraySize(pSearchMenu),4);
-	center("Enter your option: ",15);
-	char name[20];
-	long cpr;
-	char choice=getch();
-	clrscr();
-	borders();
-	switch(choice)
-	{
-		case '1':
-			center("Enter name: ",21);
-			gets(name);
-			break;
-		case '2':
-			center("Enter CPR Number: ",21);
-			cin>>cpr;
-			break;
-		default:
-			errormsg("Invalid Option....");
-			goto first_screen;
-	}
-  patient P;
-  ifstream file;
-  int p=0;
-  file.open("patients.dat",ios::in|ios::binary);
-  int point = 0;
-  while(file.read((char*)&P,sizeof(P)))
-  {
-	 point = 0;
-	 p=0;
-	 if (P.check(name) && choice=='1')
-	 {
-		point = file.tellg();
-		p=1;
-		break;
-	 }
-	 if(P.check(cpr) && choice=='2')
-	 {
-		point = file.tellg();
-		p=1;
-		break;
-	 }
-  }
-  if(p==0)
-  {
-	errormsg("Record Doesn't Exsist");
-	main_menu();
-  }
-  else
-  {
-	file.seekg(point-sizeof(P));
-	P.display();
-	file.close();
-	return;
-  }
-}
 //*************************
 //Function to add users
 //*************************
@@ -536,6 +475,67 @@ void addPatient()
 	file.write((char*)&P,sizeof(P));
 	file.close();
 }
+//Search Patient Function
+void searchPatient()
+{
+	first_screen:
+	char* pSearchMenu[]={"Search by Name","Search by CPR"};
+	createMenu("Patient Search",pSearchMenu,ArraySize(pSearchMenu),4);
+	center("Enter your option: ",15);
+	char name[20];
+	long cpr;
+	char choice=getch();
+	clrscr();
+	borders();
+	switch(choice)
+	{
+		case '1':
+			center("Enter name: ",21);
+			gets(name);
+			break;
+		case '2':
+			center("Enter CPR Number: ",21);
+			cin>>cpr;
+			break;
+		default:
+			errormsg("Invalid Option....");
+			goto first_screen;
+	}
+  patient P;
+  ifstream file;
+  int p=0;
+  file.open("patients.dat",ios::in|ios::binary);
+  int point = 0;
+  while(file.read((char*)&P,sizeof(P)))
+  {
+	 point = 0;
+	 p=0;
+	 if (P.check(name) && choice=='1')
+	 {
+		point = file.tellg();
+		p=1;
+		break;
+	 }
+	 if(P.check(cpr) && choice=='2')
+	 {
+		point = file.tellg();
+		p=1;
+		break;
+	 }
+  }
+  if(p==0)
+  {
+	errormsg("Record Doesn't Exsist");
+	main_menu();
+  }
+  else
+  {
+	file.seekg(point-sizeof(P));
+	P.display();
+	file.close();
+	return;
+  }
+}
 void facilities()
 {
 first_screen:
@@ -603,7 +603,7 @@ void billing()
 		case '1': P.addTreatment();
 		case '2': P.bill();
 	}
-  file.close();
+	file.close();
 }
 void ShowReport()
 {
