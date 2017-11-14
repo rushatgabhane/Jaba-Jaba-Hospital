@@ -46,6 +46,12 @@ char* getpass()
 	}
 	return pass;
 }
+void clearfile()
+{
+	ifstream file;
+	file.open("patients.dat",ios::out|ios::binary);
+	file.close();
+}
 //************************************************************************************************
 //Display Functions
 //************************************************************************************************
@@ -245,6 +251,7 @@ class patient
 {
 	char pname[20];
 	long cprno;
+	char description[][50];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -252,7 +259,6 @@ class patient
 	int i;
 	int date[3];
 public:
-	char description[][50];	//Stores description about the treatment
 	patient()
 	{
 		i=1;
@@ -282,7 +288,7 @@ public:
 		align("Room Number: ",25,14);
 		cin>>roomNo;
 		createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
-		align("Enter your option:",27,18);
+		align("Enter your option: ",27,18);
 		int opt;
 		cin>>opt;
 		strcpy(description[0],roomMenu[opt-1]);
@@ -297,7 +303,9 @@ public:
 		cout<<cprno;
 		align("Room No: ",30,14);
 		cout<<roomNo;
-		center("Press any key to continue",17);
+		align("Date of Admission: ",30,16);
+		dispDate();
+		center("Press any key to continue",18);
 		getch();
 		main_menu();
 	}
@@ -446,6 +454,9 @@ void main_menu()
 	  case '7':
 			exitprogram();
 			break;
+	  case '8':
+	  		clearfile();
+	  		break;
 	default:
 			errormsg("Invalid Option...");
 			goto menu;
@@ -468,6 +479,7 @@ void addPatient()
 	file.open("patients.dat",ios::app|ios::binary);
 	file.write((char*)&P,sizeof(P));
 	file.close();
+	P.display();
 }
 //Search Patient Function
 void searchPatient()
@@ -585,7 +597,7 @@ void billing()
 		file.read((char*)&P,sizeof(P));
 		if(P.check(cpr))
 	  {
-	  	point=file.tellg()-sizeof(P);
+	  	point=file.tellg();
 	  	break;
 	  }
 		else
@@ -604,8 +616,8 @@ void billing()
 		
 		P.addTreatment();
 		file.close();
-		file.open("patients.dat",ios::app|ios::binary);
-		file.seekp(point);
+		file.open("patients.dat",ios::out|ios::binary);
+		file.seekp(point-sizeof(P),ios::beg);
 		file.write((char*)&P,sizeof(P));
 		clrscr();
 		center("Added Treatments....");
@@ -623,8 +635,28 @@ void ShowReport()
 }
 void removePatient()
 {
-	clrscr();
-	cout<<6;
+	createMenu("REMOVE PATIENT")
+	fstream file;
+	file.open("patients.dat",ios::in|ios::binary);
+	cout<<"Enter cpr no: ";
+	cin>>cpr;
+	patient P1,P2;
+	while(!file.eof())
+	{
+		file.read((char*)&P1,sizeof(P2));
+		if(P1.check)
+		{
+			int point = tellg();
+			file.close();
+			file.open("patients.dat",ios::out|ios::binary);
+			file.seekp(point-sizeof(P1));
+			file.write((char*)&P2,sizeof(P2));
+			file.close();
+			return;
+		}
+	}
+	cout<<"Entry not found";
+	return;
 }
 void exitprogram()
 {
