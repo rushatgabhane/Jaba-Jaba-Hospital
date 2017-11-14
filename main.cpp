@@ -635,18 +635,19 @@ void ShowReport()
 }
 void removePatient()
 {
-	createMenu("REMOVE PATIENT")
+	createMenu("REMOVE PATIENT");
 	fstream file;
 	file.open("patients.dat",ios::in|ios::binary);
 	cout<<"Enter cpr no: ";
+	int cpr;
 	cin>>cpr;
 	patient P1,P2;
 	while(!file.eof())
 	{
 		file.read((char*)&P1,sizeof(P2));
-		if(P1.check)
+		if(P1.check(cpr))
 		{
-			int point = tellg();
+			int point = file.tellg();
 			file.close();
 			file.open("patients.dat",ios::out|ios::binary);
 			file.seekp(point-sizeof(P1));
