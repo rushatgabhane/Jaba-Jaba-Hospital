@@ -638,8 +638,20 @@ void billing()
 }
 void ShowReport()
 {
-	clrscr();
-	cout<<5;
+	createMenu("REPORTS");
+	int nop = 0; //Number of patients
+	ifstream file;
+	file.open("patients.dat",ios::in|ios::binary);
+	patient P;
+	while(!file.eof())
+	{
+		file.read((char*)&P,sizeof(P));
+		nop++;
+	}
+	center("Number of Patients: ");
+	cout<<nop;
+	getch();
+	file.close();
 }
 void removePatient()
 {
@@ -655,8 +667,7 @@ void removePatient()
 		if(P1.check(cpr))
 		{
 			int point = file.tellg();
-			file.close();
-			file.open("patients.dat",ios::out|ios::binary);
+7			file.open("patients.dat",ios::out|ios::binary);
 			file.seekp(point-sizeof(P1));
 			file.write((char*)&P2,sizeof(P2));
 			file.close();
