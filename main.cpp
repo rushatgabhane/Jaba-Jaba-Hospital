@@ -278,7 +278,57 @@ public:
 	{
 		cout<<date[0]<<'/'<<date[1]<<'/'<<date[2];
 	}
-	void input()	//Inputs patient details
+	void input();	//Inputs patient details
+	void display();	//Displays patient details
+	int check(long cpr)
+	{
+	  int x=(cprno==cpr?1:0);
+	  return x;
+	}
+	int check(char* name)
+	{
+	  int	x=(strcmpi(name,pname)==0?1:0);
+	  return x;
+	}
+	void addTreatment();
+	void bill();
+};
+void patient::addTreatment()
+{
+	int j=0;
+	createMenu("ADD TREATMENT");
+	center("Enter number of items to be added: ");
+	cin>>j;
+	j+=i;
+	for(;i<j;i++)
+	{
+		createMenu("ADD TREATMENT");
+		center("Enter description: ",10);
+		gets(description[i]);
+		center("Enter Amount: BD ");
+		cin>>amount[i];
+		center("Enter quantity: ",14);
+		cin>>qty[i];
+	}
+}
+void patient::display()	//Displays patient details
+{
+	createMenu("Patient Details");
+	align("Patient Name: ",30,10);
+	cout<<pname;
+	align("CPR No: ",30,12);
+	cout<<cprno;
+	align("Room No: ",30,14);
+	cout<<roomNo;
+	align("Room Type: ",30,16);
+	puts(description[0]);
+	align("Date of Admission: ",30,18);
+	dispDate();
+	center("Press any key to continue",20);
+	getch();
+	main_menu();
+}
+void patient::input()	//Inputs patient details
 	{
 		getDate();
 		align("Patient Name: ",25,10);
@@ -295,55 +345,7 @@ public:
 		cout<<description[0]<<endl;
 		getch();
 		amount[0]=5*opt;
-	}
-	void display()	//Displays patient details
-	{
-		createMenu("Patient Details");
-		align("Patient Name: ",30,10);
-		cout<<pname;
-		align("CPR No: ",30,12);
-		cout<<cprno;
-		align("Room No: ",30,14);
-		cout<<roomNo;
-		align("Room Type: ",30,16);
-		puts(description[0]);
-		align("Date of Admission: ",30,18);
-		dispDate();
-		center("Press any key to continue",20);
-		getch();
-		main_menu();
-	}
-	int check(long cpr)
-	{
-	  int x=(cprno==cpr?1:0);
-	  return x;
-	}
-	int check(char* name)
-	{
-	  int	x=(strcmpi(name,pname)==0?1:0);
-	  return x;
-	}
-
-	void addTreatment()
-	{
-		int j=0;
-		createMenu("ADD TREATMENT");
-		center("Enter number of items to be added: ");
-		cin>>j;
-		j+=i;
-		for(;i<j;i++)
-		{
-			createMenu("ADD TREATMENT");
-			center("Enter description: ",10);
-			gets(description[i]);
-			center("Enter Amount: BD ");
-			cin>>amount[i];
-			center("Enter quantity: ",14);
-			cin>>qty[i];
-		}
-	}
-	void bill();
-};
+}
 void patient::bill()
 	{
 		createMenu("PATIENT BILL");
