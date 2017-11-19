@@ -68,6 +68,18 @@ void clearfile()
 // }
 
 //Creates horizontal rule
+void banner()
+{
+	ifstream file;
+	char str[500];
+	file.open("banner.txt");
+	while(!file.eof())
+	{
+		file.getline(str,450,'\n');
+		cout<<str<<'\n';
+	}
+	getch();
+}
 void hr(int i,char ch)
 {
 	for(int j=0;j<81;j++)
@@ -821,7 +833,8 @@ void Unknown (char word[], char unknown[])
 //***********
 void main()
 {
-  borders();
-  login();
-  getche();
+	banner();
+	borders();
+	login();
+	getche();
 }
