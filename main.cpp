@@ -281,7 +281,7 @@ class patient
 	int i;
 	int date[3];
 public:
-	int retcpr()
+	long retcpr()
 	{
 		return(cprno);
 	}
@@ -320,8 +320,7 @@ public:
 		dispDate();
 		center("Press any key to continue",20);
 		getch();
-		main_menu();
-		cout<<i;
+		return;
 	}
 	int check(long cpr)
 	{
@@ -354,25 +353,27 @@ void patient::input()	//Inputs patient details
 	cin>>opt;
 	strcpy(description[0],roomMenu[opt-1]);
 	amount[0]=5*opt;
+	qty[0]=0;
+	return;
 }
 void patient::addTreatment()
+{
+	int j=0;
+	createMenu("ADD TREATMENT");
+	center("Enter number of items to be added: ");
+	cin>>j;
+	j+=i;
+	for(;i<j;i++)
 	{
-		int j=0;
 		createMenu("ADD TREATMENT");
-		center("Enter number of items to be added: ");
-		cin>>j;
-		j+=i;
-		for(;i<j;i++)
-		{
-			createMenu("ADD TREATMENT");
-			center("Enter description: ",10);
-			gets(description[i]);
-			center("Enter Amount: BD ");
-			cin>>amount[i];
-			center("Enter quantity: ",14);
-			cin>>qty[i];
-		}
+		center("Enter description: ",10);
+		gets(description[i]);
+		center("Enter Amount: BD ");
+		cin>>amount[i];
+		center("Enter quantity: ",14);
+		cin>>qty[i];
 	}
+}
 void patient::bill()
 {
 	createMenu("PATIENT BILL");
@@ -405,9 +406,10 @@ void patient::bill()
 		gotoxy(64,5+2*j);
 		cout<<amount[j];
 	}
-	align("Press any key to continue....",50,27);
+	align("Press any key to continue....",50,20);
+	cout<<i;
 	getch();
-	main_menu();
+	return;
 }
 //*************************
 //Function to add users
@@ -541,39 +543,33 @@ void searchPatient()
 			errormsg("Invalid Option....");
 			goto first_screen;
 	}
-  patient P;
-  ifstream file;
-  int p=0;
-  file.open("patients.dat",ios::in|ios::binary);
-  int point = 0;
-  while(file.read((char*)&P,sizeof(P)))
-  {
-	 point = 0;
-	 p=0;
-	 if (P.check(name) && choice=='1')
-	 {
-		point = file.tellg();
-		p=1;
-		break;
-	 }
-	 if(P.check(cpr) && choice=='2')
-	 {
-		point = file.tellg();
-		p=1;
-		break;
-	 }
-  }
-  if(p==0)
-  {
-	errormsg("Record Doesn't Exsist");
-	main_menu();
-  }
-  else
-  {
-	P.display();
-	file.close();
-	return;
-  }
+	patient P;
+	ifstream file;
+	int p=0;
+	file.open("patients.dat",ios::in|ios::binary);
+	float point = 0;
+	while(file.read((char*)&P,sizeof(P)))
+    {
+  		point = 0;
+	  	p=0;
+	  	if (P.check(name) && choice=='1')
+	  	{
+	  		P.display();
+	  		file.close();
+	  		return;
+	  	}
+	  	if(P.check(cpr) && choice=='2')
+	  	{
+	  		P.display();
+	  		file.close();
+	  		return;
+		}
+	}
+	if(p==0)
+	{
+		errormsg("Record Doesn't Exsist");
+		main_menu();
+	}
 }
 void facilities()
 {
@@ -637,7 +633,7 @@ void billing()
 		else
 	  {
 		errormsg("The entered CPR no. doesn't exist");
-		main_menu();
+		return;
 	  }
 	}
 	file.close();
@@ -656,7 +652,7 @@ void billing()
 		clrscr();
 		center("Added Treatments....");
 		align("Press any key to continue....",50,27);
-		main_menu();
+		return;
 		
 		case '2':
 
@@ -665,6 +661,7 @@ void billing()
 		P.bill();
 	}
 	file.close();
+	return;
 }
 
 void ShowReport()
