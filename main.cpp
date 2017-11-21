@@ -225,6 +225,7 @@ void errormsg(char* error="null")
 char Departments[][50]= {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
 char Mainmenu[][50] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
+int nop; //No. Of Patients On File
 //*******************
 //Function prototypes
 //*******************
@@ -270,7 +271,7 @@ class patient
 {
 	char pname[20];
 	long cprno;
-	char description[][50];	//Stores description about the treatment
+	char description[10][50];	//Stores description about the treatment
 	float amount[20];		//Stores the price of each corresponding treatment
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
@@ -303,25 +304,7 @@ public:
 	{
 		cout<<date[0]<<'/'<<date[1]<<'/'<<date[2];
 	}
-	void input()	//Inputs patient details
-	{
-		getDate();
-		align("Patient Name: ",25,10);
-		gets(pname);
-		align("CPR Number: ",25,12);
-		cin>>cprno;
-		align("Room Number: ",25,14);
-		cin>>roomNo;
-		align("Blood Group: ",25,16);
-		gets(blood);
-		bloodgp = blood;
-		createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
-		align("Enter your option: ",27,18);
-		int opt;
-		cin>>opt;
-		strcpy(description[0],roomMenu[opt-1]);
-		amount[0]=5*opt;
-	}
+	void input();	//Inputs patient details
 	void display()	//Displays patient details
 	{
 		createMenu("Patient Details");
@@ -338,6 +321,7 @@ public:
 		center("Press any key to continue",20);
 		getch();
 		main_menu();
+		cout<<i;
 	}
 	int check(long cpr)
 	{
@@ -349,43 +333,29 @@ public:
 	  int	x=(strcmpi(name,pname)==0?1:0);
 	  return x;
 	}
-	void bill()
-	{
-		createMenu("PATIENT BILL");
-		clrscr();
-		center("Bill Processed");
-		clrscr();
-		gotoxy(0,2);
-		cout<<"  S.No";
-		cout<<"\t\t";
-		cout<<"Description";
-		cout<<"\t\t\t\t";
-		cout<<"QTY.";
-		gotoxy(70,2);
-		cout<<"Amt";
-		vr(1,'|');
-		vr(8,'|');
-		vr(55,'|');
-		vr(62,'|');
-		vr(80,'|');
-		hr(3,'*');
-		hr(1,'*');
-		for(int j=0;j<i;j++)
-		{
-			gotoxy(3,5+2*j);
-			cout<<(j+1);
-			gotoxy(10,5+2*j);
-			cout<<description[j];
-			gotoxy(57,5+2*j);
-			cout<<qty[j];
-			gotoxy(64,5+2*j);
-			cout<<amount[j];
-		}
-		align("Press any key to continue....",50,27);
-		getch();
-		main_menu();
-	}
-	void addTreatment()
+	void bill();
+	void addTreatment();
+};
+void patient::input()	//Inputs patient details
+{
+	getDate();
+	align("Patient Name: ",25,10);
+	gets(pname);
+	align("CPR Number: ",25,12);
+	cin>>cprno;
+	align("Room Number: ",25,14);
+	cin>>roomNo;
+	align("Blood Group: ",25,16);
+	gets(blood);
+	bloodgp = blood;
+	createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
+	align("Enter your option: ",27,18);
+	int opt;
+	cin>>opt;
+	strcpy(description[0],roomMenu[opt-1]);
+	amount[0]=5*opt;
+}
+void patient::addTreatment()
 	{
 		int j=0;
 		createMenu("ADD TREATMENT");
@@ -403,8 +373,42 @@ public:
 			cin>>qty[i];
 		}
 	}
-};
-
+void patient::bill()
+{
+	createMenu("PATIENT BILL");
+	clrscr();
+	center("Bill Processed");
+	clrscr();
+	gotoxy(0,2);
+	cout<<"  S.No";
+	cout<<"\t\t";
+	cout<<"Description";
+	cout<<"\t\t\t\t";
+	cout<<"QTY.";
+	gotoxy(70,2);
+	cout<<"Amt";
+	vr(1,'|');
+	vr(8,'|');
+	vr(55,'|');
+	vr(62,'|');
+	vr(80,'|');
+	hr(3,'*');
+	hr(1,'*');
+	for(int j=0;j<i;j++)
+	{
+		gotoxy(3,5+2*j);
+		cout<<(j+1);
+		gotoxy(10,5+2*j);
+		cout<<description[j];
+		gotoxy(57,5+2*j);
+		cout<<qty[j];
+		gotoxy(64,5+2*j);
+		cout<<amount[j];
+	}
+	align("Press any key to continue....",50,27);
+	getch();
+	main_menu();
+}
 //*************************
 //Function to add users
 //*************************
@@ -566,7 +570,6 @@ void searchPatient()
   }
   else
   {
-	file.seekg(point-sizeof(P));
 	P.display();
 	file.close();
 	return;
@@ -663,7 +666,7 @@ void billing()
 	}
 	file.close();
 }
-int nop; //No. Of Patients On File
+
 void ShowReport()
 {
 	::nop=0;
@@ -693,23 +696,34 @@ void removePatient()
 	ifstream infile;
 	infile.open("patients.dat",ios::in|ios::binary);
 	ofstream outfile;
+	outfile.open("patients.dat",ios::app|ios::binary);
 	align("Enter The CPR No.: ",30,7);
 	cin>>cpr;
-	patient P1,P2;
-	while(infile.read((char*)&P1,sizeof(P1)))
+	patient P;
+	while(infile.read((char*)&P,sizeof(P)))
 	{
 		p=0;
-		if(P1.retcpr()==cpr)
+		if(P.retcpr()==cpr)
 		{
-			int point = infile.tellg();
-			outfile.open("patients.dat",ios::out|ios::binary);
-			outfile.seekp(point-sizeof(P1));
-			outfile.write((char*)&P2,sizeof(P2));
+			float point = infile.tellg();
+			if(infile.eof())
+			{
+				cout<<"check";
+				outfile.open("patients.dat",ios::out|ios::binary);
+				outfile.close();
+				align("PATIENT RECORD REMOVED",30,14);
+				getch();
+				return;
+			}
+			outfile.seekp(point-sizeof(P),ios::beg);
+			outfile.write((char*)&P,sizeof(P));
 			align("PATIENT RECORD REMOVED",30,14);
 			p=1;
 			::nop--;
 			getch();
-			return;
+		}
+		else{
+			outfile.write((char*)&P,sizeof(P));
 		}
 	}
 	if(p==0)
