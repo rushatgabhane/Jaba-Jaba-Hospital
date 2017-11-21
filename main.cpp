@@ -275,6 +275,8 @@ class patient
 	float qty[20];		//Multiplier for treatment
 	int roomNo;
 	float pBill;
+	char blood[5];
+	char *bloodgp;
 	int i;
 	int date[3];
 public:
@@ -310,6 +312,9 @@ public:
 		cin>>cprno;
 		align("Room Number: ",25,14);
 		cin>>roomNo;
+		align("Blood Group: ",25,16);
+		gets(blood);
+		bloodgp = blood;
 		createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
 		align("Enter your option: ",27,18);
 		int opt;
@@ -326,9 +331,11 @@ public:
 		cout<<cprno;
 		align("Room No: ",30,14);
 		cout<<roomNo;
-		align("Date of Admission: ",30,16);
+		align("Blood Group: ",30,16);
+		cout<<bloodgp;
+		align("Date of Admission: ",30,18);
 		dispDate();
-		center("Press any key to continue",18);
+		center("Press any key to continue",20);
 		getch();
 		main_menu();
 	}
