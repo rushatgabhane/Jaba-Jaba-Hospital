@@ -861,6 +861,7 @@ void Unknown (char word[], char unknown[])
 void main()
 {
 	banner();
+	clrscr();
 	borders();
 	login();
 	getche();
