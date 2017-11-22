@@ -13,10 +13,10 @@ void main_menu();			//To output the main menu
 //Encrypts the entered word by adding the length of the string to each character
 char* encrypt(char pass[])
 {
-  int i=0;
-  for(i=0;pass[i]!='\0';i++)
-	pass[i]+=strlen(pass);
-  return pass;
+	int i=0;
+	for(i=0;pass[i]!='\0';i++)
+		pass[i]+=strlen(pass);
+	return pass;
 }
 
 //Function to get password
@@ -37,7 +37,7 @@ char* getpass()
 		i--;
 		gotoxy(46+i,12);
 		cout<<" ";
-		gotoxy(46+i,12);       
+		gotoxy(46+i,12);
 	}
 	else
 	{
@@ -58,6 +58,13 @@ void clearfile()
 //Display Functions
 //************************************************************************************************
 
+//Simplified gotoxy to align text
+void align(char* text,int x=30,int y=15)
+{
+  gotoxy(x,y);
+  cout<<text;
+}
+
 // void box(int startX,int startY,int stopX,int stopY,char ch)
 // {
 // 	for(int i=startX;i <= stopX;i++)
@@ -67,7 +74,7 @@ void clearfile()
 // 	}
 // 	for(int j=startY;)
 // }
-
+void delay(long);
 //Creates horizontal rule
 void banner()
 {
@@ -83,13 +90,20 @@ void banner()
 	while(!file.eof())
 	{
 		file.getline(str,450,'\n');
-		cout<<str<<endl;
+		int i=0;
+		while(str[i]!='\0')
+		{
+			cout<<str[i];
+			i++;
+			delay(19999);
+		}
+		cout<<endl;
 	}
 	getch();
 }
 void hr(int i,char ch)
 {
-	for(int j=0;j<81;j++)
+	for(int j=0;j<80;j++)
 	{
 		gotoxy(j,i);
 		cout<<ch;
@@ -158,7 +172,7 @@ void createMenu(char* word,char* array[]=NULL,int size=0,int step=3,int start=6)
 		{
 			word[j]=array[i][j-2];
 		}
-	 center(word,start+(i*step));
+	 align(word,start+(i*step));
 	}
 }
 //Creates output screen with border and heading
@@ -186,12 +200,7 @@ void delay(long i)
 		cout<<"";
 	}
 }
-//Simplified gotoxy to align text
-void align(char* text,int x,int y)
-{
-  gotoxy(x,y);
-  cout<<text;
-}
+
 //Displays dixit, give x and y for its position
 void dixit(int x=10,int y=1)
 {
@@ -209,7 +218,7 @@ void errormsg(char* error="null")
 	dixit(24,10);
 	dixit(35,10);
 	dixit(46,10);
-	delay(1095990);
+	delay(9999999);
 	clrscr();
 	borders();
 	createMenu("ERROR");
@@ -278,19 +287,14 @@ class patient
 	float pBill;
 	char blood[5];
 	char *bloodgp;
-	int i;
+	int size;
 	int date[3];
 public:
 	long retcpr()
 	{
 		return(cprno);
 	}
-	patient()
-	{
-		i=1;
-		strcpy(pname,"John Doe");
-		cprno=999999;
-	}
+
 	void getDate()
 	{
 		time_t rawtime=time(0);			//gets the unix timestamp. ie, no. of seconds since 1 Jan 1970
@@ -354,6 +358,7 @@ void patient::input()	//Inputs patient details
 	strcpy(description[0],roomMenu[opt-1]);
 	amount[0]=5*opt;
 	qty[0]=0;
+	size=1;
 	return;
 }
 void patient::addTreatment()
@@ -362,16 +367,16 @@ void patient::addTreatment()
 	createMenu("ADD TREATMENT");
 	center("Enter number of items to be added: ");
 	cin>>j;
-	j+=i;
-	for(;i<j;i++)
+	j+=size;
+	for(;size<j;size++)
 	{
 		createMenu("ADD TREATMENT");
 		center("Enter description: ",10);
-		gets(description[i]);
+		gets(description[size]);
 		center("Enter Amount: BD ");
-		cin>>amount[i];
+		cin>>amount[size];
 		center("Enter quantity: ",14);
-		cin>>qty[i];
+		cin>>qty[size];
 	}
 }
 void patient::bill()
@@ -395,7 +400,7 @@ void patient::bill()
 	vr(80,'|');
 	hr(3,'*');
 	hr(1,'*');
-	for(int j=0;j<i;j++)
+	for(int j=0;j<5;j++)
 	{
 		gotoxy(3,5+2*j);
 		cout<<(j+1);
@@ -407,7 +412,7 @@ void patient::bill()
 		cout<<amount[j];
 	}
 	align("Press any key to continue....",50,20);
-	cout<<i;
+	cout<<size;
 	getch();
 	return;
 }
@@ -491,8 +496,8 @@ void main_menu()
 			exitprogram();
 			break;
 	  case '8':
-	  		clearfile();
-	  		break;
+			clearfile();
+			break;
 	default:
 			errormsg("Invalid Option...");
 			goto menu;
@@ -549,20 +554,20 @@ void searchPatient()
 	file.open("patients.dat",ios::in|ios::binary);
 	float point = 0;
 	while(file.read((char*)&P,sizeof(P)))
-    {
-  		point = 0;
-	  	p=0;
-	  	if (P.check(name) && choice=='1')
-	  	{
-	  		P.display();
-	  		file.close();
-	  		return;
-	  	}
-	  	if(P.check(cpr) && choice=='2')
-	  	{
-	  		P.display();
-	  		file.close();
-	  		return;
+	{
+		point = 0;
+		p=0;
+		if (P.check(name) && choice=='1')
+		{
+			P.display();
+			file.close();
+			return;
+		}
+		if(P.check(cpr) && choice=='2')
+		{
+			P.display();
+			file.close();
+			return;
 		}
 	}
 	if(p==0)
@@ -586,26 +591,26 @@ first_screen:
   switch(op)
   {
 	case 1:
-	  	createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
+		createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
 		getch();
 		goto first_screen;
 
-	case 2:	 
+	case 2:
 		createMenu("LAB",labMenu,ArraySize(labMenu),2);
 		getch();
 		goto first_screen;
 
 	case 3:
-	  	createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
+		createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
 		getch();
 		goto first_screen;
 
 	case 4:
-	  	main_menu();
+		main_menu();
 		break;
 
 	default:
-	  	errormsg("Invalid Option");
+		errormsg("Invalid Option");
 		goto first_screen;
   }
 }
@@ -621,20 +626,19 @@ void billing()
 	fstream file;
 	int point;
 	file.open("patients.dat",ios::in|ios::binary);
-	while(!file.eof())
+	while(file.read((char*)&P,sizeof(P)))
 	{
 		point=0;
-		file.read((char*)&P,sizeof(P));
 		if(P.check(cpr))
-	  {
-		point=file.tellg();
-		break;
-	  }
+		{
+			point=file.tellg();
+			break;
+		}
 		else
-	  {
-		errormsg("The entered CPR no. doesn't exist");
-		return;
-	  }
+		{
+			errormsg("The entered CPR no. doesn't exist");
+			return;
+		}
 	}
 	file.close();
 	char opts[][50]={"Add Treatments","View Bill"};
@@ -652,13 +656,12 @@ void billing()
 		clrscr();
 		center("Added Treatments....");
 		align("Press any key to continue....",50,27);
+		getch();
 		return;
-		
-		case '2':
 
-		file.read((char*)&P,sizeof(P));
-		file.seekg(point-sizeof(P));
+		case '2':
 		P.bill();
+
 	}
 	file.close();
 	return;
@@ -693,33 +696,22 @@ void removePatient()
 	ifstream infile;
 	infile.open("patients.dat",ios::in|ios::binary);
 	ofstream outfile;
-	outfile.open("patients.dat",ios::app|ios::binary);
+	outfile.open("temp.dat",ios::app|ios::binary);
 	align("Enter The CPR No.: ",30,7);
 	cin>>cpr;
 	patient P;
 	while(infile.read((char*)&P,sizeof(P)))
 	{
-		p=0;
+
 		if(P.retcpr()==cpr)
 		{
-			float point = infile.tellg();
-			if(infile.eof())
-			{
-				cout<<"check";
-				outfile.open("patients.dat",ios::out|ios::binary);
-				outfile.close();
-				align("PATIENT RECORD REMOVED",30,14);
-				getch();
-				return;
-			}
-			outfile.seekp(point-sizeof(P),ios::beg);
-			outfile.write((char*)&P,sizeof(P));
-			align("PATIENT RECORD REMOVED",30,14);
 			p=1;
-			::nop--;
+			align("RECORD REMOVED....");
 			getch();
+			continue;
 		}
-		else{
+		else
+		{
 			outfile.write((char*)&P,sizeof(P));
 		}
 	}
@@ -728,6 +720,8 @@ void removePatient()
 		align("Entry not found",30,14);
 		getch();
 	}
+	remove("patients.dat");
+	rename("temp.dat","patients.dat");
 	outfile.close();
 	infile.close();
 	return;
@@ -815,9 +809,9 @@ void game()
 			exitprogram();
 			break;
 		}
-	 }
-	  if(WrongGuess == mt)
-	  {
+	}
+	if(WrongGuess == mt)
+		{
 			gotoxy(1,7);
 			cout<<endl<<"You lose... you've been hanged."<<endl;
 			gotoxy(1,6);
@@ -828,20 +822,20 @@ void game()
 			align("Press Any Key To Continue",27,15);
 			getche();
 			exitprogram();
-	  }
-	 getch();
-	 }
+		}
+	getch();
+}
 int letterFill (char guess, char secretword[], char guessword[])
 {
 	int matches=0;
 	for (int i = 0; secretword[i]!='\0'; i++)
-  {
-	 if (guess == guessword[i])
-		 return 0;
-	 if (guess == secretword[i])
 	{
-	 guessword[i] = guess;
-	 matches++;
+		if (guess == guessword[i])
+			return 0;
+		if (guess == secretword[i])
+	{
+		guessword[i] = guess;
+		matches++;
 	}
   }
 	return matches;
