@@ -54,6 +54,7 @@ void clearfile()
     file.close();
     remove("patients.dat");
 }
+
 //************************************************************************************************
 //Display Functions
 //************************************************************************************************
@@ -75,7 +76,7 @@ void align(char* text,int x=30,int y=15)
     // for(int j=startY;)
 // }
 void delay(long);
-//Creates horizontal rule
+//Displays Jaba Jaba Banner
 void banner()
 {
     ifstream file;
@@ -101,6 +102,7 @@ void banner()
     }
     getch();
 }
+//Creates horizontal rule
 void hr(int i,char ch)
 {
     for(int j=0;j<80;j++)
@@ -192,7 +194,7 @@ void createMenu(char* word,char array[50][50],int size=0,int step=3,int start=6)
         center(word,start+(i*step));
     }
 }
-//Can be called to create a simple error screen
+//Call to delay the ouput
 void delay(long i)
 {
     for(long a=0;a<i;a++)
@@ -211,6 +213,7 @@ void dixit(int x=10,int y=1)
     align("/ \\",x+4,y+4);
     align("_/  \\_",x+2,y+5);
 }
+//Displays simple Error Message
 void errormsg(char* error="null")
 {
     clrscr();
@@ -273,9 +276,9 @@ class user
         return x;
     }
 };
-///////////////////
+//*****************
 //Patient Class
-///////////////////
+//*****************
 class patient
 {
     char pname[20];
@@ -576,6 +579,7 @@ void searchPatient()
         main_menu();
     }
 }
+//Facilities offered
 void facilities()
 {
     first_screen:
@@ -765,6 +769,7 @@ const int mr=7; //for game program
 int letterFill (char, char[], char[]);
 void Unknown (char[], char[]);
 
+//Simple Hangman Game
 void game()
 {
     char letter,unknown[ml],word[ml];
@@ -846,9 +851,9 @@ void Unknown (char word[], char unknown[])
     unknown[i]='*';
     unknown[i]='\0';
 }
-//***********
+//*************
 //Main Function
-//***********
+//*************
 void main()
 {
     banner();
