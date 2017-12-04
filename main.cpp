@@ -732,6 +732,10 @@ exit_screen:
 	switch(op)
 	{
 	  case 1:
+	  	clrscr();
+	  	borders();
+	  	center("THIS PROJECT WAS DEVELOPED BY....");
+	  	center("AMAL, ALVIN, RUSHAT & AMAN",14);
 		  exit(0);
 	  case 2:
 		  clrscr();
