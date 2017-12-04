@@ -65,15 +65,6 @@ void align(char* text,int x=30,int y=15)
   cout<<text;
 }
 
-// void box(int startX,int startY,int stopX,int stopY,char ch)
-// {
-// 	for(int i=startX;i <= stopX;i++)
-// 	{
-// 		gotoxy(i,startY);
-// 		cout<<ch;
-// 	}
-// 	for(int j=startY;)
-// }
 void delay(long);
 //Displays Jaba Jaba Banner
 void banner()
@@ -111,20 +102,13 @@ void hr(int i,char ch)
 	}
 }
 //Creates vertical rule
-void vr(int i,char ch/*,int mode=1,int stop=0*/)
+void vr(int i,char ch)
 {
-	// if(mode)
-	// {
 		for(int j=0;j<25;j++)
 		{
 			gotoxy(i,j);
 			cout<<ch;
 		}
-	// }
-	// else
-	// {
-	// 	for(int )
-	// }
 }
 //Creates borders
 void borders()
@@ -144,19 +128,6 @@ void center(char* word,int y=12.5)
 	cout<<word;
 }
 
-//Displays the elements of a passed array by calling the center function
-// void dispArray(char* array[],int size=0,int step=3,int start=6)
-// {
-// 	for(int i=0;i<size;i++)
-// 	{
-// 		char word[50] = {i+49,'.'};				//Makes the list of items numbered
-// 		for(int j = 2; array[i][j-2]!='\0';j++)
-// 		{
-// 			word[j]=array[i][j-2];
-// 		}
-// 	 center(word,start+(i*step));
-// 	}
-// }
 //Menu functions
 //Creates a menu with the given heading and the elements passed through the array
 void createMenu(char* word,char* array[]=NULL,int size=0,int step=3,int start=6)
