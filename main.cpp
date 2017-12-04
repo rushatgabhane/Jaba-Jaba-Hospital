@@ -186,6 +186,7 @@ void errormsg(char* error="null")
 //*****************
 //Global Variables
 //*****************
+char doctors[][50] = {"Dr. Sanjog","Dr. Alvin Anthony","Dr. Nithesh Hariharan","Dr. Shriram Suresh","Dr. Rouche de Piale","Dr. Blah"};
 char Departments[][50]= {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
 char Mainmenu[][50] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
@@ -193,7 +194,6 @@ int nop; //No. Of Patients On File
 //*******************
 //Function prototypes
 //*******************
-void getdoctor();			//To assign a doctor to a patient
 void addPatient();			//To add a patient
 void removePatient();		//To archive patient records
 void login();				//To login
@@ -244,6 +244,7 @@ class patient
 	char *bloodgp;
 	int size;
 	int date[3];
+	char doctor[50];
 public:
 	long retcpr()
 	{
@@ -267,17 +268,19 @@ public:
 	void display()	//Displays patient details
 	{
 		createMenu("Patient Details");
-		align("Patient Name: ",30,10);
+		align("Patient Name: ",30,6);
 		cout<<pname;
-		align("CPR No: ",30,12);
+		align("CPR No: ",30,8);
 		cout<<cprno;
-		align("Room No: ",30,14);
+		align("Room No: ",30,10);
 		cout<<roomNo;
-		align("Blood Group: ",30,16);
+		align("Blood Group: ",30,12);
 		cout<<bloodgp;
-		align("Date of Admission: ",30,18);
+		align("Date of Admission: ",30,14);
 		dispDate();
-		center("Press any key to continue",20);
+		align("Doctor: ",30,16);
+		cout<<doctor;
+		center("Press any key to continue",22);
 		getch();
 		return;
 	}
@@ -294,6 +297,7 @@ public:
 	void bill();
 	void addTreatment();
 };
+
 void patient::input()	//Inputs patient details
 {
 	getDate();
@@ -314,6 +318,8 @@ void patient::input()	//Inputs patient details
 	amount[0]=5*opt;
 	qty[0]=0;
 	size=1;
+	int select = random(7);
+	strcpy(doctor,doctors[select]);
 	return;
 }
 void patient::addTreatment()
@@ -332,6 +338,7 @@ void patient::addTreatment()
 		cin>>amount[size];
 		center("Enter quantity: ",14);
 		cin>>qty[size];
+		bill();
 	}
 }
 void patient::bill()
@@ -355,7 +362,7 @@ void patient::bill()
 	vr(80,'|');
 	hr(3,'*');
 	hr(1,'*');
-	for(int j=0;j<5;j++)
+	for(int j=0;j<size;j++)
 	{
 		gotoxy(3,5+2*j);
 		cout<<(j+1);
@@ -371,6 +378,11 @@ void patient::bill()
 	getch();
 	return;
 }
+// char* getdoctor()
+// {
+// 	int select=random(7);
+// 	return doctors[select];
+// }
 //*************************
 //Function to add users
 //*************************
@@ -584,7 +596,7 @@ void billing()
 	while(file.read((char*)&P,sizeof(P)))
 	{
 		point=0;
-		if(P.check(cpr))
+		if(P.check(cpr)==1)
 		{
 			point=file.tellg();
 			break;
