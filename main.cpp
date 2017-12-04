@@ -129,26 +129,8 @@ void center(char* word,int y=12.5)
 }
 
 //Menu functions
-//Creates a menu with the given heading and the elements passed through the array
-void createMenu(char* word,char* array[]=NULL,int size=0,int step=3,int start=6)
-{
-	clrscr();
-	borders();
-	hr(4,'*');
-	center(word,2);
-	// dispArray(array,step,6);
-	for(int i=0;i<size;i++)
-	{
-		char word[50] = {i+49,'.'};				//Makes the list of items numbered
-		for(int j = 2; array[i][j-2]!='\0';j++)
-		{
-			word[j]=array[i][j-2];
-		}
-	 align(word,start+(i*step));
-	}
-}
 //Creates output screen with border and heading
-void createMenu(char* word,char array[50][50],int size=0,int step=3,int start=6)
+void createMenu(char* word,char array[50][50]=NULL,int size=0,int step=3,int start=6)
 {
 	clrscr();
 	borders();
