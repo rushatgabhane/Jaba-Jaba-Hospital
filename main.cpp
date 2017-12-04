@@ -340,6 +340,7 @@ void patient::addTreatment()
 		cin>>qty[size];
 		bill();
 	}
+	return;
 }
 void patient::bill()
 {
@@ -436,7 +437,6 @@ void main_menu()
 	menu:
 	createMenu("Main Menu",Mainmenu,ArraySize(Mainmenu),2);
 	center("Enter Your Option:",21);
-	patient P;
 	ifstream file;
 	char option=getch();
 	switch(option)
@@ -585,14 +585,16 @@ void billing()
 {
 	clrscr();
 	borders();
-	patient P;
+	patient P,T;
 	long cpr;
 	borders();
 	align("Enter CPR number: ",17,12);
 	cin>>cpr;
 	fstream file;
+	fstream outfile,infile;
 	int point;
 	file.open("patients.dat",ios::in|ios::binary);
+	remove("patients.bak");
 	while(file.read((char*)&P,sizeof(P)))
 	{
 		point=0;
@@ -617,18 +619,34 @@ void billing()
 		case '1':
 
 		P.addTreatment();
-		file.open("patients.dat",ios::app|ios::binary);
-		file.seekp(point-sizeof(P),ios::beg);
-		file.write((char*)&P,sizeof(P));
+		outfile.open("patients.bak",ios::out|ios::binary);
+		infile.open("patients.dat",ios::in|ios::binary);
+		while(infile.read((char*)&T,sizeof(T)))
+		{
+			if(T.check(cpr)==1)
+			{
+				outfile.write((char*)&P,sizeof(P));
+				clrscr();
+				center("Written to file");
+				getch();
+			}
+			else
+				outfile.write((char*)&T,sizeof(P));
+		}
+		infile.close();
+		outfile.close();
+		remove("patients.dat");
+		rename("patients.bak","patients.dat");
 		clrscr();
+		borders();
 		center("Added Treatments....");
 		align("Press any key to continue....",50,27);
 		getch();
 		return;
 
 		case '2':
-		P.bill();
-
+			P.bill();
+			return;
 	}
 	file.close();
 	return;
