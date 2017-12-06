@@ -701,11 +701,6 @@ void billing()
 	outfile.close();
 	remove("patients.dat");
 	rename("patients.bak","patients.dat");
-	clrscr();
-	borders();
-	center("Added Treatments....");
-	align("Press any key to continue....",50,27);
-	getch();
 	file.close();
 	return;
 }
