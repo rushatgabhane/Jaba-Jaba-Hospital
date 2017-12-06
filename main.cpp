@@ -670,19 +670,13 @@ void ShowReport()
 	cin>>cpr;
 	while(file.read((char*)&P,sizeof(P)))
 	{
-		p=0;
 		if(P.check(cpr)==1)
 		{
-			p=1;
-			break;
+			P.bill();
+			return;
 		}
 	}
-	if(p==0)
-	{
-		errormsg("CPR Doesn't Exsist");
-		return;
-	}
-	P.bill();
+	errormsg("CPR Doesn't Exsist");
 	return;
 }
 void removePatient()
