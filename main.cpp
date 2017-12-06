@@ -5,6 +5,7 @@
 #include <process.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 #define ArraySize(array)	sizeof(array)/sizeof(array[0])
 void main_menu();			//To output the main menu
 //*********************************************************************************************
@@ -245,6 +246,7 @@ class patient
 	int size;
 	int date[3];
 	char doctor[50];
+	float tot;
 public:
 	long retcpr()
 	{
@@ -296,6 +298,7 @@ public:
 	}
 	void bill();
 	void addTreatment();
+	void payBill();
 };
 
 void patient::input()	//Inputs patient details
@@ -317,7 +320,7 @@ void patient::input()	//Inputs patient details
 	cin>>opt;
 	strcpy(description[0],roomMenu[opt-1]);
 	amount[0]=10*opt;
-	qty[0]=1;
+	qty[0]=0;
 	size=1;
 	int select;
 	select = random(7);
@@ -333,21 +336,26 @@ void patient::addTreatment()
 	j+=size;
 	for(;size<j;size++)
 	{
+		error:
 		createMenu("ADD TREATMENT");
 		center("Enter description: ",10);
 		gets(description[size]);
+	
 		center("Enter Amount: BD ");
 		cin>>amount[size];
 		center("Enter quantity: ",14);
 		cin>>qty[size];
+		if(amount[size]<=0 || qty[size]<=0){
+			errormsg("Invalid amount or quantity!");
+			goto error;
+		}
 	}
 	return;
 }
 void patient::bill()
 {
-	int tot=0;
+	tot = 0;
 	createMenu("PATIENT BILL");
-	clrscr();
 	center("Bill Processed");
 	clrscr();
 	gotoxy(0,2);
@@ -373,18 +381,63 @@ void patient::bill()
 		gotoxy(10,5+2*j);
 		cout<<description[j];
 		gotoxy(57,5+2*j);
-		cout<<qty[j];
+		if(qty[j]==0)
+			cout<<'-';
+		else
+			cout<<qty[j];
 		gotoxy(64,5+2*j);
 		cout<<amount[j];
 		gotoxy(72,5+2*j);
-		tot+=(qty[j]*amount[j]);
-		cout<<qty[j]*amount[j];
+		if(qty[j]==0)
+		{
+			tot+=amount[j];
+			cout<<amount[j];
+		}		
+		else
+		{
+			tot+=(qty[j]*amount[j]);
+			cout<<qty[j]*amount[j];
+		}
 	}
 	gotoxy(66,22);
 	cout<<"Subtotal:"<<tot;
 	align("Press any key to continue....",50,24);
 	getch();
 	return;
+}
+void patient::payBill(){
+	start:
+	tot = 0;
+	float paid;
+	for(int j=0;j<size;j++)
+		if(qty==0)
+			tot += amount[j];
+		else
+			tot += amount[j]*qty[j];
+	createMenu("PAY BILL");
+	align("Amount Payable: ",30,10);
+	cout<<tot;
+	align("Pay full amount(Y/N): ",30,11);
+	char ch = toupper(getche());
+	if(ch=='Y')
+		paid = tot;
+	else if(ch=='N')
+	{
+		align("                              ",30,11);
+		align("Amount Paid: ",30,11);
+		cin>>paid;
+	}
+	else
+		goto start;
+	if (paid<=0)
+	{
+		errormsg("Invalid Amount!!!");
+		goto start;
+	}
+	strcpy(description[size],"BILL PAID");
+	amount[size]=(-paid);
+	qty[size]=0;
+	size++;
 }
 // char* getdoctor()
 // {
@@ -624,36 +677,35 @@ void billing()
 	switch(ch)
 	{
 		case '1':
-
-		P.addTreatment();
-		outfile.open("patients.bak",ios::out|ios::binary);
-		infile.open("patients.dat",ios::in|ios::binary);
-		while(infile.read((char*)&T,sizeof(T)))
-		{
-			if(T.check(cpr)==1)
-			{
-				outfile.write((char*)&P,sizeof(P));
-				clrscr();
-				center("Written to file");
-				getch();
-			}
-			else
-				outfile.write((char*)&T,sizeof(P));
-		}
-		infile.close();
-		outfile.close();
-		remove("patients.dat");
-		rename("patients.bak","patients.dat");
-		clrscr();
-		borders();
-		center("Added Treatments....");
-		align("Press any key to continue....",50,27);
-		getch();
-		return;
-
+			P.addTreatment();
+			break;
 		case '2':
-			return;
+			P.payBill();
+			break;
 	}
+	outfile.open("patients.bak",ios::out|ios::binary);
+	infile.open("patients.dat",ios::in|ios::binary);
+	while(infile.read((char*)&T,sizeof(T)))
+	{
+		if(T.check(cpr)==1)
+		{
+			outfile.write((char*)&P,sizeof(P));
+			clrscr();
+			center("Written to file");
+			getch();
+		}
+		else
+			outfile.write((char*)&T,sizeof(P));
+	}
+	infile.close();
+	outfile.close();
+	remove("patients.dat");
+	rename("patients.bak","patients.dat");
+	clrscr();
+	borders();
+	center("Added Treatments....");
+	align("Press any key to continue....",50,27);
+	getch();
 	file.close();
 	return;
 }
