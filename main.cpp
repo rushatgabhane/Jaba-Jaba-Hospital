@@ -88,7 +88,7 @@ void banner()
 		{
 			cout<<str[i];
 			i++;
-			delay(1999);
+			delay(195);
 		}
 	}
 	getch();
@@ -183,6 +183,14 @@ void errormsg(char* error="null")
 	center("Press any key to continue...",17);
 	getche();
 }
+void msg(char* error="null")
+{
+	createMenu("MESSAGE");
+	if(strcmp(error,"null"))
+		center(error);
+	center("Press any key to continue...",17);
+	getche();
+}
 
 //*****************
 //Global Variables
@@ -229,6 +237,19 @@ public:
 	return x;
   }
 };
+//*************************
+//Function to add users
+//*************************
+void addUser()
+{
+	user U;
+	createMenu("NEW USER");
+	U.input();
+	ofstream file;
+	file.open("users.dat",ios::app|ios::binary);
+	file.write((char*)&U,sizeof(U));
+	file.close();
+}
 ///////////////////
 //Patient Class
 ///////////////////
@@ -246,8 +267,8 @@ class patient
 	int size;
 	int date[3];
 	char doctor[50];
-	float tot;
 public:
+	float tot;
 	long retcpr()
 	{
 		return(cprno);
@@ -299,6 +320,7 @@ public:
 	void bill();
 	void addTreatment();
 	void payBill();
+	float calcTotal();
 };
 
 void patient::input()	//Inputs patient details
@@ -325,6 +347,7 @@ void patient::input()	//Inputs patient details
 	int select;
 	select = random(7);
 	strcpy(doctor,doctors[select]);
+	calcTotal();
 	return;
 }
 void patient::addTreatment()
@@ -350,11 +373,13 @@ void patient::addTreatment()
 			goto error;
 		}
 	}
+	calcTotal();
+	getch();
 	return;
 }
 void patient::bill()
 {
-	tot = 0;
+	calcTotal();
 	createMenu("PATIENT BILL");
 	center("Bill Processed");
 	clrscr();
@@ -389,15 +414,9 @@ void patient::bill()
 		cout<<amount[j];
 		gotoxy(72,5+2*j);
 		if(qty[j]==0)
-		{
-			tot+=amount[j];
-			cout<<amount[j];
-		}		
+			cout<<amount[j];		
 		else
-		{
-			tot+=(qty[j]*amount[j]);
 			cout<<qty[j]*amount[j];
-		}
 	}
 	gotoxy(66,22);
 	cout<<"Subtotal:"<<tot;
@@ -407,13 +426,7 @@ void patient::bill()
 }
 void patient::payBill(){
 	start:
-	tot = 0;
 	float paid;
-	for(int j=0;j<size;j++)
-		if(qty==0)
-			tot += amount[j];
-		else
-			tot += amount[j]*qty[j];
 	createMenu("PAY BILL");
 	align("Amount Payable: ",30,10);
 	cout<<tot;
@@ -438,24 +451,26 @@ void patient::payBill(){
 	amount[size]=(-paid);
 	qty[size]=0;
 	size++;
+	calcTotal();
+}
+float patient::calcTotal()
+{
+	tot=0;
+	for(int i=0;i<size;i++)
+	{
+		if(qty[i]==0)
+			tot+=amount[i];
+		else
+			tot+=qty[i]*amount[i];
+	}
+	return tot;
 }
 // char* getdoctor()
 // {
 // 	int select=random(7);
 // 	return doctors[select];
 // }
-//*************************
-//Function to add users
-//*************************
-void addUser()
-{
-	user U;
-	U.input();
-	ofstream file;
-	file.open("users.dat",ios::app|ios::binary);
-	file.write((char*)&U,sizeof(U));
-	file.close();
-}
+
 //****************
 //Login Screen
 //****************
@@ -463,8 +478,7 @@ void login()
 {
  char uname[200],pass[200];
  login:
-	 borders();
-	 align("LOGIN",36,7);
+	 createMenu("LOGIN");
 	 align("Enter Username: ",30,10);
 	 gets(uname);
 	 align("Enter Password: ",30,12);
@@ -728,23 +742,37 @@ void ShowReport()
 }
 void removePatient()
 {
+	start:
 	createMenu("REMOVE PATIENT");
-	int cpr,p=0;
-	ifstream infile;
-	infile.open("patients.dat",ios::in|ios::binary);
-	ofstream outfile;
-	outfile.open("temp.dat",ios::app|ios::binary);
+	int cpr;
 	align("Enter The CPR No.: ",30,7);
 	cin>>cpr;
+	int p=0;
+	ifstream infile;
+	infile.open("patients.dat",ios::in|ios::binary);
+	ofstream outfile,archive;
+	outfile.open("temp.dat",ios::app|ios::binary);
+	archive.open("archive.dat",ios::app|ios::binary);
 	patient P;
 	while(infile.read((char*)&P,sizeof(P)))
 	{
 
-		if(P.retcpr()==cpr)
+		if(P.retcpr()==cpr && P.tot==0)
 		{
 			p=1;
-			align("RECORD REMOVED....");
+			align("PATIENT DISCHARGED....");
+			archive.write((char*)&P,sizeof(P));
 			getch();
+			continue;
+		}
+		else if(P.retcpr()==cpr && P.tot!=0)
+		{
+			msg("Payment Pending....");
+			align("Please clear pending bill to continue...",30,20);
+			P.bill();
+			P.payBill();
+			outfile.write((char*)&P,sizeof(P));
+			p=2;
 			continue;
 		}
 		else
@@ -759,8 +787,11 @@ void removePatient()
 	}
 	remove("patients.dat");
 	rename("temp.dat","patients.dat");
+	archive.close();
 	outfile.close();
 	infile.close();
+	if(p==2)
+		goto start;
 	return;
 }
 void exitprogram()
@@ -895,6 +926,14 @@ void main()
 	banner();
 	clrscr();
 	borders();
+	fstream file;
+	file.open("users.dat",ios::in|ios::binary);
+	if(!file)
+	{
+		addUser();
+		main_menu();
+		return;
+	};
 	login();
 	getche();
 }
