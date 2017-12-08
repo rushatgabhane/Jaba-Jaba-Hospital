@@ -81,6 +81,7 @@ void banner()
 	}
 	while(!file.eof())
 	{
+		cout<<endl;
 		file.getline(str,450,'\n');
 		int i=0;
 		while(str[i]!='\0')
@@ -89,7 +90,6 @@ void banner()
 			i++;
 			delay(1999);
 		}
-		cout<<endl;
 	}
 	getch();
 }
