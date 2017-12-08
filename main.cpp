@@ -50,10 +50,9 @@ char* getpass()
 }
 void clearfile()
 {
-	ifstream file;
-	file.open("patients.dat",ios::out|ios::binary);
-	file.close();
 	remove("patients.dat");
+	remove("archive.dat");
+	remove("users.dat");
 }
 //************************************************************************************************
 //Display Functions
@@ -197,17 +196,20 @@ void msg(char* error="null")
 //*****************
 char doctors[][50] = {"Dr. Sanjog","Dr. Alvin Anthony","Dr. Nithesh Hariharan","Dr. Shriram Suresh","Dr. Rouche de Piale","Dr. Blah"};
 char Departments[][50]= {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
-char Mainmenu[][50] = {"New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char Mainmenu[][50] = {"Administrator","New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
 char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
 int nop; //No. Of Patients On File
 //*******************
 //Function prototypes
 //*******************
 void addPatient();			//To add a patient
+void Admin();				//Admin menu
 void removePatient();		//To archive patient records
 void login();				//To login
 void billing();				//Billing Function
 void addUser();				//Function to add users
+void removeUser();			//Function to remove users
+void dispArchive();			//Function to display archive entries;
 void facilities(int fac[]);	//Function To Display Facilities Offered
 void ShowReport();			//Function To Display Patient Report
 void exitprogram();			//Function asking to exit or play a game
@@ -237,19 +239,7 @@ public:
 	return x;
   }
 };
-//*************************
-//Function to add users
-//*************************
-void addUser()
-{
-	user U;
-	createMenu("NEW USER");
-	U.input();
-	ofstream file;
-	file.open("users.dat",ios::app|ios::binary);
-	file.write((char*)&U,sizeof(U));
-	file.close();
-}
+
 ///////////////////
 //Patient Class
 ///////////////////
@@ -478,30 +468,25 @@ void login()
 {
  char uname[200],pass[200];
  login:
-	 createMenu("LOGIN");
-	 align("Enter Username: ",30,10);
-	 gets(uname);
-	 align("Enter Password: ",30,12);
-	 strcpy(pass,getpass());
-	 strcpy(pass,encrypt(pass));
-	 ifstream file;
-	 file.open("users.dat",ios::in|ios::binary);
-	 user U;
-	 while(!file.eof())
-	 {
+	createMenu("LOGIN");
+	align("Enter Username: ",30,10);
+	gets(uname);
+	align("Enter Password: ",30,12);
+	strcpy(pass,getpass());
+	strcpy(pass,encrypt(pass));
+	ifstream file;
+	file.open("users.dat",ios::in|ios::binary);
+	user U;
+	while(!file.eof())
+	{
 		file.read((char*)&U,sizeof(U));
 		if(U.access(uname,pass))
-	  {
-		main_menu();
-	  }
-		else
-	  {
-		errormsg("Incorrect username or password");
-		clrscr();
-		goto
-		login;
-	  }
-	 }
+			main_menu();
+	}
+	errormsg("Incorrect username or password");
+	clrscr();
+	goto
+	login;
 }
 //***********
 //Main Menu
@@ -510,36 +495,39 @@ void main_menu()
 {
 	menu:
 	createMenu("Main Menu",Mainmenu,ArraySize(Mainmenu),2);
-	center("Enter Your Option:",21);
+	align("Enter Your Option:",30,23);
 	ifstream file;
 	char option=getch();
 	switch(option)
 	{
-	  case '1':
+		case '1':
+			Admin();
+			break;
+		case '2':
 			addPatient();
 			break;
-	  case '2':
+		case '3':
 			searchPatient();
 			break;
-	  case '3':
+		case '4':
 			facilities();
 			break;
-	  case '4':
+		case '5':
 			billing();
 			break;
-	  case '5':
+		case '6':
 			ShowReport();
 			break;
-	  case '6':
+		case '7':
 			removePatient();
 			break;
-	  case '7':
+		case '8':
 			exitprogram();
 			break;
-	  case '8':
+		case '9':
 			clearfile();
 			break;
-	default:
+		default:
 			errormsg("Invalid Option...");
 			goto menu;
 	}
@@ -549,6 +537,99 @@ void main_menu()
 //*******************
 //Main Menu Functions
 //*******************
+
+//**********
+//Admin Menu
+//**********
+void Admin()
+{
+	start:
+	char accmenu[][50]={"Add User","Remove User","Display Archive","Back"};
+	createMenu("ADMINISTRATOR",accmenu,ArraySize(accmenu),4);
+	align("Enter your option: ",30,20);
+	int opt;
+	cin>>opt;
+	switch(opt)
+	{
+		case 1:
+			addUser();
+			return;
+		case 2:
+			removeUser();
+			return;
+		case 3:
+			dispArchive();
+			return;
+		case 4:
+			return;
+		default:
+			errormsg("Invalid Option...");
+			break;
+	}
+	goto start;
+}
+void addUser() //Function to add users
+{
+	user U;
+	createMenu("NEW USER");
+	U.input();
+	ofstream file;
+	file.open("users.dat",ios::app|ios::binary);
+	file.write((char*)&U,sizeof(U));
+	file.close();
+}
+void removeUser()
+{
+	user U;
+	createMenu("REMOVE USER");
+	char uname[200],pass[200];
+	align("Enter Username: ",30,7);
+	gets(uname);
+	align("Enter Username: ",30,9);
+	strcpy(pass,getpass());
+	strcpy(pass,encrypt(pass));
+	int p=0;
+	ifstream infile;
+	infile.open("users.dat",ios::in|ios::binary);
+	ofstream outfile,archive;
+	outfile.open("temp.dat",ios::app|ios::binary);
+	while(infile.read((char*)&U,sizeof(U)))
+	{
+
+		if(U.access(uname,pass))
+		{
+			p=1;
+			msg("USER REMOVED.....");
+			continue;
+		}
+		else
+		{
+			outfile.write((char*)&U,sizeof(U));
+		}
+	}
+	if(p==0)
+	{
+		align("Entry not found",30,14);
+		getch();
+	}
+	remove("users.dat");
+	rename("temp.dat","users.dat");
+	outfile.close();
+	infile.close();
+	return;
+
+}
+void dispArchive()
+{
+	fstream file;
+	file.open("archive.dat",ios::in|ios::binary);
+	patient P;
+	while(file.read((char*)&P,sizeof(P)))
+		P.display();
+}
+//*****************
+//End of Admin menu
+//*****************
 void addPatient()
 {
 	patient P;
@@ -617,6 +698,7 @@ void searchPatient()
 		main_menu();
 	}
 }
+
 void facilities()
 {
 first_screen:
