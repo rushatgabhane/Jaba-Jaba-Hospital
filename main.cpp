@@ -87,7 +87,7 @@ void banner()
 		{
 			cout<<str[i];
 			i++;
-			delay(19999);
+			delay(1999);
 		}
 		cout<<endl;
 	}
