@@ -331,12 +331,12 @@ void patient::input()	//Inputs patient details
 	createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
 	align("Enter your option: ",30,18);
 	cin>>opt;
-	strcpy(description[0],roomMenu[opt-1]);
+	strcpy(description[0],roomMenu[opt-1]);                                         
 	amount[0]=10*opt;
 	qty[0]=0;
 	size=1;
 	int select;
-	select = random(7);
+	select = random(6);
 	strcpy(doctor,doctors[select]);
 	calcTotal();
 	return;
@@ -443,6 +443,7 @@ void patient::payBill()
 	amount[size]=(-paid);
 	qty[size]=0;
 	size++;
+	msg("You Have Closed A Payment");
 	calcTotal();
 }
 float patient::calcTotal()
@@ -481,7 +482,7 @@ void login()
 		if(U.access(uname,pass))
 		{
 			file.close();
-			main_menu();
+			return;
 		}
 	}
 	file.close();
@@ -626,6 +627,8 @@ void dispArchive()
 	fstream file;
 	file.open("archive.dat",ios::in|ios::binary);
 	patient P;
+	if(!file)
+		msg("No Archieved Records");
 	while(file.read((char*)&P,sizeof(P)))
 		P.display();
 }
@@ -970,7 +973,7 @@ void game()
 		"china","japan","dubai","spain","finland","canada","argentina"
 	};
 	randomize();
-	int n=random(18);
+	int n=random(17);
 	strcpy(word,words[n]);
 	Unknown(word, unknown);
 	align("Welcome to hangman",1,2);
