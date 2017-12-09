@@ -173,7 +173,7 @@ void errormsg(char* error="null")
 	dixit(24,10);
 	dixit(35,10);
 	dixit(46,10);
-	delay(9999999);
+	delay(19999);
 	clrscr();
 	borders();
 	createMenu("ERROR");
@@ -253,7 +253,7 @@ class patient
 	int roomNo;
 	float pBill;
 	char blood[5];
-	char *bloodgp;
+	char bloodgp[3];
 	int size;
 	int date[3];
 	char doctor[50];
@@ -325,7 +325,7 @@ void patient::input()	//Inputs patient details
 	cin>>roomNo;
 	align("Blood Group: ",25,16);
 	gets(blood);
-	bloodgp = blood;
+	strcpy(bloodgp,blood);
 	createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
 	align("Enter your option: ",27,18);
 	int opt;
@@ -404,7 +404,7 @@ void patient::bill()
 		cout<<amount[j];
 		gotoxy(72,5+2*j);
 		if(qty[j]==0)
-			cout<<amount[j];		
+			cout<<amount[j];
 		else
 			cout<<qty[j]*amount[j];
 	}
@@ -414,7 +414,8 @@ void patient::bill()
 	getch();
 	return;
 }
-void patient::payBill(){
+void patient::payBill()
+{
 	start:
 	float paid;
 	createMenu("PAY BILL");
@@ -481,7 +482,7 @@ void login()
 	{
 		file.read((char*)&U,sizeof(U));
 		if(U.access(uname,pass))
-			main_menu();
+			return;
 	}
 	errormsg("Incorrect username or password");
 	clrscr();
@@ -543,24 +544,25 @@ void main_menu()
 //**********
 void Admin()
 {
+	login();
 	start:
 	char accmenu[][50]={"Add User","Remove User","Display Archive","Back"};
 	createMenu("ADMINISTRATOR",accmenu,ArraySize(accmenu),4);
 	align("Enter your option: ",30,20);
 	int opt;
-	cin>>opt;
+	opt = getch();;
 	switch(opt)
 	{
-		case 1:
+		case '1':
 			addUser();
 			return;
-		case 2:
+		case '2':
 			removeUser();
 			return;
-		case 3:
+		case '3':
 			dispArchive();
 			return;
-		case 4:
+		case '4':
 			return;
 		default:
 			errormsg("Invalid Option...");
@@ -674,10 +676,8 @@ void searchPatient()
 	ifstream file;
 	int p=0;
 	file.open("patients.dat",ios::in|ios::binary);
-	float point = 0;
 	while(file.read((char*)&P,sizeof(P)))
 	{
-		point = 0;
 		p=0;
 		if (P.check(name) && choice=='1')
 		{
@@ -710,25 +710,25 @@ first_screen:
   center("Enter Your Option:",17);
 
   int op;
-  cin>>op;
+  op = getch();
   switch(op)
   {
-	case 1:
+	case '1':
 		createMenu("DEPARTMENTS",Departments,ArraySize(Departments),2);
 		getch();
 		goto first_screen;
 
-	case 2:
+	case '2':
 		createMenu("LAB",labMenu,ArraySize(labMenu),2);
 		getch();
 		goto first_screen;
 
-	case 3:
+	case '3':
 		createMenu("ROOMS",roomMenu,ArraySize(roomMenu),2);
 		getch();
 		goto first_screen;
 
-	case 4:
+	case '4':
 		main_menu();
 		break;
 
@@ -786,8 +786,6 @@ void billing()
 		if(T.check(cpr)==1)
 		{
 			outfile.write((char*)&P,sizeof(P));
-			clrscr();
-			center("Written to file");
 			getch();
 		}
 		else
@@ -806,27 +804,71 @@ void ShowReport()
 	patient P;
 	ifstream file;
 	file.open("patients.dat",ios::in|ios::binary);
-	long cpr=0;
-	int p;
-	createMenu("SHOW REPORT");
-	center("Enter the CPR: ");
-	cin>>cpr;
-	while(file.read((char*)&P,sizeof(P)))
+	char opts[][50]={"Patients On File","View Bill"};
+	createMenu("SHOW REPORT",opts,ArraySize(opts));
+	center("Enter Your Option:");
+	int op = getch();
+	if(op == '2')
 	{
-		if(P.check(cpr)==1)
+		clrscr();
+		createMenu("View Bill");
+		long cpr=0;
+		center("Enter the CPR: ");
+		cin>>cpr;
+		while(file.read((char*)&P,sizeof(P)))
 		{
-			P.bill();
-			return;
+			if(P.check(cpr)==1)
+			{
+				P.bill();
+				return;
+			}
 		}
+		errormsg("CPR Doesn't Exsist");
+		getch();
+		return;
 	}
-	errormsg("CPR Doesn't Exsist");
-	return;
+	switch(op)
+	{
+		case '1':
+			clrscr();
+			createMenu("No. Of Records");
+			int nop=0;
+			ifstream infile;
+			infile.open("patients.dat",ios::in|ios::binary);
+			if(!infile)
+				errormsg("No Records Exsit");
+			while(infile.read((char*)&P,sizeof(P)))
+			{
+				nop++;
+				P.display();
+			}
+			if(nop==0)
+			{
+				clrscr();
+				borders();
+         	center("The No. Of Patients:");
+				cout<<nop;
+				getch();
+				clrscr();
+				borders();
+				center("Everyone Seems To Be Doing Well!!");
+			}
+			else
+			{
+				clrscr();
+				borders();
+				center("The No. Of Patients:");
+				cout<<nop;
+			}
+			getch();
+			return;
+	}
 }
 void removePatient()
 {
 	start:
 	createMenu("REMOVE PATIENT");
-	int cpr;
+	long cpr=0;
 	align("Enter The CPR No.: ",30,7);
 	cin>>cpr;
 	int p=0;
@@ -838,8 +880,7 @@ void removePatient()
 	patient P;
 	while(infile.read((char*)&P,sizeof(P)))
 	{
-
-		if(P.retcpr()==cpr && P.tot==0)
+		if(P.check(cpr) && P.tot==0)
 		{
 			p=1;
 			align("PATIENT DISCHARGED....");
@@ -847,7 +888,7 @@ void removePatient()
 			getch();
 			continue;
 		}
-		else if(P.retcpr()==cpr && P.tot!=0)
+		else if(P.check(cpr) && P.tot!=0)
 		{
 			msg("Payment Pending....");
 			align("Please clear pending bill to continue...",30,20);
@@ -893,19 +934,19 @@ exit_screen:
 	cout<<"Press 3 to Return To Main Menu";
 	gotoxy(25,14);
 	cout<<"Enter your choice: ";
-	cin>>op;
+	op = getch();
 	switch(op)
 	{
-	  case 1:
-	  	clrscr();
-	  	borders();
-	  	center("THIS PROJECT WAS DEVELOPED BY....");
-	  	center("AMAL, ALVIN, RUSHAT & AMAN",14);
+	  case '1':
+		clrscr();
+		borders();
+		center("THIS PROJECT WAS DEVELOPED BY....");
+		center("AMAL, ALVIN, RUSHAT & AMAN",14);
 		  exit(0);
-	  case 2:
+	  case '2':
 		  clrscr();
 		  game();
-	  case 3:
+	  case '3':
 			clrscr();
 			main_menu();
 
@@ -926,10 +967,11 @@ void game()
 	char words[][ml] =
 	{
 		"india","bahrain","sweden","australia","germany",
-		"russia","france","mexico","denmark","vietnam"
+		"russia","france","mexico","denmark","vietnam","kuwait",
+		"china","japan","dubai","spain","finland","canada","argentina"
 	};
 	randomize();
-	int n=random(10);
+	int n=random(18);
 	strcpy(word,words[n]);
 	Unknown(word, unknown);
 	align("Welcome to hangman",1,2);
@@ -952,7 +994,7 @@ void game()
 			clrscr();
 		}
 		gotoxy(1,4);
-		cout << "You have "<< (mt) - (WrongGuess)<<" guesses left"<<endl;
+		cout <<"You have "<<mt-WrongGuess<<" guesses left"<<endl;
 		if (strcmp(word,unknown)==0)
 		{
 			gotoxy(1,8);
@@ -1017,5 +1059,6 @@ void main()
 		return;
 	};
 	login();
+	main_menu();
 	getche();
 }
