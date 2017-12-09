@@ -7,10 +7,35 @@
 #include <time.h>
 #include <ctype.h>
 #define ArraySize(array)	sizeof(array)/sizeof(array[0])
+//*****************
+//Global Variables
+//*****************
+char doctors[][50] = {"Dr. Sanjog","Dr. Alvin Anthony","Dr. Nithesh Hariharan","Dr. Shriram Suresh","Dr. Rouche de Piale","Dr. Blah"};
+char Departments[][50]= {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
+char Mainmenu[][50] = {"Administrator","New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
+char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
+//*******************
+//Function prototypes
+//*******************
+void addPatient();			//To add a patient
+void admin();				//Admin menu
+void removePatient();		//To archive patient records
+void login();				//To login
+void billing();				//Billing Function
+void addUser();				//Function to add users
+void removeUser();			//Function to remove users
+void dispArchive();			//Function to display archive entries;
+void facilities(int fac[]);	//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+void exitprogram();			//Function asking to exit or play a game
+void game();				//Function to Play a game
+void facilities();		//Function To Display Facilities Offered
+void ShowReport();			//Function To Display Patient Report
+void searchPatient();		//Funtion to search for a patient
 void main_menu();			//To output the main menu
-//*********************************************************************************************
+//*****************
 //Special Functions
-//*********************************************************************************************
+//*****************
 //Encrypts the entered word by adding the length of the string to each character
 char* encrypt(char pass[])
 {
@@ -19,9 +44,7 @@ char* encrypt(char pass[])
 		pass[i]+=strlen(pass);
 	return pass;
 }
-
-//Function to get password
-char* getpass()
+char* getpass()	//Function to get password
 {
 	char pass[200];
 	int i=0;
@@ -33,7 +56,7 @@ char* getpass()
 		pass[i]='\0';
 		break;
 	}
-	else if(i>=1 && pass[i]==8)  //Checks for backspace
+	else if(i>=1 && pass[i]==8)	//Checks for backspace
 	{
 		i--;
 		gotoxy(46+i,12);
@@ -48,16 +71,17 @@ char* getpass()
 	}
 	return pass;
 }
-void clearfile()
+void msg(char*);
+void clearfile()	//Clears all the files
 {
 	remove("patients.dat");
 	remove("archive.dat");
 	remove("users.dat");
+	msg("Files Cleared....");
 }
-//************************************************************************************************
+//*****************
 //Display Functions
-//************************************************************************************************
-
+//*****************
 //Simplified gotoxy to align text
 void align(char* text,int x=30,int y=15)
 {
@@ -182,41 +206,17 @@ void errormsg(char* error="null")
 	center("Press any key to continue...",17);
 	getche();
 }
+//Can be called to display a simple message
 void msg(char* error="null")
 {
 	createMenu("MESSAGE");
 	if(strcmp(error,"null"))
 		center(error);
 	center("Press any key to continue...",17);
-	getche();
+	getch();
 }
 
-//*****************
-//Global Variables
-//*****************
-char doctors[][50] = {"Dr. Sanjog","Dr. Alvin Anthony","Dr. Nithesh Hariharan","Dr. Shriram Suresh","Dr. Rouche de Piale","Dr. Blah"};
-char Departments[][50]= {"General Medicine","ENT","Pediatrics","Neurology","Gynacology","Opthamology","Dental"};
-char Mainmenu[][50] = {"Administrator","New Admission","Search","Facilities","Billing","Reports","Patient Checkout","Exit"};
-char roomMenu[][50]={"Single Non-AC Room","Single AC Room","Double Non-AC Room","Double AC Room","Family Suite"};
-int nop; //No. Of Patients On File
-//*******************
-//Function prototypes
-//*******************
-void addPatient();			//To add a patient
-void Admin();				//Admin menu
-void removePatient();		//To archive patient records
-void login();				//To login
-void billing();				//Billing Function
-void addUser();				//Function to add users
-void removeUser();			//Function to remove users
-void dispArchive();			//Function to display archive entries;
-void facilities(int fac[]);	//Function To Display Facilities Offered
-void ShowReport();			//Function To Display Patient Report
-void exitprogram();			//Function asking to exit or play a game
-void game();				//Function to Play a game
-void facilities();		//Function To Display Facilities Offered
-void ShowReport();			//Function To Display Patient Report
-void searchPatient();		//Funtion to search for a patient
+
 //***********
 //User Class
 //***********
@@ -253,7 +253,6 @@ class patient
 	int roomNo;
 	float pBill;
 	char blood[5];
-	char *bloodgp;
 	int size;
 	int date[3];
 	char doctor[50];
@@ -288,7 +287,7 @@ public:
 		align("Room No: ",30,10);
 		cout<<roomNo;
 		align("Blood Group: ",30,12);
-		cout<<bloodgp;
+		cout<<blood;
 		align("Date of Admission: ",30,14);
 		dispDate();
 		align("Doctor: ",30,16);
@@ -315,6 +314,7 @@ public:
 
 void patient::input()	//Inputs patient details
 {
+	int opt;
 	randomize();
 	getDate();
 	align("Patient Name: ",25,10);
@@ -323,12 +323,15 @@ void patient::input()	//Inputs patient details
 	cin>>cprno;
 	align("Room Number: ",25,14);
 	cin>>roomNo;
-	align("Blood Group: ",25,16);
-	gets(blood);
-	bloodgp = blood;
+	char bloodgrp[][50] = {"O-","O+","B-","B+","A-","A+","AB-","AB+"};
+	createMenu("BLOOD GROUP",bloodgrp,ArraySize(bloodgrp),2);
+	align("ENTER BLOOD GROUP: ",30,22);
+	cin>>opt;
+	strcpy(blood,bloodgrp[opt]);
+	// gets(blood);
+	// bloodgp = blood;
 	createMenu("ROOM TYPE",roomMenu,ArraySize(roomMenu),2);
-	align("Enter your option: ",27,18);
-	int opt;
+	align("Enter your option: ",30,18);
 	cin>>opt;
 	strcpy(description[0],roomMenu[opt-1]);
 	amount[0]=10*opt;
@@ -467,6 +470,7 @@ float patient::calcTotal()
 void login()
 {
  char uname[200],pass[200];
+ int i=5;
  login:
 	createMenu("LOGIN");
 	align("Enter Username: ",30,10);
@@ -481,12 +485,14 @@ void login()
 	{
 		file.read((char*)&U,sizeof(U));
 		if(U.access(uname,pass))
+		{
+			file.close();
 			main_menu();
+		}
 	}
+	file.close();
 	errormsg("Incorrect username or password");
-	clrscr();
-	goto
-	login;
+	goto login;
 }
 //***********
 //Main Menu
@@ -501,7 +507,7 @@ void main_menu()
 	switch(option)
 	{
 		case '1':
-			Admin();
+			admin();
 			break;
 		case '2':
 			addPatient();
@@ -526,6 +532,7 @@ void main_menu()
 			break;
 		case '9':
 			clearfile();
+			addUser();
 			break;
 		default:
 			errormsg("Invalid Option...");
@@ -541,7 +548,7 @@ void main_menu()
 //**********
 //Admin Menu
 //**********
-void Admin()
+void admin()
 {
 	start:
 	char accmenu[][50]={"Add User","Remove User","Display Archive","Back"};
@@ -807,7 +814,6 @@ void ShowReport()
 	ifstream file;
 	file.open("patients.dat",ios::in|ios::binary);
 	long cpr=0;
-	int p;
 	createMenu("SHOW REPORT");
 	center("Enter the CPR: ");
 	cin>>cpr;
